@@ -1,14 +1,15 @@
-﻿using System;
+﻿using EasySoft.controler;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySoft.model;
 
-namespace EasySoft.View
+namespace EasySoft.view
 {
     class View
     {
-
         /// <summary>
         /// Show this panel when the console open
         /// </summary>
@@ -31,3 +32,4 @@ namespace EasySoft.View
         }
     }
 }
+
