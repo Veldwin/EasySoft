@@ -1,5 +1,6 @@
 ﻿using EasySoft.view;
 using EasySoft.model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace EasySoft.controller
     {
         private Model model;
         private View view;
+        private int InputMenu;
 
         public Controller()
         {
@@ -76,8 +78,8 @@ namespace EasySoft.controller
                 {
                     Console.Clear();//Console cleaning
                 }
+                return "";
             }
-            return "";
         }
     }
 }
