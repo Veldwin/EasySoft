@@ -14,7 +14,7 @@ namespace EasySoft.view
         /// <summary>
         /// Show this panel when the console open
         /// </summary>
-        public void show_start()
+        public void ShowStart()
         {
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("|||                   EasySave v1.0                    |||");
@@ -32,7 +32,7 @@ namespace EasySoft.view
         /// open this in the same time as show_start
         /// </summary>
         /// 
-        public void show_menu()
+        public void ShowMenu()
         {
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("|||                          Menu                      |||");
@@ -48,7 +48,7 @@ namespace EasySoft.view
         /// <summary>
         /// open this when 2 is enter
         /// </summary> 
-        public void show_sub_menu()
+        public void ShowSubMenu()
         {
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("|||           Backup Type / Type de Sauvergarde        |||");
@@ -64,7 +64,7 @@ namespace EasySoft.view
         /// <summary>
         /// name your backup
         /// </summary>
-        public void show_name()
+        public void ShowName()
         {
             Console.WriteLine("Please enter the name of your backup.\n" +
                 "Entrez le nom de votre sauvegarde : ");
@@ -73,10 +73,12 @@ namespace EasySoft.view
         /// <summary>
         /// Enter the path of the resource you wish to backup
         /// </summary>
-        public void show_resource()
+        public void ShowResource()
         {
-            Console.WriteLine("Please enter the path of the resource you want to back up.\n" +
+            Console.WriteLine("\"------------------------------------------------\\n\" +" +
+            "Please enter the path of the resource you want to back up.\n" +
             "you can drag and drop your resource : \n" +
+            "------------------------------------------------\n" + 
             "Entrez le chemin du dossier que vous souhaitez sauvegarder.\n" +
             "Vous pouvez glisser-déposer votre dossier");
         }
@@ -84,10 +86,12 @@ namespace EasySoft.view
         /// <summary>
         ///  select the destination of your backup
         /// </summary>
-        public void show_target_resource()
+        public void ShowTargetRessource()
         {
-            Console.WriteLine("Please enter the destination path for the backup. \n " +
+            Console.WriteLine("------------------------------------------------\n" + 
+            "Please enter the destination path for the backup. \n " +
             "you can drag and drop your resource: \n" +
+            "------------------------------------------------\n" + 
             "Entrez le chemin de destination de la sauvegarde. \n" +
             "Vous pouvez glisser-déposer votre resource :");
         }
@@ -95,10 +99,12 @@ namespace EasySoft.view
         /// <summary>
         /// select the destination of your mirror backup
         /// </summary>
-        public void show_mirror_resource()
+        public void ShowMirrorResource()
         {
-            Console.WriteLine("Please enter the path of the resource mirror backup.  \n" +
+            Console.WriteLine("------------------------------------------------\n" + 
+            "Please enter the path of the resource mirror backup.  \n" +
             "you can drag and drop your resource : \n" +
+            "------------------------------------------------\n" + 
             "Entrez le chemin de la sauvegarde mirroir. \n" +
             "Vous pouvez glisser-déposer votre resource :");
         }
@@ -107,7 +113,7 @@ namespace EasySoft.view
         /// error message
         /// </summary>
         /// <param name="result"></param>
-        public void error_menu(string ErrorReturn)
+        public void ErrorMenu(string ErrorReturn)
         {
             Console.WriteLine(ErrorReturn);
         }
@@ -116,21 +122,23 @@ namespace EasySoft.view
         /// <summary>
         /// ask for the name of the backup
         /// </summary>
-        public void show_file()
+        public void ShowFile()
         {
-            Console.Write("Please enter the name of your backup : \n" +
-                "Entrez le nom de votre sauvegarde : ");
+            Console.Write("------------------------------------------------\n" + 
+            "Please enter the name of your backup : \n" +
+            "Entrez le nom de votre sauvegarde : ");
         }
 
 
         /// <summary>
         /// Here to present the backup available
         /// </summary>
-        public void show_name_file()
+        public void ShowNameFile()
         {
             Console.Clear();
-            Console.WriteLine("Here are the names of your backups : \n" +
-                "Voici les noms de vos sauvegardes : ");
+            Console.WriteLine("------------------------------------------------\n" + 
+            "Here are the names of your backups : \n" +
+            "Voici les noms de vos sauvegardes : ");
         }
     }
 }

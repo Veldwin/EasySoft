@@ -25,7 +25,7 @@ namespace EasySoft.model
         /// <summary>
         /// count the number of backup in json file
         /// </summary>
-        public void check_data_file()
+        public void CheckDataFile()
         {
             CheckDataBackup = 0;
              
