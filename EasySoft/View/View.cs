@@ -67,6 +67,17 @@ namespace EasySoft.View
             Console.WriteLine("Please enter the name of your backup.\n" +
                 "Entrez le nom de votre sauvegarde : ");
         }
+        
+        /// <summary>
+        /// Enter the path of the ressource you wish to backup
+        /// </summary>
+        public void show_ressource()
+        {
+            Console.WriteLine("Please enter the path of the ressource you want to back up.\n" +
+            "you can drag and drop your ressource : \n" +
+            "Entrez le chemin du dossier que vous souhaitez sauvegarder.\n" +
+            "Vous pouvez glisser-déposer votre dossier");
+        }
        
     }
 }
