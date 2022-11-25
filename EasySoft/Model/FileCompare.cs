@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace EasySoft.Model
 {
     /// <summary>
-    /// allow to know with ressource is modify.
+    /// allow to know with resource is modify.
     /// </summary>
     class FileCompare : System.Collections.Generic.IEqualityComparer<System.IO.FileInfo>
     {
@@ -20,7 +20,7 @@ namespace EasySoft.Model
         }
 
         /// <summary>
-        /// retrieve the hashe of the ressource
+        /// retrieve the hashe of the resource
         /// </summary>
         /// <param name="fi"></param>
         /// <returns></returns>

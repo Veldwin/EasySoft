@@ -69,12 +69,12 @@ namespace EasySoft.View
         }
         
         /// <summary>
-        /// Enter the path of the ressource you wish to backup
+        /// Enter the path of the resource you wish to backup
         /// </summary>
         public void show_resource()
         {
-            Console.WriteLine("Please enter the path of the ressource you want to back up.\n" +
-            "you can drag and drop your ressource : \n" +
+            Console.WriteLine("Please enter the path of the resource you want to back up.\n" +
+            "you can drag and drop your resource : \n" +
             "Entrez le chemin du dossier que vous souhaitez sauvegarder.\n" +
             "Vous pouvez glisser-déposer votre dossier");
         }
@@ -85,9 +85,9 @@ namespace EasySoft.View
         public void show_target_resource()
         {
             Console.WriteLine("Please enter the destination path for the backup. \n " +
-            "you can drag and drop your ressource: \n" +
+            "you can drag and drop your resource: \n" +
             "Entrez le chemin de destination de la sauvegarde. \n" +
-            "Vous pouvez glisser-déposer votre ressource :");
+            "Vous pouvez glisser-déposer votre resource :");
         }
 
         /// <summary>
@@ -95,10 +95,10 @@ namespace EasySoft.View
         /// </summary>
         public void show_mirror_resource()
         {
-            Console.WriteLine("Please enter the path of the ressource mirror backup.  \n" +
-            "you can drag and drop your ressource : \n" +
+            Console.WriteLine("Please enter the path of the resource mirror backup.  \n" +
+            "you can drag and drop your resource : \n" +
             "Entrez le chemin de la sauvegarde mirroir. \n" +
-            "Vous pouvez glisser-déposer votre ressource :");
+            "Vous pouvez glisser-déposer votre resource :");
         }
 
         /// <summary>
