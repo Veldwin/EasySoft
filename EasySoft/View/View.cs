@@ -71,7 +71,7 @@ namespace EasySoft.View
         /// <summary>
         /// Enter the path of the ressource you wish to backup
         /// </summary>
-        public void show_ressource()
+        public void show_resource()
         {
             Console.WriteLine("Please enter the path of the ressource you want to back up.\n" +
             "you can drag and drop your ressource : \n" +
@@ -82,7 +82,7 @@ namespace EasySoft.View
         /// <summary>
         ///  select the destination of your backup
         /// </summary>
-        public void show_target_ressource()
+        public void show_target_resource()
         {
             Console.WriteLine("Please enter the destination path for the backup. \n " +
             "you can drag and drop your ressource: \n" +
@@ -90,5 +90,45 @@ namespace EasySoft.View
             "Vous pouvez glisser-déposer votre ressource :");
         }
 
+        /// <summary>
+        /// select the destination of your mirror backup
+        /// </summary>
+        public void show_mirror_resource()
+        {
+            Console.WriteLine("Please enter the path of the ressource mirror backup.  \n" +
+            "you can drag and drop your ressource : \n" +
+            "Entrez le chemin de la sauvegarde mirroir. \n" +
+            "Vous pouvez glisser-déposer votre ressource :");
+        }
+
+        /// <summary>
+        /// error message
+        /// </summary>
+        /// <param name="result"></param>
+        public void error_menu(string ErrorReturn)
+        {
+            Console.WriteLine(ErrorReturn);
+        }
+
+
+        /// <summary>
+        /// ask for the name of the backup
+        /// </summary>
+        public void show_file()
+        {
+            Console.Write("Please enter the name of your backup : \n" +
+                "Entrez le nom de votre sauvegarde : ");
+        }
+
+
+        /// <summary>
+        /// Here to present the backup available
+        /// </summary>
+        public void show_name_file()
+        {
+            Console.Clear();
+            Console.WriteLine("Here are the names of your backups : \n" +
+                "Voici les noms de vos sauvegardes : ");
+        }
     }
 }
