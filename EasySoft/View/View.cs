@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySoft.controller;
+using EasySoft.model;
 
-namespace EasySoft.View
+namespace EasySoft.view
 {
     class View
     {
