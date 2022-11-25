@@ -9,7 +9,7 @@ namespace EasySoft.Model
     class Backup
     {
 
-        public string resourceBackup { get; set; }
+        public string ResourceBackup { get; set; }
         public string TargetBackup { get; set; }
         public string SaveName { get; set; }
         public int Type { get; set; }
@@ -18,7 +18,7 @@ namespace EasySoft.Model
         public Backup(string saveName, string source, string target, int type, string mirror)
         {
             SaveName = saveName;
-            resourceBackup = source;
+            ResourceBackup = source;
             TargetBackup = target;
             Type = type;
             MirrorBackup = mirror;
