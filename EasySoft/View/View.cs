@@ -12,22 +12,18 @@ namespace EasySoft.View
         /// <summary>
         /// Show this panel when the console open
         /// </summary>
-        public void ShowStart()
+        public void show_start()
         {
-            Console.WriteLine("----------------------------------------------------");
-            Console.WriteLine("|||            Welcome to EasySave               |||");
-            Console.WriteLine("----------------------------------------------------");
-        }
-        public void ShowMenu()
-        {
-            Console.WriteLine("----------------------------------------------------");
-            Console.WriteLine("|||                   Menu                       |||");
-            Console.WriteLine("----------------------------------------------------");
-            Console.WriteLine("|||  0. Exit                                     |||");
-            Console.WriteLine("|||  1. Open a backup job                        |||");
-            Console.WriteLine("|||  2. Create a backup job                      |||");
-            Console.WriteLine("----------------------------------------------------");
-            Console.Write("Please enter the menu number : ");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("|||                   EasySave v1.0                    |||");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("     _____    _    ______   ______    ___     _______ ");
+            Console.WriteLine("    | ____|  / \\  / ___\\ \\ / / ___|  / \\ \\   / / ____|");
+            Console.WriteLine("    |  _|   / _ \\ \\___ \\\\ V /\\___ \\ / _ \\ \\ / /|  _|  ");
+            Console.WriteLine("    | |___ / ___ \\ ___) || |  ___) / ___ \\ V / | |___ ");
+            Console.WriteLine("    |_____/_/   \\_\\____/ |_| |____/_/   \\_\\_/  |_____|");
+            Console.WriteLine("                                                      ");
+            Console.WriteLine("----------------------------------------------------------");
         }
     }
 }
