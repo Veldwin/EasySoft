@@ -1,5 +1,6 @@
 ﻿using EasySoft.view;
 using EasySoft.model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace EasySoft.controller
     {
         private Model model;
         private View view;
+        private int InputMenu;
 
         public Controller()
         {
@@ -36,14 +38,48 @@ namespace EasySoft.controller
                 try
                 {
                     view.show_menu();
+                    InputMenu = int.Parse(Console.ReadLine());
+                    switch (InputMenu)
+                    {
+                        case 0:
+                            Environment.Exit(0);
+                            break;
+
+                        case 1:
+                            view.show_name_file();
+                            string JsonString = File.ReadAllText(model.BackupListFile);
+                            Backup[] list = JsonConvert.DeserializeObject<Backup[]>(JsonString);
+                            foreach (var Obj in list)
+                            {
+                                Console.WriteLine(" -- " + Obj.SaveName);
+                            }
+                            view.show_file();
+                            string input_name_backup = Console.ReadLine();
+                            model.load_save(input_name_backup);
+                            break;
+
+                        case 2:
+                            if (model.CheckDataBackup < 5)
+                            {
+                                Console.Clear();
+                                view.show_sub_menu();
+                                sub_menu();
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                view.error_menu("You already have 5 backups to create.");
+                            }
+                            break;
+                    }
+
                 }
                 catch
                 {
                     Console.Clear();//Console cleaning
                 }
-
+                return "";
             }
-            return "";
         }
     }
 }
