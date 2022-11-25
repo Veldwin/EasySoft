@@ -25,5 +25,22 @@ namespace EasySoft.View
             Console.WriteLine("                                                      ");
             Console.WriteLine("----------------------------------------------------------");
         }
+
+        /// <summary>
+        /// open this in the same time as show_start
+        /// </summary>
+        /// 
+        public void show_menu()
+        {
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("|||                          Menu                      |||");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("|||  0. Exit / Quitter                                 |||");
+            Console.WriteLine("|||  1. Open a backup job / Ouvrir une sauvegarde      |||");
+            Console.WriteLine("|||  2. Create a backup job / Créer une sauvegarde     |||");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.Write("Please enter the menu number you want to use : \n" +
+            "Veuillez entrer le numéro du menu que vous souhaitez utiliser : ");
+        }
     }
 }
