@@ -42,5 +42,21 @@ namespace EasySoft.View
             Console.Write("Please enter the menu number you want to use : \n" +
             "Veuillez entrer le numéro du menu que vous souhaitez utiliser : ");
         }
+
+        /// <summary>
+        /// open this when 2 is enter
+        /// </summary> 
+        public void show_sub_menu()
+        {
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("|||           Backup Type / Type de Sauvergarde        |||");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine("|||  0. Exit / Quitter                                 |||");
+            Console.WriteLine("|||  1. Complete Save / Sauvegarde complète            |||");
+            Console.WriteLine("|||  2. Differential Save / Sauvegarde Différentielle  |||");
+            Console.WriteLine("----------------------------------------------------------");
+            Console.Write("Please enter the menu number.\n" +
+            "Entrez le numéro du menu : ");
+        }
     }
 }
