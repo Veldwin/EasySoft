@@ -78,6 +78,17 @@ namespace EasySoft.View
             "Entrez le chemin du dossier que vous souhaitez sauvegarder.\n" +
             "Vous pouvez glisser-déposer votre dossier");
         }
-       
+
+        /// <summary>
+        ///  select the destination of your backup
+        /// </summary>
+        public void show_target_ressource()
+        {
+            Console.WriteLine("Please enter the destination path for the backup. \n " +
+            "you can drag and drop your ressource: \n" +
+            "Entrez le chemin de destination de la sauvegarde. \n" +
+            "Vous pouvez glisser-déposer votre ressource :");
+        }
+
     }
 }
