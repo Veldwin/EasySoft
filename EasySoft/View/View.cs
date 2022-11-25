@@ -58,5 +58,15 @@ namespace EasySoft.View
             Console.Write("Please enter the menu number.\n" +
             "Entrez le numéro du menu : ");
         }
+
+        /// <summary>
+        /// name your backup
+        /// </summary>
+        public void show_name()
+        {
+            Console.WriteLine("Please enter the name of your backup.\n" +
+                "Entrez le nom de votre sauvegarde : ");
+        }
+       
     }
 }
