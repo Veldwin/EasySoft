@@ -146,15 +146,9 @@ namespace EasySoft.model
 
 
             // reset value 
-            DataState.TotalSizeState = TotalSize;
-            DataState.SourceFileState = null;
-            DataState.TargetFileState = null;
-            DataState.TotalFileState = 0;
-            DataState.TotalSizeState = 0;
-            DataState.TotalSizeRestState = 0;
-            DataState.FileRestState = 0;
-            DataState.ProgressState = 0;
-            DataState.SaveState = false;
+
+            ResetValue();
+            
 
              UpdateStateFile();
 
@@ -287,6 +281,20 @@ namespace EasySoft.model
             }
         }
 
+
+
+        private void ResetValue()
+        {
+            DataState.TotalSizeState = TotalSize;
+            DataState.SourceFileState = null;
+            DataState.TargetFileState = null;
+            DataState.TotalFileState = 0;
+            DataState.TotalSizeState = 0;
+            DataState.TotalSizeRestState = 0;
+            DataState.FileRestState = 0;
+            DataState.ProgressState = 0;
+            DataState.SaveState = false;
+        }
         // CheckDataFile() TODO
     }
 }
