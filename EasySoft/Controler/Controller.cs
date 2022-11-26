@@ -25,9 +25,6 @@ namespace EasySoft.controller
             model.UserMenuInput = FirstMenu();
         }
 
-
-        // GetResourceInput()
-        // GetTargetResource()
         // GetMirrorResource()
         
 
@@ -112,9 +109,9 @@ namespace EasySoft.controller
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
-                            ////model.Resource = GetResourceInput();
+                            model.Resource = GetResourceInput();
                             view.ShowTargetResource();
-                            ////model.Targetresource = GetTargetResource();
+                            model.Targetresource = GetTargetResource();
                             Backup backup = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, "");
                             model.AddSave(backup);
                             break;
@@ -124,11 +121,11 @@ namespace EasySoft.controller
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
-                            ////model.Resource = GetResourceInput();
+                            model.Resource = GetResourceInput();
                             view.ShowMirrorResource();
                             ////model.Mirrorresource = GetMirrorResource();
                             view.ShowTargetResource();
-                            ////model.Targetresource = GetTargetResource();
+                            model.Targetresource = GetTargetResource();
                             Backup backup2 = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, model.Mirrorresource);
                             model.AddSave(backup2);
                             break;
@@ -143,6 +140,59 @@ namespace EasySoft.controller
 
             }
 
+        }
+
+        /// <summary>
+        /// get the file to backup
+        /// </summary>
+        /// <returns></returns>
+        private string GetResourceInput()
+        {
+            string resourceInput = "";
+            bool IsValid = false;
+
+            while (!IsValid)
+            {
+                resourceInput = Console.ReadLine();
+                if (Directory.Exists(resourceInput.Replace("\"", "")))
+                {
+                    IsValid = true;
+                }
+                else
+                {
+                    view.ErrorMenu("Incorrect Path.\n" +
+                    "Chemin Incorrect");
+                }
+
+            }
+            return resourceInput;
+        }
+
+        /// <summary>
+        /// Obtain the resource when called
+        /// </summary>
+        /// <returns></returns>
+        private string GetTargetResource()
+        {
+            string Targetresource = "";
+            bool IsValid = false;
+
+            do
+            {
+                Targetresource = Console.ReadLine();
+                if (Directory.Exists(Targetresource.Replace("\"", "")))
+                {
+                    IsValid = true;
+                }
+                else
+                {
+                    view.ErrorMenu("Incorrect Path.\n" +
+                    "Chemin Incorrect");
+                }
+            } while (!IsValid);
+
+
+            return Targetresource;
         }
     }
 }
