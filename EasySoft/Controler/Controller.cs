@@ -78,8 +78,9 @@ namespace EasySoft.controller
                 {
                     Console.Clear();//Console cleaning
                 }
-                return "";
+               
             }
+            return "";
         }
     }
 }
