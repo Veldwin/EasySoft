@@ -75,9 +75,9 @@ namespace EasySoft.view
         /// </summary>
         public void ShowResource()
         {
-            Console.WriteLine("\"------------------------------------------------\\n\" +" +
+            Console.WriteLine("------------------------------------------------\n" +
             "Please enter the path of the resource you want to back up.\n" +
-            "you can drag and drop your resource : \n" +
+            "You can drag and drop your resource : \n" +
             "------------------------------------------------\n" + 
             "Entrez le chemin du dossier que vous souhaitez sauvegarder.\n" +
             "Vous pouvez glisser-déposer votre dossier");

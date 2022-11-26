@@ -1,11 +1,12 @@
-﻿using EasySoft.view;
-using EasySoft.model;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EasySoft.view;
+using EasySoft.model;
+using Newtonsoft.Json;
+
 
 
 namespace EasySoft.controller
@@ -24,6 +25,12 @@ namespace EasySoft.controller
             model.UserMenuInput = FirstMenu();
         }
 
+
+        // GetResourceInput()
+        // GetTargetResource()
+        // GetMirrorResource()
+        
+
         
         /// <summary>
         /// launch the console and react to the input of the user if registered
@@ -34,7 +41,7 @@ namespace EasySoft.controller
             bool menu = true;
             while (menu)
             {
-                model.CheckDataFile();
+                ///model.CheckDataFile();
                 try
                 {
                     view.ShowMenu();
@@ -68,7 +75,8 @@ namespace EasySoft.controller
                             else
                             {
                                 Console.Clear();
-                                view.ErrorMenu("You already have 5 backups to create.");
+                                view.ErrorMenu("You already have 5 backups to create.\n"+
+                                "Vous avez déjà 5 Sauvegardes Enregistrées");
                             }
                             break;
                     }
@@ -78,8 +86,63 @@ namespace EasySoft.controller
                 {
                     Console.Clear();//Console cleaning
                 }
-                return "";
             }
+            return "";
+        }
+
+        /// <summary>
+        /// launch the SubMenu when 2 is selected in the menu
+        /// </summary>
+        private void SubMenu()
+        {
+            bool SubMenu = true;
+            while (SubMenu)
+            {
+                try
+                {
+                    int inputMenuSub = int.Parse(Console.ReadLine());
+                    switch (inputMenuSub)
+                    {
+                        case 0:
+                            Console.Clear();
+                            FirstMenu();
+                            break;
+                        case 1:   // full 
+                            model.Type = 1;
+                            view.ShowName();
+                            model.SaveName = Console.ReadLine();
+                            view.ShowResource();
+                            ////model.Resource = GetResourceInput();
+                            view.ShowTargetResource();
+                            ////model.Targetresource = GetTargetResource();
+                            Backup backup = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, "");
+                            model.AddSave(backup);
+                            break;
+
+                        case 2: // differential
+                            model.Type = 2;
+                            view.ShowName();
+                            model.SaveName = Console.ReadLine();
+                            view.ShowResource();
+                            ////model.Resource = GetResourceInput();
+                            view.ShowMirrorResource();
+                            ////model.Mirrorresource = GetMirrorResource();
+                            view.ShowTargetResource();
+                            ////model.Targetresource = GetTargetResource();
+                            Backup backup2 = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, model.Mirrorresource);
+                            model.AddSave(backup2);
+                            break;
+                    }
+
+                }
+                catch
+                {
+                    Console.Clear();
+                    FirstMenu();
+                }
+
+            }
+
         }
     }
 }
