@@ -35,8 +35,8 @@ namespace EasySoft.model
         public TimeSpan TimeTransfert { get; set; }
         public string UserMenuInput { get; set; }
         public string Mirrorresource { get; set; }
-        
-        
+
+
         public Model()
         {
             UserMenuInput = " ";
@@ -107,7 +107,7 @@ namespace EasySoft.model
 
             }
 
-            
+
             foreach (FileInfo file in files)
             {
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
@@ -143,25 +143,18 @@ namespace EasySoft.model
                     CompleteSave(subdir.FullName, tempPath, copyDir, true);
                 }
             }
-
-
-            // reset value 
-
             ResetValue();
-            
-
-             UpdateStateFile();
-
+            UpdateStateFile();
             stopwatch.Stop();
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
 
 
-            // UpdateLogFile() TODO
+        // UpdateLogFile() TODO
 
 
 
-            public void AddSave(Backup backup)
+        public void AddSave(Backup backup)
         {
             List<Backup> backupList = new List<Backup>();
             SerializeObj = null;
@@ -190,7 +183,7 @@ namespace EasySoft.model
             {
                 BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
             };
-             AddState();
+            AddState();
         }
 
         /// <summary>

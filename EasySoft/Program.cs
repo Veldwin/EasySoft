@@ -9,9 +9,13 @@ namespace EasySoft
 {
     class Program
     {
+        /// <summary>
+        /// needed to launch the appli
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Controller controller = new Controller(); //Instantiating an object
+            Controller controller = new Controller(); 
         }
     }
 }
