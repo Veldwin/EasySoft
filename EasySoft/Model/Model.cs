@@ -197,10 +197,38 @@ namespace EasySoft.model
             {
                 BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
             };
-            //// AddState();
+             AddState();
         }
 
-        // AddState() TODO
+        /// <summary>
+        /// //Allows you to add a backup job to the report file.
+        /// </summary>
+        public void AddState()
+        {
+            List<DataState> stateList = new List<DataState>();
+            SerializeObj = null;
+
+            if (!File.Exists(StateFile))
+            {
+                File.Create(StateFile).Close();
+            }
+
+            string jsonString = File.ReadAllText(StateFile);
+
+            if (jsonString.Length != 0)
+            {
+                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString);
+                foreach (var backup in list)
+                {
+                    stateList.Add(backup);
+                }
+            }
+            DataState.SaveState = false;
+            stateList.Add(DataState);
+
+            SerializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine;
+            File.WriteAllText(StateFile, SerializeObj);
+        }
 
         /// <summary>
         /// load backup registered
