@@ -146,15 +146,9 @@ namespace EasySoft.model
 
 
             // reset value 
-            DataState.TotalSizeState = TotalSize;
-            DataState.SourceFileState = null;
-            DataState.TargetFileState = null;
-            DataState.TotalFileState = 0;
-            DataState.TotalSizeState = 0;
-            DataState.TotalSizeRestState = 0;
-            DataState.FileRestState = 0;
-            DataState.ProgressState = 0;
-            DataState.SaveState = false;
+
+            ResetValue();
+            
 
              UpdateStateFile();
 
@@ -162,7 +156,6 @@ namespace EasySoft.model
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
 
-            // DifferentialSave() TODO
 
             // UpdateLogFile() TODO
 
@@ -265,7 +258,7 @@ namespace EasySoft.model
             else
             {
                 NameStateFile = backup.SaveName;
-                //// DifferentialSave(backup.ResourceBackup, backup.MirrorBackup, backup.TargetBackup);
+                DifferentialSave(backup.ResourceBackup, backup.MirrorBackup, backup.TargetBackup);
                 //// UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup);
                 Console.WriteLine("Saved Successfull !");
             }
@@ -315,6 +308,79 @@ namespace EasySoft.model
             }
         }
 
+        /// <summary>
+        /// function called when differential backup is selected
+        /// </summary>
+        /// <param name="pathA"></param>
+        /// <param name="pathB"></param>
+        /// <param name="pathC"></param>
+        public void DifferentialSave(string pathA, string pathB, string pathC)
+        {
+            DataState = new DataState(NameStateFile);
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            DataState.SaveState = true;
+            TotalSize = 0;
+            NbFileMmax = 0;
+
+            System.IO.DirectoryInfo resource1 = new System.IO.DirectoryInfo(pathA);
+            System.IO.DirectoryInfo resource2 = new System.IO.DirectoryInfo(pathB);
+
+            // Take a snapshot of the file system.  
+            IEnumerable<System.IO.FileInfo> list1 = resource1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+            IEnumerable<System.IO.FileInfo> list2 = resource2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+            //A custom file comparer defined below  
+            FileCompare myFileCompare = new FileCompare();
+
+            var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
+            Size = 0;
+            Nbfiles = 0;
+            Progs = 0;
+
+            foreach (var v in queryList1Only)
+            {
+                TotalSize += v.Length;
+                NbFileMmax++;
+
+            }
+
+
+            foreach (var v in queryList1Only)
+            {
+                string tempPath = Path.Combine(pathC, v.Name);
+                DataState.SourceFileState = Path.Combine(pathA, v.Name);
+                DataState.TargetFileState = tempPath;
+                DataState.TotalSizeState = NbFileMmax;
+                DataState.TotalFileState = TotalSize;
+                DataState.TotalSizeRestState = TotalSize - Size;
+                DataState.FileRestState = NbFileMmax - Nbfiles;
+                DataState.ProgressState = Progs;
+                UpdateStateFile();
+                v.CopyTo(tempPath, true);
+                Size += v.Length;
+                Nbfiles++;
+            }
+
+            ResetValue();
+            UpdateStateFile();
+            stopwatch.Stop();
+            TimeTransfert = stopwatch.Elapsed;
+        }
+
+
+        private void ResetValue()
+        {
+            DataState.SourceFileState = null;
+            DataState.TargetFileState = null;
+            DataState.TotalFileState = 0;
+            DataState.TotalSizeState = 0;
+            DataState.TotalSizeRestState = 0;
+            DataState.FileRestState = 0;
+            DataState.ProgressState = 0;
+            DataState.SaveState = false;
+        }
         // CheckDataFile() TODO
     }
 }
