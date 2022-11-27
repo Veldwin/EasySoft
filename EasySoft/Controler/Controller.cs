@@ -25,10 +25,31 @@ namespace EasySoft.controller
             model.UserMenuInput = FirstMenu();
         }
 
-        // GetMirrorResource()
-        
+        private string GetMirrorResource()
+        {
+            string Mirrorresource = "";
+            bool IsValid = false;
 
-        
+            do
+            {
+                Mirrorresource = Console.ReadLine();
+                if (Directory.Exists(Mirrorresource.Replace("\"", "")))
+                {
+                    IsValid = true;
+                }
+                else
+                {
+                    view.ErrorMenu("Incorect Path.\n" +
+                    "Chemin Incorrect");
+                }
+            } while (!IsValid);
+
+
+            return Mirrorresource;
+        }
+
+
+
         /// <summary>
         /// launch the console and react to the input of the user if registered
         /// </summary>
@@ -38,7 +59,7 @@ namespace EasySoft.controller
             bool menu = true;
             while (menu)
             {
-                ///model.CheckDataFile();
+                model.CheckDataFile();
                 try
                 {
                     view.ShowMenu();
