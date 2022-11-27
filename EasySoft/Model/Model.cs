@@ -405,6 +405,22 @@ namespace EasySoft.model
         }
 
 
-        // CheckDataFile() TODO
+        /// <summary>
+        /// count the number of backup in json file
+        /// </summary>
+        public void CheckDataFile()
+        {
+            CheckDataBackup = 0;
+
+            if (File.Exists(BackupListFile))
+            {
+                string jsonstring = File.ReadAllText(BackupListFile);
+                if (jsonstring.Length != 0)
+                {
+                    Backup[]? list = JsonConvert.DeserializeObject<Backup[]>(jsonstring);
+                    CheckDataBackup = list.Length;
+                }
+            }
+        }
     }
 }

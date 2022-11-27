@@ -38,7 +38,7 @@ namespace EasySoft.controller
             bool menu = true;
             while (menu)
             {
-                ///model.CheckDataFile();
+                model.CheckDataFile();
                 try
                 {
                     view.ShowMenu();
