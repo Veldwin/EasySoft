@@ -150,7 +150,7 @@ namespace EasySoft.model
         }
 
 
-        // UpdateLogFile() TODO
+        
 
 
 
@@ -245,14 +245,14 @@ namespace EasySoft.model
             {
                 NameStateFile = backup.SaveName;
                 CompleteSave(backup.ResourceBackup, backup.TargetBackup, true, false);
-                //// UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup);
+                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup);
                 Console.WriteLine("Saved Successfull !");
             }
             else
             {
                 NameStateFile = backup.SaveName;
                 DifferentialSave(backup.ResourceBackup, backup.MirrorBackup, backup.TargetBackup);
-                //// UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup);
+                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup);
                 Console.WriteLine("Saved Successfull !");
             }
 
@@ -374,6 +374,37 @@ namespace EasySoft.model
             DataState.ProgressState = 0;
             DataState.SaveState = false;
         }
+
+
+        /// <summary>
+        /// update log file on: \EasySoft\bin
+        /// </summary>
+        /// <param name="savename"></param>
+        /// <param name="sourcedir"></param>
+        /// <param name="targetdir"></param>
+        public void UpdateLogFile(string savename, string sourcelog, string targetlog)
+        {
+             string Time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
+
+            DataLogs datalogs = new DataLogs
+            {
+                SaveNameLog = savename,
+                SourceLog = sourcelog,
+                TargetLog = targetlog,
+                BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
+                TotalSizeLog = TotalSize,
+                TransactionTimeLog = Time
+            };
+
+            string path = System.Environment.CurrentDirectory;
+            var directory = System.IO.Path.GetDirectoryName(path); 
+
+            string serializeObj = JsonConvert.SerializeObject(datalogs, Formatting.Indented) + Environment.NewLine;
+            File.AppendAllText(directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json", serializeObj);
+
+        }
+
+
         // CheckDataFile() TODO
     }
 }
