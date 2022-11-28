@@ -70,6 +70,6 @@ Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.j
 
 ## User Documentation
 
-User Documentation available : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
+User documentation available : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
 
-User Documentation available : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
+Docmentation utilisateur disponible : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
