@@ -149,11 +149,6 @@ namespace EasySoft.model
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
 
-
-        
-
-
-
         public void AddSave(Backup backup)
         {
             List<Backup> backupList = new List<Backup>();

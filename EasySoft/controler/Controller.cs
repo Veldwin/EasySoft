@@ -25,10 +25,9 @@ namespace EasySoft.controller
             model.UserMenuInput = FirstMenu();
         }
 
-        // GetMirrorResource()
-        
 
-        
+
+
         /// <summary>
         /// launch the console and react to the input of the user if registered
         /// </summary>
@@ -72,7 +71,7 @@ namespace EasySoft.controller
                             else
                             {
                                 Console.Clear();
-                                view.ErrorMenu("You already have 5 backups to create.\n"+
+                                view.ErrorMenu("You already have 5 backups to create.\n" +
                                 "Vous avez déjà 5 Sauvegardes Enregistrées");
                             }
                             break;
@@ -193,6 +192,29 @@ namespace EasySoft.controller
 
 
             return Targetresource;
+        }
+
+        private string GetMirrorResource()
+        {
+            string Mirrorresource = "";
+            bool IsValid = false;
+
+            do
+            {
+                Mirrorresource = Console.ReadLine();
+                if (Directory.Exists(Mirrorresource.Replace("\"", "")))
+                {
+                    IsValid = true;
+                }
+                else
+                {
+                    view.ErrorMenu("Incorect Path.\n" +
+                    "Chemin Incorrect");
+                }
+            } while (!IsValid);
+
+
+            return Mirrorresource;
         }
     }
 }
