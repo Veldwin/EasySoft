@@ -74,9 +74,9 @@ Cette version possédera une nouvelle interface avec plus de fonctionalités
 
 ### Install EasySoft / Installer EasySoft
 
-To install the software, you can clone our repository on you're IDE : `https://github.com/Veldwin/EasySoft.git`. 
+To install the software, you can clone our repository on you're IDE : `https://github.com/Veldwin/EasySoft.git`
 
-Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `https://github.com/Veldwin/EasySoft.git`.
+Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `https://github.com/Veldwin/EasySoft.git`
 
 ### Start the application / Lancer l'Application
 
@@ -118,9 +118,9 @@ Le fichier log est enregistré ici : `\EasySoft\bin`.
 
 ### State file / Fichier State
 
-The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`. 
+The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
-Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.json`.
+Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.json`
 
 ## Authors / Auteurs
 
