@@ -13,35 +13,36 @@ Here is the folder structure of the project :
 Voici l'arborescence des dossiers du projet :
 
 ```bash
-V1
-├───EasySoft
-    ├───bin
-    │   └───DebugDailyLogs.json
-    │   ├───Debug
-    │   │   └───net6.0
-    │   │       ├───State
-    │   │       │   └───state.json
-    │   │       └───Works
-    │   │           └───backupList.json
-    │   └───Release
-    │       └───net6.0
-    ├───controler
-    │   └───controller.cs
-    ├───model
-    │   └───model.cs
-    ├───obj
-    │   ├───Debug
-    │   │   └───net6.0
-    │   │       ├───ref
-    │   │       └───refint
-    │   └───Release
-    │       └───net6.0
-    │           ├───ref
-    │           └───refint
-    ├───view
-    │   └───view.cs
-    ├───EasySoft.csproj
-    └───Program.cs
+EasySoft
+    └───V1
+        └───EasySoft
+            ├───bin
+            │   ├───DebugDailyLogs.json
+            │   ├───Debug
+            │   │   └───net6.0
+            │   │       ├───State
+            │   │       │   └───state.json
+            │   │       └───Works
+            │   │           └───backupList.json
+            │   └───Release
+            │       └───net6.0
+            ├───controler
+            │   └───controller.cs
+            ├───model
+            │   └───model.cs
+            ├───obj
+            │   ├───Debug
+            │   │   └───net6.0
+            │   │       ├───ref
+            │   │       └───refint
+            │   └───Release
+            │       └───net6.0
+            │           ├───ref
+            │           └───refint
+            ├───view
+            │   └───view.cs
+            ├───EasySoft.csproj
+            └───Program.cs
 ```
 
 ### Minimum characteristics / Caractéristiques minimales
