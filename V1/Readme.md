@@ -122,7 +122,7 @@ Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.j
 
 ## Authors / Auteurs
 
-### Groupe 4
+### Group 4 / Groupe 4
 
 - RAAD Camille
 - GIRAUDEAU Valentin
