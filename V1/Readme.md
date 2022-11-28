@@ -21,9 +21,9 @@ Once you have run our programme, with the help of our Getting Started solution y
 
 Une fois que vous aurez exécuté notre programme, avec l'aide de notre solution Getting Started, vous aurez plusieurs choix.
 
-### Add a backup job / Créer une sauvegarde
+### Add a backup job / Créer une sauvegarde (2)
 
-To perform a backup, you must first create a backup job (1).
+To perform a backup, you must first create a backup job.
 
   1) Choose a full or a differential Backup (A full backup will copy every files / folder while a differential one compares itself to a full and copy only modified files).
   2) Give your backup a name.
@@ -32,7 +32,7 @@ To perform a backup, you must first create a backup job (1).
   5) For differential backup, you need to put the path to your folder where a full backup was made.
   6) Return to principal menu (0)
 
-Pour effectuer une sauvegarde, vous devez d'abord créer une tâche de sauvegarde (2).
+Pour effectuer une sauvegarde, vous devez d'abord créer une tâche de sauvegarde.
 
   1) Choisissez une sauvegarde complète ou différentielle (une sauvegarde complète copiera tous les fichiers / dossiers tandis qu'une sauvegarde différentielle se compare à une sauvegarde complète et ne copie que les fichiers modifiés).
   2) Donnez un nom à votre sauvegarde.
@@ -41,7 +41,7 @@ Pour effectuer une sauvegarde, vous devez d'abord créer une tâche de sauvegard
   5) Pour une sauvegarde différentielle, vous devez mettre le chemin vers votre dossier où une sauvegarde complète a été faite.
   6) Revenir au menu principal (0)
 
-### Load backup job and execute / Charger une sauvegarde et l'éxecuter
+### Load backup job and execute / Charger une sauvegarde et l'éxecuter (1)
 
 To start a backup job, you must enter the name of the backup you want to do.
 After filling in the name of the backup, the execution will start. If the backup works fine, you will get a validation message.
