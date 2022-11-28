@@ -67,3 +67,9 @@ Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.j
 - GIRAUDEAU Valentin
 - TRENY Edwin
 - WAUTERS Mathis
+
+## User Documentation
+
+User Documentation available : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
+
+User Documentation available : [User Documentation](https://github.com/Veldwin/EasySoft/blob/master/V1/UserDocumentation.md)
