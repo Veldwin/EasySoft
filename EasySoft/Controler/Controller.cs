@@ -104,7 +104,7 @@ namespace EasySoft.controller
                             FirstMenu();
                             break;
                         case 1:   // full 
-                            model.Type = 1;
+                            model.Type = "full";
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
@@ -116,7 +116,7 @@ namespace EasySoft.controller
                             break;
 
                         case 2: // differential
-                            model.Type = 2;
+                            model.Type = "differential";
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
