@@ -12,10 +12,10 @@ namespace EasySoft.model
         public string ResourceBackup { get; set; }
         public string TargetBackup { get; set; }
         public string SaveName { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public string MirrorBackup { get; set; }
 
-        public Backup(string saveName, string source, string target, int type, string mirror)
+        public Backup(string saveName, string source, string target, string type, string mirror)
         {
             SaveName = saveName;
             ResourceBackup = source;

@@ -66,7 +66,8 @@ namespace EasySoft.view
         /// </summary>
         public void ShowName()
         {
-            Console.WriteLine("Please enter the name of your backup.\n" +
+            Console.WriteLine("------------------------------------------------\n" + 
+                "Please enter the name of your backup.\n" +
                 "Entrez le nom de votre sauvegarde : ");
         }
         
