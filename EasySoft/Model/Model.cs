@@ -28,7 +28,7 @@ namespace EasySoft.model
         public float Progs { get; set; }
         public string Targetresource { get; set; }
         public string SaveName { get; set; }
-        public int Type { get; set; }
+        public string Type { get; set; }
         public string SourceFile { get; set; }
         public string TypeString { get; set; }
         public long TotalSize { get; set; }
@@ -236,7 +236,7 @@ namespace EasySoft.model
                 }
             }
 
-            if (backup.Type == 1)
+            if (backup.Type == "full")
             {
                 NameStateFile = backup.SaveName;
                 CompleteSave(backup.ResourceBackup, backup.TargetBackup, true, false);

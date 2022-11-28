@@ -104,7 +104,7 @@ namespace EasySoft.controller
                             FirstMenu();
                             break;
                         case 1:   // full 
-                            model.Type = 1;
+                            model.Type = "full";
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
@@ -116,16 +116,16 @@ namespace EasySoft.controller
                             break;
 
                         case 2: // differential
-                            model.Type = 2;
+                            model.Type = "differential";
                             view.ShowName();
                             model.SaveName = Console.ReadLine();
                             view.ShowResource();
                             model.Resource = GetResourceInput();
                             view.ShowMirrorResource();
-                            model.Mirrorsource = GetMirrorResource();
+                            model.MirrorResource = GetMirrorResource();
                             view.ShowTargetResource();
                             model.Targetresource = GetTargetResource();
-                            Backup backup2 = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, model.Mirrorresource);
+                            Backup backup2 = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, model.MirrorResource);
                             model.AddSave(backup2);
                             break;
                     }
