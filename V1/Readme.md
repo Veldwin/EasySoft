@@ -1,8 +1,8 @@
 # EasySoft v1.0 By PROSOFT
 
-Easysave is a back up folder software. It's a school project created by a team of 4 students.
+Easysave is a back up software. It's a school project created by a team of 4 students.
 
-Easysave est un logiciel de sauvegarde de dossiers. C'est un projet scolaire créé par une équipe de 4 étudiants.
+Easysave est un logiciel de sauvegarde. C'est un projet scolaire créé par une équipe de 4 étudiants.
 
 ## User Documentation / Documentation Utilisateur
 
@@ -13,6 +13,7 @@ Here is the folder structure of the project :
 Voici l'arborescence des dossiers du projet :
 
 ```bash
+EasySoft
 ├───bin
 │   └───DebugDailyLogs.json
 │   ├───Debug
@@ -66,6 +67,11 @@ Cette version possédera une nouvelle interface avec plus de fonctionalités
 
 ### Features / Fonctionalités
 
+- Console Interface / Interface console
+- Full Backup / Sauvegarde complète
+- Differential Backup / Sauvegarde différentielle
+- 5 Backups maximum / 5 Sauvegardes maximum
+
 ### Install EasySoft / Installer EasySoft
 
 To install the software, you can clone our repository on you're IDE : `https://github.com/Veldwin/EasySoft.git`
@@ -113,3 +119,12 @@ Le fichier log est enregistré ici : `\EasySoft\bin`
 
 The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 Le fichier State est enregistré ici : `\EasySoft\bin\Debug\net6.0\State\state.json`
+
+## Authors / Auteurs
+
+### Groupe 4
+
+- RAAD Camille
+- GIRAUDEAU Valentin
+- TRENY Edwin
+- WAUTERS Mathis
