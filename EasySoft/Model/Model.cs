@@ -34,7 +34,7 @@ namespace EasySoft.model
         public long TotalSize { get; set; }
         public TimeSpan TimeTransfert { get; set; }
         public string UserMenuInput { get; set; }
-        public string Mirrorresource { get; set; }
+        public string Mirrorsource { get; set; }
 
 
         public Model()

@@ -122,7 +122,7 @@ namespace EasySoft.controller
                             view.ShowResource();
                             model.Resource = GetResourceInput();
                             view.ShowMirrorResource();
-                            ////model.Mirrorresource = GetMirrorResource();
+                            model.Mirrorsource = GetMirrorResource();
                             view.ShowTargetResource();
                             model.Targetresource = GetTargetResource();
                             Backup backup2 = new Backup(model.SaveName, model.Resource, model.Targetresource, model.Type, model.Mirrorresource);
