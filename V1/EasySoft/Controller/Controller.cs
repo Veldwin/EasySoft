@@ -26,8 +26,6 @@ namespace EasySoft.controller
         }
 
 
-
-
         /// <summary>
         /// launch the console and react to the input of the user if registered
         /// </summary>
