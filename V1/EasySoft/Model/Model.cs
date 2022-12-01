@@ -393,8 +393,7 @@ namespace EasySoft.model
             string pathfile = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
             string pathfiles = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
             string serializeObj = JsonConvert.SerializeObject(datalogs, Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
-            File.AppendAllText(pathfile, serializeObj);
-            if ( Format== true)
+            if (Format == true)
             {
                 XmlDocument xdoc = new XmlDocument();
 
@@ -437,6 +436,10 @@ namespace EasySoft.model
 
                 xdoc.DocumentElement.PrependChild(Log);
                 xdoc.Save(pathfiles);
+            }
+            else
+            {
+                File.AppendAllText(pathfile, serializeObj);
             }
 
         }
