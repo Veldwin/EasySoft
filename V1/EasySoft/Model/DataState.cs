@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySoft.model
 {
-    class DataState
+     public class DataState
     {
         // Declaration of properties that are used for saving information for the report file in JSON
         public string SaveNameState { get; set; }

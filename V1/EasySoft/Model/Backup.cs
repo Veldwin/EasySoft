@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace EasySoft.model
 {
-    class Backup
+    public class Backup
     {
 
         public string ResourceBackup { get; set; }
@@ -14,6 +9,7 @@ namespace EasySoft.model
         public string SaveName { get; set; }
         public string Type { get; set; }
         public string MirrorBackup { get; set; }
+
 
         public Backup(string saveName, string source, string target, string type, string mirror)
         {

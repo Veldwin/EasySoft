@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySoft.model
 {
-    internal class DataLogs
+    public class DataLogs
     {
         //Declaration of the properties that are used for the program log file
         public string SourceLog { get; set; }

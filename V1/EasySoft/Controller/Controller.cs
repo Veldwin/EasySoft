@@ -1,26 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasySoft.view;
+﻿using EasySoft.view;
 using EasySoft.model;
 using Newtonsoft.Json;
 
-
-
 namespace EasySoft.controller
 {
-    class Controller
+    public class Controller
     {
         private Model model;
         private View view;
         private int InputMenu;
+        bool format;
+        string extension;
 
         public Controller()
         {
-            model = new Model();
             view = new View();
+            view.ShowFormat();
+            extension = Console.ReadLine();
+            format = GetFormat(extension);
+            model = new Model(format);
             view.ShowStart();
             model.UserMenuInput = FirstMenu();
         }
@@ -90,6 +88,7 @@ namespace EasySoft.controller
         private void SubMenu()
         {
             bool SubMenu = true;
+
             while (SubMenu)
             {
                 try
@@ -206,13 +205,22 @@ namespace EasySoft.controller
                 }
                 else
                 {
-                    view.ErrorMenu("Incorect Path.\n" +
+                    view.ErrorMenu("Incorrect Path.\n" +
                     "Chemin Incorrect");
                 }
             } while (!IsValid);
 
 
             return Mirrorresource;
+        }
+
+        private bool GetFormat(string extension)
+        {
+            if (extension == "xml" || extension == "XML" || extension == "Xml")
+            {
+                format = true;
+            }
+            return format;
         }
     }
 }

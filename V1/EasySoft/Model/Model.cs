@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EasySoft.controller;
-using EasySoft.view;
+using System.Reflection.Metadata;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using Newtonsoft.Json;
 
 
@@ -35,24 +35,26 @@ namespace EasySoft.model
         public TimeSpan TimeTransfert { get; set; }
         public string UserMenuInput { get; set; }
         public string MirrorResource { get; set; }
+        public bool Format { get; set; }
 
 
-        public Model()
+        public Model(bool format)
         {
             UserMenuInput = " ";
+            Format= format; 
+                if (!Directory.Exists(BackupListFile))
+                {
+                    DirectoryInfo resource = Directory.CreateDirectory(BackupListFile);
+                }
+                BackupListFile += @"backupList.json";
 
-            if (!Directory.Exists(BackupListFile))
-            {
-                DirectoryInfo resource = Directory.CreateDirectory(BackupListFile);
-            }
-            BackupListFile += @"backupList.json";
-
-            if (!Directory.Exists(StateFile))
-            {
-                DirectoryInfo resource = Directory.CreateDirectory(StateFile);
-            }
-            StateFile += @"state.json";
+                if (!Directory.Exists(StateFile))
+                {
+                    DirectoryInfo resource = Directory.CreateDirectory(StateFile);
+                }
+                StateFile += @"state.json";
         }
+        
 
         /// <summary>
         /// function called when full backup is selected
@@ -170,10 +172,8 @@ namespace EasySoft.model
                 }
             }
             backupList.Add(backup);
-
-            SerializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Formatting.Indented) + Environment.NewLine;
+            SerializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
             File.WriteAllText(BackupListFile, SerializeObj);
-
             DataState = new DataState(SaveName)
             {
                 BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
@@ -206,8 +206,7 @@ namespace EasySoft.model
             }
             DataState.SaveState = false;
             stateList.Add(DataState);
-
-            SerializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine;
+            SerializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
             File.WriteAllText(StateFile, SerializeObj);
         }
 
@@ -290,11 +289,11 @@ namespace EasySoft.model
 
                 }
 
-                SerializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Formatting.Indented) + Environment.NewLine;
-
+                SerializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
                 File.WriteAllText(StateFile, SerializeObj);
             }
         }
+     
 
         /// <summary>
         /// function called when differential backup is selected
@@ -379,8 +378,7 @@ namespace EasySoft.model
         /// <param name="targetdir"></param>
         public void UpdateLogFile(string savename, string sourcelog, string targetlog)
         {
-             string Time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
-
+            string Time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
             DataLogs datalogs = new DataLogs
             {
                 SaveNameLog = savename,
@@ -390,12 +388,56 @@ namespace EasySoft.model
                 TotalSizeLog = TotalSize,
                 TransactionTimeLog = Time
             };
-
             string path = System.Environment.CurrentDirectory;
-            var directory = System.IO.Path.GetDirectoryName(path); 
+            var directory = System.IO.Path.GetDirectoryName(path);
+            string pathfile = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
+            string pathfiles = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
+            string serializeObj = JsonConvert.SerializeObject(datalogs, Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
+            File.AppendAllText(pathfile, serializeObj);
+            if ( Format== true)
+            {
+                XmlDocument xdoc = new XmlDocument();
 
-            string serializeObj = JsonConvert.SerializeObject(datalogs, Formatting.Indented) + Environment.NewLine;
-            File.AppendAllText(directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json", serializeObj);
+                try
+                {
+                    xdoc.Load(pathfiles);
+                }
+                catch
+                {
+                    XElement Logs = new XElement("Logs");
+                    StreamWriter sr = new StreamWriter(pathfiles);
+                    sr.WriteLine(Logs);
+                    sr.Close();
+                    xdoc.Load(pathfiles);
+
+                }
+
+                XmlNode Log = xdoc.CreateElement("log");
+
+                XmlNode Name = xdoc.CreateElement("name");
+                XmlNode SourceFile = xdoc.CreateElement("sourceFile");
+                XmlNode TargetFile = xdoc.CreateElement("TargetFile");
+                XmlNode Date = xdoc.CreateElement("date");
+                XmlNode SizeOctet = xdoc.CreateElement("size");
+                XmlNode TransfertTime = xdoc.CreateElement("transfertTime");
+
+                Name.InnerText = datalogs.SaveNameLog;
+                SourceFile.InnerText = datalogs.SourceLog;
+                TargetFile.InnerText = datalogs.TargetLog;
+                Date.InnerText = datalogs.BackupDateLog;
+                SizeOctet.InnerText = datalogs.TotalSizeLog.ToString();
+                TransfertTime.InnerText = datalogs.TransactionTimeLog;
+
+                Log.AppendChild(Name);
+                Log.AppendChild(SourceFile);
+                Log.AppendChild(TargetFile);
+                Log.AppendChild(Date);
+                Log.AppendChild(SizeOctet);
+                Log.AppendChild(TransfertTime);
+
+                xdoc.DocumentElement.PrependChild(Log);
+                xdoc.Save(pathfiles);
+            }
 
         }
 
@@ -416,6 +458,11 @@ namespace EasySoft.model
                     CheckDataBackup = list.Length;
                 }
             }
+        }
+
+        public static void JsonToXml(string pathfiles)
+        {
+          
         }
     }
 }

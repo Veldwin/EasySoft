@@ -9,7 +9,7 @@ namespace EasySoft.model
     /// <summary>
     /// allow to know with resource is modify.
     /// </summary>
-    class FileCompare : System.Collections.Generic.IEqualityComparer<System.IO.FileInfo>
+    public class FileCompare : System.Collections.Generic.IEqualityComparer<System.IO.FileInfo>
     {
         public FileCompare() { }
 

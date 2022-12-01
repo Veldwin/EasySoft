@@ -141,5 +141,12 @@ namespace EasySoft.view
             "Here are the names of your backups : \n" +
             "Voici les noms de vos sauvegardes : ");
         }
+
+        public void ShowFormat()
+        {
+            Console.WriteLine("------------------------------------------------\n" +
+            "Please enter the format you want for your log (Xml or Json): "); 
+        }
     }
 }
+
