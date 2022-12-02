@@ -15,7 +15,7 @@
 
 ### Install EasySoft
 
-To install the software, you can clone our repository on your IDE : `https://github.com/Veldwin/EasySoft.git`
+To install the software, you can clone our repository on your IDE : `$ git clone https://github.com/Veldwin/EasySoft.git`
 
 ### Start the application
 
@@ -76,7 +76,7 @@ The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
 ### Installer EasySoft
 
-Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `https://github.com/Veldwin/EasySoft.git`
+Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `$ git clone https://github.com/Veldwin/EasySoft.git`
 
 ### Start the application / Lancer l'Application
 
