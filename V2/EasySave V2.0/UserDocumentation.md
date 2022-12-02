@@ -62,7 +62,7 @@ To run EasySoft, you need at least :
 ### Next Versions
 
 A version 3 of the software is planned in the next few days.
-This version will have more features coming soon.
+This version will contain more features such as multitasking and many others.
 
 # EasySoft v2.0 By PROSOFT FR
 
@@ -128,4 +128,4 @@ Pour executer le logiciel EasySoft, il est necessaire d'avoir au minimum :
 ### Prochaines Versions
 
 Une version 3 du logiciel est prévue dans les prochains jours.
-Cette version plus de fonctionalités.
+Cette version contiendra plus de fonctionalités comme par exemple le multitâche et bien d'autres.
