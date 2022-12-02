@@ -7,8 +7,6 @@ namespace EasySaveApp.viewmodel
 {
     public class ViewModel
     {
-
-        public bool JailAppsStop { get; set; }
         private Model model;
         string[] jail_apps = Model.GetJailApps();
         public string[] BlackListApp { get => jail_apps; set => jail_apps = value; }
@@ -38,21 +36,17 @@ namespace EasySaveApp.viewmodel
             return nameslist;
         }
 
-        public void LoadBackup(string backupname)//Function that allows you to load the backups that were selected by the user.
+        public bool LoadBackup(string backupname)//Function that allows you to load the backups that were selected by the user.
         {
+            if (!Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
             {
-                JailAppsStop = true;
-
-                if (Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
-                {
-                    JailAppsStop = false;
-                }
-                else
-                {
-                    model.LoadSave(backupname);//Function that launches backups
-                }
+                model.LoadSave(backupname);//Function that launches backups
+                return true;
             }
-
+            else
+            {
+                return false;
+            }
         }
 
         public void DeleteBackup(string backupname)//Function that allows you to delete the backups that were selected by the user.

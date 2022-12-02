@@ -200,9 +200,10 @@ namespace EasySaveApp.view
                 foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
                     string saveName = item.ToString();
-                    viewmodel.LoadBackup(saveName);
 
-                    if (viewmodel.JailAppsStop == false) //Check for message display if blacklisted software was detected.
+                    bool backupSucceeded = viewmodel.LoadBackup(saveName);
+
+                    if (!backupSucceeded) //Check for message display if blacklisted software was detected.
                     {
                         result.Text = (string)FindResource("msg_failsave");
                     }
