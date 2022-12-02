@@ -117,7 +117,7 @@
 
 
                 </Grid>
-                <RadioButton x:Name="xml_button" GroupName="LogFile" Content="XML" HorizontalAlignment="Left" Margin="533,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="195" FontFamily="Segoe UI Variable Text Semibold" />
+                <RadioButton x:Name="xml_button" GroupName="LogFile"  Content="XML" HorizontalAlignment="Left" Margin="533,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="195" FontFamily="Segoe UI Variable Text Semibold" />
                 <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="611,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" />
             </Grid>
 
