@@ -46,7 +46,11 @@ For deleting a backup, you need to select the backup to erase then use the "Dele
 
 The log file is saved here: `\EasySoft\bin`. 
 
-### State file / Fichier State
+### BackupList File
+
+The backupList File is saved here: `\EasySoft\bin\Debug\net6.0\Work\backupList.json`
+
+### State file
 
 The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
@@ -107,6 +111,10 @@ Pour supprimer une sauvegarde, vous devez sélectionner la sauvegarde à effacer
 ### Fichier Log
 
 Le fichier log est enregistré ici : `\EasySoft\bin`.
+
+### Fichier BackupList
+
+Le fichier BackupList est enregistré ici : `\EasySoft\bin\Debug\net6.0\Work\backupList.json`
 
 ### Fichier State
 
