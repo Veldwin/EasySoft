@@ -2,9 +2,9 @@
 
 Easysave is a back up software. It's a school project created by a team of 4 students.
 
-## User Documentation / Documentation Utilisateur
+## User Documentation
 
-### Tree structure / Arborescence
+### Tree structure
 
 Here is the folder structure of the project :
 
