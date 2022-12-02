@@ -15,7 +15,7 @@
 
 ### Install EasySoft
 
-To install the software, you can clone our repository on your IDE : `$ git clone https://github.com/Veldwin/EasySoft.git`
+To install the software, you can clone our repository on your IDE : `https://github.com/Veldwin/EasySoft.git`
 
 ### Start the application
 
@@ -46,11 +46,7 @@ For deleting a backup, you need to select the backup to erase then use the "Dele
 
 The log file is saved here: `\EasySoft\bin`. 
 
-### BackupList File
-
-The backupList File is saved here: `\EasySoft\bin\Debug\net6.0\Work\backupList.json`
-
-### State file
+### State file / Fichier State
 
 The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
@@ -80,7 +76,7 @@ The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
 ### Installer EasySoft
 
-Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `$ git clone https://github.com/Veldwin/EasySoft.git`
+Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `https://github.com/Veldwin/EasySoft.git`
 
 ### Start the application / Lancer l'Application
 
@@ -111,10 +107,6 @@ Pour supprimer une sauvegarde, vous devez sélectionner la sauvegarde à effacer
 ### Fichier Log
 
 Le fichier log est enregistré ici : `\EasySoft\bin`.
-
-### Fichier BackupList
-
-Le fichier BackupList est enregistré ici : `\EasySoft\bin\Debug\net6.0\Work\backupList.json`
 
 ### Fichier State
 
