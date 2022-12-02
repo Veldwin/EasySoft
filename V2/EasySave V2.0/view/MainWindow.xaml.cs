@@ -195,13 +195,11 @@ namespace EasySaveApp.view
 
         private void ButtonStartSaveClick(object sender, RoutedEventArgs e)//Function that launches the backup
         {
-            string saveName = "";
-
             if (Save_work.SelectedItem != null) //Condition that allows to check if the user has selected a backup.
             {
                 foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
-                    saveName = item.ToString();
+                    string saveName = item.ToString();
                     viewmodel.LoadBackup(saveName);
 
                     if (viewmodel.JailAppsStop == false) //Check for message display if blacklisted software was detected.
@@ -212,10 +210,7 @@ namespace EasySaveApp.view
                     {
                         result.Text = (string)FindResource("msg_successave");
                     }
-
                 }
-
-
             }
         }
 

@@ -43,10 +43,9 @@ namespace EasySaveApp.viewmodel
             {
                 JailAppsStop = true;
 
-                if (!Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
+                if (Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
                 {
                     JailAppsStop = false;
-                  
                 }
                 else
                 {

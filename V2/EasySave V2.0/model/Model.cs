@@ -19,7 +19,6 @@ namespace EasySaveApp.model
         private string serializeObj;
         public string backupListFile = System.Environment.CurrentDirectory + @"\Works\";
         public string stateFile = System.Environment.CurrentDirectory + @"\State\";
-        public string logDir = @"..\..\..\Logs\";
         public DataState DataState { get; set; }
         public string NameStateFile { get; set; }
         public string BackupNameState { get; set; }
@@ -55,13 +54,6 @@ namespace EasySaveApp.model
                 DirectoryInfo di = Directory.CreateDirectory(stateFile); //Function that creates the folder
             }
             stateFile += @"state.json"; //Create a JSON file
-
-            if (!Directory.Exists(logDir)) //Check if the folder is created
-            {
-                DirectoryInfo di = Directory.CreateDirectory(logDir); //Function that creates the folder
-            }
-
-
         }
 
         public void CompleteSave(string inputpathsave, string inputDestToSave, bool copyDir, bool verif)
@@ -288,7 +280,6 @@ namespace EasySaveApp.model
             var directory = System.IO.Path.GetDirectoryName(path);
             string pathfile = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
             string pathfiles = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
-            string serializeObj = JsonConvert.SerializeObject(datalogs, Newtonsoft.Json.Formatting.Indented) + Environment.NewLine;
 
             if (Format == true)
             {
@@ -335,7 +326,15 @@ namespace EasySaveApp.model
             }
             else
             {
-                File.AppendAllText(pathfile, serializeObj);
+                List<object> jsonContent = new List<object>();
+                if (File.Exists(pathfile))
+                {
+                    string oldJsonFileContent = File.ReadAllText(pathfile);
+                    jsonContent = JsonConvert.DeserializeObject<List<object>>(oldJsonFileContent);
+                }
+                jsonContent.Add(datalogs);
+                string serializedObj = JsonConvert.SerializeObject(jsonContent, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(pathfile, serializedObj);
             }
         }
 
@@ -402,7 +401,7 @@ namespace EasySaveApp.model
 
         public void LoadSave(string backupname) //Function that allows you to load backup jobs
         {
-            Backup backup = null;
+            Backup selectedBackup = null;
             this.TotalSize = 0;
             BackupNameState = backupname;
 
@@ -416,25 +415,26 @@ namespace EasySaveApp.model
                 {
                     if (obj.SaveName == backupname) //Check to have the correct name of the backup
                     {
-                        backup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
+                        selectedBackup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
                     }
                 }
             }
 
-            if (backup.Type == "full") //If the type is 1, it means it's a full backup
+            if (selectedBackup != null)
             {
-                NameStateFile = backup.SaveName;
-                CompleteSave(backup.ResourceBackup, backup.TargetBackup, true, false); //Calling the function to run the full backup
-                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup); //Call of the function to start the modifications of the log file
+                NameStateFile = selectedBackup.SaveName;
 
-            }
-            else //If this is the wrong guy then, it means it's a differential backup
-            {
-                NameStateFile = backup.SaveName;
-                DifferentialSave(backup.ResourceBackup, backup.MirrorBackup, backup.TargetBackup); //Calling the function to start the differential backup
-                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup); //Call of the function to start the modifications of the log file
-            }
+                if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
+                {
+                    CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false); //Calling the function to run the full backup
+                }
+                else //If this is the wrong guy then, it means it's a differential backup
+                {
+                    DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup); //Calling the function to start the differential backup
+                }
 
+                UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file
+            }
         }
 
         public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
@@ -523,23 +523,16 @@ namespace EasySaveApp.model
 
         public static bool CheckSoftware(string[] blacklist_app)//Function that allows you to compare a program that is in the list is running.
         {
-            bool check = true;
+            bool abortSave = false;
             foreach (string App in blacklist_app)
             {
                 Process[] ps = Process.GetProcessesByName(App);
-                foreach (Process p in ps)
-                    try
-                    {
-                        p.Kill();
-                        check = false;
-                        MessageBox.Show(p + " process has exited!");
-                    }
-                    catch
-                    {
-                        check = true;
-                    }
+                if (ps.Length > 0)
+                {
+                    abortSave = true;
+                }
             }
-            return check;
+            return abortSave;
         }
 
         public void ModelFormat(bool extension)
