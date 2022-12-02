@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml;
 using System.Windows;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace EasySaveApp.model
 {
@@ -337,5 +338,215 @@ namespace EasySaveApp.model
                 File.AppendAllText(pathfile, serializeObj);
             }
         }
+
+
+        public void AddSave(Backup backup) //Function that creates a backup job
+        {
+            List<Backup> backupList = new List<Backup>();
+            this.serializeObj = null;
+
+            if (!File.Exists(backupListFile)) //Checking if the file exists
+            {
+                File.WriteAllText(backupListFile, this.serializeObj);
+            }
+
+            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
+                foreach (var obj in list) //Loop to add the information in the json
+                {
+                    backupList.Add(obj);
+                }
+            }
+            backupList.Add(backup); //Allows you to prepare the objects for the json filling
+
+            this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
+
+            DataState = new DataState(this.SaveName);//Class initiation
+
+            DataState.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); //Adding the time in the variable
+            AddState(); //Call of the function to add the backup in the report file.
+        }
+
+        public void AddState() //Function that allows you to add a backup job to the report file.
+        {
+            List<DataState> stateList = new List<DataState>();
+            this.serializeObj = null;
+
+            if (!File.Exists(stateFile)) //Checking if the file exists
+            {
+                File.Create(stateFile).Close();
+            }
+
+            string jsonString = File.ReadAllText(stateFile); //Reading the json file
+
+            if (jsonString.Length != 0)
+            {
+                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
+                foreach (var obj in list) //Loop to add the information in the json
+                {
+                    stateList.Add(obj);
+                }
+            }
+            this.DataState.SaveState = false;
+            stateList.Add(this.DataState); //Allows you to prepare the objects for the json filling
+
+            this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            File.WriteAllText(stateFile, this.serializeObj);// Writing to the json file
+
+
+        }
+
+        public void LoadSave(string backupname) //Function that allows you to load backup jobs
+        {
+            Backup backup = null;
+            this.TotalSize = 0;
+            BackupNameState = backupname;
+
+            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
+
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString);  //Derialization of the json file
+                foreach (var obj in list)
+                {
+                    if (obj.SaveName == backupname) //Check to have the correct name of the backup
+                    {
+                        backup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
+                    }
+                }
+            }
+
+            if (backup.Type == "full") //If the type is 1, it means it's a full backup
+            {
+                NameStateFile = backup.SaveName;
+                CompleteSave(backup.ResourceBackup, backup.TargetBackup, true, false); //Calling the function to run the full backup
+                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup); //Call of the function to start the modifications of the log file
+
+            }
+            else //If this is the wrong guy then, it means it's a differential backup
+            {
+                NameStateFile = backup.SaveName;
+                DifferentialSave(backup.ResourceBackup, backup.MirrorBackup, backup.TargetBackup); //Calling the function to start the differential backup
+                UpdateLogFile(backup.SaveName, backup.ResourceBackup, backup.TargetBackup); //Call of the function to start the modifications of the log file
+            }
+
+        }
+
+        public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
+        {
+            checkDataBackup = 0;
+
+            if (File.Exists(backupListFile)) //Check on file exists
+            {
+                string jsonString = File.ReadAllText(backupListFile);//Reading the json file
+                if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
+                {
+                    Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
+                    checkDataBackup = list.Length; //Allows to count the number of backups
+                }
+            }
+        }
+
+        public List<Backup> NameList()//Function that lets you know the names of the backups.
+        {
+            List<Backup> backupList = new List<Backup>();
+
+            if (!File.Exists(backupListFile)) //Checking if the file exists
+            {
+                File.WriteAllText(backupListFile, this.serializeObj);
+            }
+
+            List<Backup> names = new List<Backup>();
+            string jsonString = File.ReadAllText(backupListFile); //Function to read json file
+            Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); // Function to dezerialize the json file
+
+            if (jsonString.Length != 0)
+            {
+                foreach (var obj in list) //Loop to display the names of the backups
+                {
+                    names.Add(obj);
+                }
+
+            }
+
+            return names;
+
+        }
+
+        // Function Delete a backup
+        public void DeleteSave(string backupname)
+        {
+            List<Backup> backupList = new List<Backup>();
+            this.serializeObj = null;
+
+            if (!File.Exists(backupListFile)) //Checking if the file exists
+            {
+                File.WriteAllText(backupListFile, this.serializeObj);
+            }
+
+            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
+
+            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            {
+                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
+                foreach (var obj in list) //Loop to add the information in the json
+                {
+                    if (obj.SaveName != backupname) //Check to have the correct name of the backup
+                    {
+                        backupList.Add(obj);
+                    }
+                }
+            }
+
+            this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+            File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
+        }
+
+        public static string[] GetJailApps()//Function that allows to recover software that is blacklisted.
+        {
+            using StreamReader reader = new StreamReader(@"..\..\..\Resources\JailApps.json");//Function to read the json file
+            JailAppsFormat[] item_jailapps;
+            string[] jailapps_array;
+            string json = reader.ReadToEnd();
+            List<JailAppsFormat> items = JsonConvert.DeserializeObject<List<JailAppsFormat>>(json);
+            item_jailapps = items.ToArray();
+            jailapps_array = item_jailapps[0].jailed_apps.Split(',');
+
+            return jailapps_array;//We return the names of the softwares which are in the list of the json file.
+        }
+
+        public static bool CheckSoftware(string[] blacklist_app)//Function that allows you to compare a program that is in the list is running.
+        {
+            bool check = true;
+            foreach (string App in blacklist_app)
+            {
+                Process[] ps = Process.GetProcessesByName(App);
+                foreach (Process p in ps)
+                    try
+                    {
+                        p.Kill();
+                        check = false;
+                        MessageBox.Show(p + " process has exited!");
+                    }
+                    catch
+                    {
+                        check = true;
+                    }
+            }
+            return check;
+        }
+
+        public void transitFormat(bool extension)
+        {
+            Format = extension;
+        }
     }
 }
+
+
+
