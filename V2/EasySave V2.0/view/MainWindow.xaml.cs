@@ -59,7 +59,16 @@ namespace EasySaveApp.view
             if (xml_button.IsChecked.Value)
             {
                 formatmw = true;
-                viewmodel.TransitFormat(formatmw);
+                viewmodel.ModelFormat(formatmw);
+            }
+        }
+
+        private void JsonLog(object sender, RoutedEventArgs e)
+        {
+            if ((Json_button.IsChecked.Value))
+            {
+                formatmw = false;
+                viewmodel.ModelFormat(formatmw);
             }
         }
 
@@ -274,15 +283,6 @@ namespace EasySaveApp.view
                 }
 
                 ShowListBox();//Function to update the list.
-            }
-        }
-
-        private void JsonLog(object sender, RoutedEventArgs e)
-        {
-            if ((xml_button.IsChecked.Value))
-            {
-                formatmw = false;
-                viewmodel.TransitFormat(formatmw);
             }
         }
     }

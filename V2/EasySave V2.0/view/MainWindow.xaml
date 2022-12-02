@@ -121,8 +121,8 @@
                     <Button Name="mirror_directory" Content="..." Click="MirrorResourceClick" Grid.Column="2" Background="#FF098AC3" Foreground="White" BorderBrush="{x:Null}" Margin="7,142,7,63"/>
 
                 </Grid>
-                <CheckBox x:Name="xml_button" Content="XML" HorizontalAlignment="Left" Margin="515,62,0,0" VerticalAlignment="Top" Height="14"  Checked="XmlLog" Width="214" FontFamily="Sitka Text" />
-                <CheckBox x:Name="Json_button" Content="Json" HorizontalAlignment="Left" Margin="600,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Sitka Text" />
+                <RadioButton x:Name="xml_button" GroupName="LogFile" Content="XML" HorizontalAlignment="Left" Margin="515,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="214" FontFamily="Sitka Text" />
+                <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="600,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Sitka Text" />
             </Grid>
 
             <Rectangle Grid.Row="1"  Margin="15" Fill="#FFD0D1D0" RadiusX="11" RadiusY="11"/>

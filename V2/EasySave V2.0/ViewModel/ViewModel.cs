@@ -61,36 +61,9 @@ namespace EasySaveApp.viewmodel
             model.DeleteSave(backupname);
         }
 
-        public void DontSave() //Function that prevent EasySave from saving while a third party app is running
+        public void ModelFormat(bool format)
         {
-            List<string> BL = new List<string>();
-
-            foreach (string bl in jail_apps)
-            {
-                BL.Add(bl);
-
-                Process[] i = Process.GetProcessesByName(bl);
-
-                if (i.Length > 0 == true)
-                {
-                    foreach (Process proc in i)
-                    {
-                        proc.WaitForExit();
-
-                        if (proc.HasExited)
-                        {
-                            proc.CloseMainWindow();
-
-                            proc.Close();
-                        }
-                    }
-                }
-            }
-        }
-
-        public void TransitFormat(bool format)
-        {
-            model.TransitFormat(format);
+            model.ModelFormat(format);
         }
     }
 }

@@ -520,6 +520,7 @@ namespace EasySaveApp.model
             return jailapps_array;//We return the names of the softwares which are in the list of the json file.
         }
 
+
         public static bool CheckSoftware(string[] blacklist_app)//Function that allows you to compare a program that is in the list is running.
         {
             bool check = true;
@@ -541,7 +542,7 @@ namespace EasySaveApp.model
             return check;
         }
 
-        public void TransitFormat(bool extension)
+        public void ModelFormat(bool extension)
         {
             Format = extension;
         }
