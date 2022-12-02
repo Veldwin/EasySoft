@@ -1,6 +1,6 @@
 # EasySoft v2.0 By PROSOFT EN
 
-## User Manual / Manuel d'Utilisation V2.0
+## User Manual
 
 ### Features 
 
@@ -51,7 +51,7 @@ For deleting a backup, you need to select the backup to erase then use the "Dele
 
 The log file is saved here: `\EasySoft\bin`. 
 
-### State file / Fichier State
+### State file
 
 The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
@@ -66,7 +66,7 @@ The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
 # EasySoft v2.0 By PROSOFT FR
 
-## User Manual / Manuel d'Utilisation V2.0
+## Manuel d'Utilisation
 
 ### Fonctionalités
 
@@ -83,11 +83,11 @@ The state File is saved here: `\EasySoft\bin\Debug\net6.0\State\state.json`
 
 Pour installer le logiciel, vous pouvez cloner notre dépôt sur votre IDE : `$ git clone https://github.com/Veldwin/EasySoft.git`
 
-### Start the application / Lancer l'Application
+### Lancer l'Application
 
 Au lancement de l'application, vous serez accueilli par notre interface graphique. Entrez les informations dans les champs correspondants pour que notre application s’occupe de vos sauvegardes.
 
-### Add a backup job / Créer une sauvegarde
+### Créer une sauvegarde
 
 Pour effectuer une sauvegarde, vous devez d'abord créer une tâche de sauvegarde.
 
