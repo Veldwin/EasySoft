@@ -541,7 +541,7 @@ namespace EasySaveApp.model
             return check;
         }
 
-        public void transitFormat(bool extension)
+        public void TransitFormat(bool extension)
         {
             Format = extension;
         }

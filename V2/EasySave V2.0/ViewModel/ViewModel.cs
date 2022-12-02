@@ -90,7 +90,7 @@ namespace EasySaveApp.viewmodel
 
         public void TransitFormat(bool format)
         {
-            model.transitFormat(format);
+            model.TransitFormat(format);
         }
     }
 }
