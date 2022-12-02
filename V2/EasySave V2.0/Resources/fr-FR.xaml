@@ -21,4 +21,9 @@
     <system:String x:Key="msg_errorsave">ECHEC DE LA SAUVEGARDE LOGICIELS BLOQUÉS</system:String>
     <system:String x:Key="msg_successsave">Sauvegarde réussie</system:String>
     <system:String x:Key="btn_selectall">Tout</system:String>
+    <system:String x:Key="msg_emptyfield">Completez tous les champs</system:String>
+    <system:String x:Key="msg_saveaddeddiff">Sauvegarde différentielle ajoutée</system:String>
+    <system:String x:Key="msg_saveaddedfull">Sauvegarde Complète ajoutée</system:String>
+    <system:String x:Key="msg_failsave">Erreur Sauvegarde ❎ BLACKLIST APP</system:String>
+    <system:String x:Key="msg_successave">Sauvegarde effectuée ✅</system:String>
 </ResourceDictionary>

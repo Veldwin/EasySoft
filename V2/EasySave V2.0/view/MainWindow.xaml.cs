@@ -13,7 +13,7 @@ namespace EasySaveApp.view
     {
         private ViewModel viewmodel;
 
-        private string language;
+        private string language = "fr";
         private bool formatmw = false;
 
 
@@ -53,7 +53,63 @@ namespace EasySaveApp.view
             }
             this.Resources.MergedDictionaries.Add(dict);
         }
+        private void ButtonAddSaveClick(object sender, RoutedEventArgs e)//Function that allows the button to add a backup
+        {
+            string saveName = "";
+            string sourceDir = "";
+            string targetDir = "";
+            string mirrorDir = "";
 
+            saveName = name_save.Text;
+            sourceDir = SoureDir.Text;
+            targetDir = TargetDir.Text;
+            mirrorDir = MirrorDir.Text;
+
+            if (mirror_button.IsChecked.Value) //If the button of the full backup is selected
+            {
+                if (name_save.Text.Length.Equals(0) || SoureDir.Text.Length.Equals(0) || TargetDir.Text.Length.Equals(0))
+                {
+                    result.Text = (string)FindResource("msg_emptyfield");
+                    /*if (language == "fr")
+                    {
+                        result.Text = " Veuillez remplir tous les champs ! ";
+                    }
+                    else
+                    {
+                        result.Text = " Please complete all fields ! ";
+                    }*/
+                }
+                else
+                {
+                    string type = "full";
+
+                    viewmodel.AddSaveModel(type, saveName, sourceDir, targetDir, ""); //Function to add the backup
+
+                    result.Text = (string)FindResource("msg_saveaddedfull");
+
+                    ShowListBox();//Function to update the list.
+                }
+
+            }
+            else if (diff_button.IsChecked.Value)//If the button of the full backup is selected
+            {
+                if (name_save.Text.Length.Equals(0) || SoureDir.Text.Length.Equals(0) || TargetDir.Text.Length.Equals(0) || MirrorDir.Text.Length.Equals(0))
+                {
+                    result.Text = (string)FindResource("msg_emptyfield");
+                }
+                else
+                {
+                    string type = "diff";
+                    viewmodel.AddSaveModel(type, saveName, sourceDir, targetDir, mirrorDir);//Function to add the backup
+
+                    result.Text = (string)FindResource("msg_saveaddeddiff");
+
+                    ShowListBox();//Function to update the list.
+                }
+
+            }
+
+        }
         private void XmlLog(object sender, RoutedEventArgs e)
         {
             if (xml_button.IsChecked.Value)
@@ -73,85 +129,7 @@ namespace EasySaveApp.view
         }
 
 
-        private void ButtonAddSaveClick(object sender, RoutedEventArgs e)//Function that allows the button to add a backup
-        {
-            string saveName = "";
-            string sourceDir = "";
-            string targetDir = "";
-            string mirrorDir = "";
-
-            saveName = name_save.Text;
-            sourceDir = SoureDir.Text;
-            targetDir = TargetDir.Text;
-            mirrorDir = MirrorDir.Text;
-
-            if (mirror_button.IsChecked.Value) //If the button of the full backup is selected
-            {
-                if (name_save.Text.Length.Equals(0) || SoureDir.Text.Length.Equals(0) || TargetDir.Text.Length.Equals(0))
-                {
-                    if (language == "fr")
-                    {
-                        result.Text = " Veuillez remplir tous les champs ! ";
-                    }
-                    else
-                    {
-                        result.Text = " Please complete all fields ! ";
-                    }
-                }
-                else
-                {
-                    string type = "full";
-
-                    viewmodel.AddSaveModel(type, saveName, sourceDir, targetDir, ""); //Function to add the backup
-
-                    if (language == "fr")//Condition for the display of the success message according to the language chosen by the user.
-                    {
-                        result.Text = "VOUS AVEZ AJOUTÉ UNE SAUVEGARDE \n";
-                    }
-                    else
-                    {
-                        result.Text = "YOU HAVE ADDED A BACKUP";
-                    }
-
-                    ShowListBox();//Function to update the list.
-                }
-
-            }
-            else if (diff_button.IsChecked.Value)//If the button of the full backup is selected
-            {
-                if (name_save.Text.Length.Equals(0) || SoureDir.Text.Length.Equals(0) || TargetDir.Text.Length.Equals(0) || MirrorDir.Text.Length.Equals(0))
-                {
-                    if (language == "fr")
-                    {
-                        result.Text = " Veuillez remplir tous les champs sauf celui du mirror path ! ";
-                    }
-                    else
-                    {
-                        result.Text = " Please complete all fields test! ";
-                    }
-                }
-                else
-                {
-                    string type = "diff";
-                    viewmodel.AddSaveModel(type, saveName, sourceDir, targetDir, mirrorDir);//Function to add the backup
-
-                    if (language == "fr")//Condition for the display of the success message according to the language chosen by the user.
-                    {
-                        result.Text = "VOUS AVEZ AJOUTÉ UNE SAUVEGARDE \n" +
-                            " DIFFÉRENTIELLE";
-                    }
-                    else
-                    {
-                        result.Text = "YOU HAVE ADDED A DIFFERENTIAL\n" +
-                                    " BACKUP";
-                    }
-
-                    ShowListBox();//Function to update the list.
-                }
-
-            }
-
-        }
+        
 
         private void SourceResourceClick(object sender, RoutedEventArgs e)//Function to retrieve the path to the source folder
         {
@@ -228,29 +206,11 @@ namespace EasySaveApp.view
 
                     if (viewmodel.JailAppsStop == false) //Check for message display if blacklisted software was detected.
                     {
-                        if (language == "fr")
-                        {
-                            result.Text = "ECHEC DE SAUVEGARDE ❎\n" +
-                                "ERREUR N°1 : LOGICIEL BLACKLIST \n" +
-                                "EN COURS D'EXECUTION";
-                        }
-                        else
-                        {
-                            result.Text = "BACKUP FAILURE ❎\n" +
-                                "ERROR N°1 : BLACKLIST SOFTWARE\n" +
-                                "IN PROGRESS";
-                        }
+                        result.Text = (string)FindResource("msg_failsave");
                     }
                     else
                     {
-                        if (language == "fr")
-                        {
-                            result.Text = "SAUVEGARDE REUSSIE ✅";
-                        }
-                        else
-                        {
-                            result.Text = "SUCCESSFUL BACKUP ✅";
-                        }
+                        result.Text = (string)FindResource("msg_successave");
                     }
 
                 }

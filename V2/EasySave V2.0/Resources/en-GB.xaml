@@ -21,4 +21,9 @@
     <system:String x:Key="msg_errorsave">BACKUP FAILURE BLACKLIST SOFTWARE</system:String>
     <system:String x:Key="msg_successsave">Successful Backup</system:String>
     <system:String x:Key="btn_selectall">All</system:String>
+    <system:String x:Key="msg_emptyfield">Please complete all fields !</system:String>
+    <system:String x:Key="msg_saveaddeddiff">YOU HAVE ADDED A DIFFERENTIAL BACKUP</system:String>
+    <system:String x:Key="msg_saveaddedfull">YOU HAVE ADDED A FULL BACKUP</system:String>
+    <system:String x:Key="msg_failsave">BACKUP FAILURE ❎ BLACKLIST APP</system:String>
+    <system:String x:Key="msg_successave">SUCCESSFUL BACKUP ✅</system:String>
 </ResourceDictionary>
