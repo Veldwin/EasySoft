@@ -2,18 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <system:String x:Key="backup_name">Nom de la sauvegarde</system:String>
+    <system:String x:Key="backup_name">Nom de la sauvegarde :</system:String>
     <system:String x:Key="diff_button">Sauvegarde Différentielle</system:String>
     <system:String x:Key="mirror_button">Sauvegarde Complète</system:String>
-    <system:String x:Key="source_name">Chemin du dossier source:</system:String>
-    <system:String x:Key="target_name">Chemin du dossier cible:</system:String>
-    <system:String x:Key="mirror_name">Sauvegarde du dossier miroir:</system:String>
+    <system:String x:Key="source_name">Chemin du dossier source :</system:String>
+    <system:String x:Key="target_name">Chemin du dossier cible :</system:String>
+    <system:String x:Key="mirror_name">Sauvegarde du dossier miroir :</system:String>
     <system:String x:Key="text_addsave">AJOUTER UNE SAUVEGARDE</system:String>
     <system:String x:Key="text_startbackup">DÉMARRER LA SAUVEGARDE</system:String>
     <system:String x:Key="text_jailapps">Logiciels bloqués</system:String>
     <system:String x:Key="francais_text">FRANÇAIS</system:String>
     <system:String x:Key="english_text">ANGLAIS</system:String>
-    <system:String x:Key="delete_backup">Supprimer la sauvegarde</system:String>
+    <system:String x:Key="delete_backup">Supprimer</system:String>
     <system:String x:Key="msg_checkfield">Veuillez remplir tous les champs</system:String>
     <system:String x:Key="msg_addsave">VOUS AVEZ AJOUTÉ UNE SAUVEGARDE</system:String>
     <system:String x:Key="msg_diffcheckfield">Veuillez remplir tous les champs test!</system:String>
@@ -26,4 +26,5 @@
     <system:String x:Key="msg_saveaddedfull">Sauvegarde Complète ajoutée</system:String>
     <system:String x:Key="msg_failsave">Erreur Sauvegarde ❎ BLACKLIST APP</system:String>
     <system:String x:Key="msg_successave">Sauvegarde effectuée ✅</system:String>
+    <system:String x:Key="msg_parameters">Paramètres</system:String>
 </ResourceDictionary>

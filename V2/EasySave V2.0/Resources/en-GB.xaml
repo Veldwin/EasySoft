@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <system:String x:Key="backup_name">Backup Name</system:String>
+    <system:String x:Key="backup_name">Backup Name :</system:String>
     <system:String x:Key="diff_button">Differential Backup</system:String> 
     <system:String x:Key="mirror_button">Mirror Backup</system:String>
-    <system:String x:Key="source_name">Source folder path:</system:String>
-    <system:String x:Key="target_name">Target folder path:</system:String>
-    <system:String x:Key="mirror_name">Mirror folder backup:</system:String>
+    <system:String x:Key="source_name">Source folder path :</system:String>
+    <system:String x:Key="target_name">Target folder path :</system:String>
+    <system:String x:Key="mirror_name">Mirror folder backup :</system:String>
     <system:String x:Key="text_addsave">ADD SAVE</system:String>
     <system:String x:Key="text_startbackup">START THE BACKUP</system:String>
     <system:String x:Key="text_jailapps">BLACKLIST SOFTWARE</system:String>
@@ -26,4 +26,5 @@
     <system:String x:Key="msg_saveaddedfull">YOU HAVE ADDED A FULL BACKUP</system:String>
     <system:String x:Key="msg_failsave">BACKUP FAILURE ❎ BLACKLIST APP</system:String>
     <system:String x:Key="msg_successave">SUCCESSFUL BACKUP ✅</system:String>
+    <system:String x:Key="msg_parameters">Parameters</system:String>
 </ResourceDictionary>
