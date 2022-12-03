@@ -9,6 +9,7 @@ namespace EasySaveApp.model
         public string BackupDateLog { get; set; }
         public string TransactionTimeLog { get; set; }
         public long TotalSizeLog { get; set; }
+        public string CryptTime { get; set; }
 
 
     }

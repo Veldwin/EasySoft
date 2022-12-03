@@ -127,7 +127,7 @@
             </Grid>
 
             <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
-            <ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,44,110"/>
+            <ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,129,110"/>
 
             <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,148,44,64"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="150" Height="30">
@@ -147,6 +147,21 @@
                 </Grid>
             </Button>
             <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,190,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
+            <Button x:Name="button_start_save_Copy" Click="ButtonStartSaveClick" Margin="645,13,44,199"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+                <Grid Width="54" Height="30">
+                    <materialDesigin:PackIcon Kind="Play" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
+            <Button x:Name="button_start_save_Copy1" Click="ButtonStartSaveClick" Margin="645,56,44,156"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+                <Grid Width="54" Height="30">
+                    <materialDesigin:PackIcon Kind="Pause" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
+            <Button x:Name="button_start_save_Copy2" Click="ButtonStartSaveClick" Margin="645,98,44,114"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+                <Grid Width="54" Height="30">
+                    <materialDesigin:PackIcon Kind="Stop" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
+                </Grid>
+            </Button>
 
         </Grid>
 
@@ -156,7 +171,7 @@
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>
             </StackPanel>
-            <Label Content="EasySave V2.0" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="434,-5,0,0"/>
+            <Label Content="EasySave V3.0" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="434,-5,0,0"/>
         </Grid>
 
 

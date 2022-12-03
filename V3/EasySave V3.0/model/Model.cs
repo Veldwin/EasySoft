@@ -6,8 +6,6 @@ using System.Linq;
 using System.Diagnostics;
 using System.Xml.Linq;
 using System.Xml;
-using System.Windows;
-using System.DirectoryServices.ActiveDirectory;
 
 namespace EasySaveApp.model
 {
@@ -35,12 +33,14 @@ namespace EasySaveApp.model
         public long TotalSize { get; set; }
         public int NbFileMmax { get; private set; }
         public TimeSpan TimeTransfert { get; set; }
+        public TimeSpan CryptTransfert { get; set; }
         public string UserMenuInput { get; set; }
         public string MirrorResource { get; set; }
         public bool Format { get; set; }
 
         public Model()
         {
+
             UserMenuInput = " ";
 
             if (!Directory.Exists(backupListFile)) //Check if the folder is created
@@ -61,6 +61,7 @@ namespace EasySaveApp.model
             DataState = new DataState(NameStateFile);
             DataState.SaveState = true;
             Stopwatch stopwatch = new Stopwatch();
+            Stopwatch cryptwatch = new Stopwatch();
             stopwatch.Start();
             TotalSize = 0;
             NbFileMmax = 0;
@@ -120,7 +121,17 @@ namespace EasySaveApp.model
 
                 UpdateStateFile();
 
-                file.CopyTo(tempPath, true);
+                if (CryptExt(Path.GetExtension(file.Name)))
+                {
+                    cryptwatch.Start();
+                    Encrypt(DataState.SourceFileState, tempPath);
+                    cryptwatch.Stop();
+                }
+                else
+                {
+                    file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
+                }
+                
                 Nbfiles++;
                 Size += file.Length;
 
@@ -137,7 +148,9 @@ namespace EasySaveApp.model
             }
             ResetValue();
             UpdateStateFile();
+            cryptwatch.Stop();
             stopwatch.Stop();
+            CryptTransfert = stopwatch.Elapsed;
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
 
@@ -151,6 +164,7 @@ namespace EasySaveApp.model
         {
             DataState = new DataState(NameStateFile);
             Stopwatch stopwatch = new Stopwatch();
+            Stopwatch cryptwatch = new Stopwatch();
             stopwatch.Start();
 
             DataState.SaveState = true;
@@ -191,7 +205,18 @@ namespace EasySaveApp.model
                 DataState.FileRestState = NbFileMmax - Nbfiles;
                 DataState.ProgressState = Progs;
                 UpdateStateFile();
-                v.CopyTo(tempPath, true);
+                
+                if (CryptExt(Path.GetExtension(v.Name)))
+                {
+                    cryptwatch.Start();
+                    Encrypt(DataState.SourceFileState, tempPath);
+                    cryptwatch.Stop();
+                }
+                else
+                {
+                    v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
+                }
+                
                 Size += v.Length;
                 Nbfiles++;
             }
@@ -199,7 +224,9 @@ namespace EasySaveApp.model
             ResetValue();
             UpdateStateFile();
             stopwatch.Stop();
-            TimeTransfert = stopwatch.Elapsed;
+            cryptwatch.Stop();
+            TimeTransfert = stopwatch.Elapsed; // Note the time passed
+            CryptTransfert = stopwatch.Elapsed;
         }
 
 
@@ -267,6 +294,7 @@ namespace EasySaveApp.model
         public void UpdateLogFile(string savename, string sourcelog, string targetlog)
         {
             string Time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
+            string elapsedCrypt = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", CryptTransfert.Hours, CryptTransfert.Minutes, CryptTransfert.Seconds, CryptTransfert.Milliseconds / 10);
             DataLogs datalogs = new DataLogs
             {
                 SaveNameLog = savename,
@@ -274,7 +302,8 @@ namespace EasySaveApp.model
                 TargetLog = targetlog,
                 BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
                 TotalSizeLog = TotalSize,
-                TransactionTimeLog = Time
+                TransactionTimeLog = Time,
+                CryptTime = elapsedCrypt,
             };
             string path = System.Environment.CurrentDirectory;
             var directory = System.IO.Path.GetDirectoryName(path);
@@ -306,6 +335,7 @@ namespace EasySaveApp.model
                 XmlNode Date = xdoc.CreateElement("date");
                 XmlNode SizeOctet = xdoc.CreateElement("size");
                 XmlNode TransfertTime = xdoc.CreateElement("transfertTime");
+                XmlNode CryptTime = xdoc.CreateElement("cryptTime");
 
                 Name.InnerText = datalogs.SaveNameLog;
                 SourceFile.InnerText = datalogs.SourceLog;
@@ -320,6 +350,7 @@ namespace EasySaveApp.model
                 Log.AppendChild(Date);
                 Log.AppendChild(SizeOctet);
                 Log.AppendChild(TransfertTime);
+                Log.AppendChild(CryptTime);
 
                 xdoc.DocumentElement.PrependChild(Log);
                 xdoc.Save(pathfiles);
@@ -450,6 +481,45 @@ namespace EasySaveApp.model
                     checkDataBackup = list.Length; //Allows to count the number of backups
                 }
             }
+        }
+
+        private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
+        {
+            using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
+            {
+                CryptFormat[] item_crypt;
+                string[] crypt_extensions_array;
+                string json = reader.ReadToEnd();
+                List<CryptFormat> items = JsonConvert.DeserializeObject<List<CryptFormat>>(json);
+                item_crypt = items.ToArray();
+                crypt_extensions_array = item_crypt[0].extensionCrypt.Split(',');
+
+                return crypt_extensions_array; //We return the variables that are stored in an array
+            }
+        }
+        public static bool CryptExt(string extension)//Function that compares the extensions of the json file and the one of the file being backed up.
+        {
+            foreach (string extensionExt in getExtensionCrypt())
+            {
+                if (extensionExt == extension)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Encrypt(string sourceDir, string targetDir)//This function allows you to encrypt files. 
+        {
+            using (Process process = new Process())//Declaration of the process
+            {
+                process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
+                process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
+                process.Start(); //Launching the process
+                process.Close();
+
+            }
+
         }
 
         public List<Backup> NameList()//Function that lets you know the names of the backups.
