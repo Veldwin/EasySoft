@@ -11,7 +11,7 @@
     <system:String x:Key="text_addsave">ADD SAVE</system:String>
     <system:String x:Key="text_startbackup">START THE BACKUP</system:String>
     <system:String x:Key="text_jailapps">BLACKLIST SOFTWARE</system:String>
-    <system:String x:Key="francais_text">FRENCH</system:String>
+    <system:String x:Key="francais_text">FRANCAIS</system:String>
     <system:String x:Key="english_text">ENGLISH</system:String>
     <system:String x:Key="msg_checkfield">Please complete all fields</system:String>
     <system:String x:Key="delete_backup">Delete Backup</system:String>
@@ -27,4 +27,5 @@
     <system:String x:Key="msg_failsave">BACKUP FAILURE ❎ BLACKLIST APP</system:String>
     <system:String x:Key="msg_successave">SUCCESSFUL BACKUP ✅</system:String>
     <system:String x:Key="msg_parameters">Parameters</system:String>
+    <system:String x:Key="btn_unselectall">None</system:String>
 </ResourceDictionary>

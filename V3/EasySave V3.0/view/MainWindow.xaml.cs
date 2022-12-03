@@ -226,6 +226,11 @@ namespace EasySaveApp.view
             Save_work.SelectAll();
         }
 
+        private void ButtonUnselectAll(object sender, RoutedEventArgs e)
+        {
+            Save_work.UnselectAll();
+        }
+
         private void ButtonDeleteSave(object sender, RoutedEventArgs e)//Function that allows the deletion of a backup
         {
             string saveName = "";
