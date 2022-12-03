@@ -1,4 +1,4 @@
-# EasySoft v1.0 By PROSOFT
+# EasySoft v1.1 By PROSOFT
 
 ## User's Manual / Manuel d'Utilisation V1.0
 
@@ -50,6 +50,8 @@ Pour démarrer une tâche de sauvegarde, vous devez entrer le nom de la sauvegar
 Après avoir rempli le nom de la sauvegarde, l'exécution commencera. Si la sauvegarde fonctionne bien, vous obtiendrez un message de validation.
 
 ### Log file / Fichier Log
+
+The Log file can be generate with a json or xml format.
 
 The log file is saved here: `\EasySoft\bin`. 
 
