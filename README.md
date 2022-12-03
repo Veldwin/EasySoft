@@ -6,9 +6,9 @@ Easysave is a back up folder software. It's a school project created by a team o
 
 ## Built with
 
-Visual Studio 2022 (enterprise version)
-Visual Pardigm (for diagram)
-Git Repos
+* Visual Studio 2022 (enterprise version)
+* Visual Pardigm (for diagram)
+* Git Repos
 
 ## Version 1.0
 
