@@ -82,7 +82,7 @@ Version	Available
 | Version | Available          |
 | ------- | ------------------ |
 |   [1.0](V1/)   | :white_check_mark: |
-|   [1.1](V1/)   | :white_check_mark: |
+|   [1.1](V1_1/V1)   | :white_check_mark: |
 |   [2.0](V2/EasySave%20V2.0)   | :white_check_mark: |
 |   [3.0](Version3.0/EasySave%20V3.0)   | ❎ |
 
