@@ -85,10 +85,3 @@ Version	Available
 |   [1.1](https://github.com/Veldwin/EasySoft/tree/V1_1/V1)   | :white_check_mark: |
 |   [2.0](V2/EasySave%20V2.0)   | :white_check_mark: |
 |   [3.0](V3/EasySave%20V3.0)   | ❎ |
-
-## Authors
-
-- RAAD Camille
-- GIRAUDEAU Valentin
-- TRENY Edwin
-- WAUTERS Mathis
