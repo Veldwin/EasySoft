@@ -1,6 +1,6 @@
 # EasySoft v1.1 By PROSOFT
 
-## User's Manual / Manuel d'Utilisation V1.0
+## User's Manual / Manuel d'Utilisation V1.1
 
 ### Features / Fonctionalités
 
