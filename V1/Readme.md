@@ -8,6 +8,7 @@
 - Full Backup / Sauvegarde complète
 - Differential Backup / Sauvegarde différentielle
 - 5 Backups maximum / 5 Sauvegardes maximum
+- Logs in Xml or Json extension
 
 ### Install EasySoft / Installer EasySoft
 
