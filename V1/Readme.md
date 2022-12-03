@@ -8,7 +8,7 @@
 - Full Backup / Sauvegarde complète
 - Differential Backup / Sauvegarde différentielle
 - 5 Backups maximum / 5 Sauvegardes maximum
-- Logs in Xml or Json extension
+- Logs in Xml or Json extension / Log avec extension Xml ou Json
 
 ### Install EasySoft / Installer EasySoft
 
@@ -53,6 +53,8 @@ Après avoir rempli le nom de la sauvegarde, l'exécution commencera. Si la sauv
 ### Log file / Fichier Log
 
 The Log file can be generate with a json or xml format.
+
+Le fichier journal peut être généré au format json ou xml.
 
 The log file is saved here: `\EasySoft\bin`. 
 
