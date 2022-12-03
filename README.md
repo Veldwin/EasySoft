@@ -29,7 +29,7 @@ The user may request the execution of one of the backup jobs or the sequential e
 
 ### Daily Log File :
 
-The software write in real time in a daily log file the history of the actions of the backup jobs. The minimum expected information is :
+The software write in real time in a daily log file (Xml or Json) the history of the actions of the backup jobs. The minimum expected information is :
 
 Timestamp  
 Naming the backup job
@@ -52,7 +52,7 @@ The number of backup jobs is now unlimited. 
 
 ### Evolution of the Daily Log file
 
-The daily log file can be generate with a json or xml extension.
+The daily log file can be generate with a json or xml extension at the user's choice.
 
 ### Business software
 
