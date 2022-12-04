@@ -88,7 +88,7 @@ Version	Available
 
 ## Authors
 
-- RAAD Camille
-- GIRAUDEAU Valentin
-- TRENY Edwin
-- WAUTERS Mathis
+* RAAD Camille
+* GIRAUDEAU Valentin
+* TRENY Edwin
+* WAUTERS Mathis
