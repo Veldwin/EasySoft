@@ -220,6 +220,11 @@ namespace EasySaveApp.view
             System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\JailApps.json");
         }
 
+        private void OpenCryptExt(object sender, RoutedEventArgs e)//Function that allows the button to open the file of blacklisted software
+        {
+            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\CryptExtension.json");
+        }
+
 
         private void ButtonSelectAll(object sender, RoutedEventArgs e)
         {
