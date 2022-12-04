@@ -37,6 +37,10 @@ namespace EasySaveApp.model
         public string UserMenuInput { get; set; }
         public string MirrorResource { get; set; }
         public bool Format { get; set; }
+        public bool button_play { get; set; }
+        public bool button_pause { get; set; }
+        public bool button_stop { get; set; }
+        public string StatusButton { get; set; }
 
         public Model()
         {
@@ -608,6 +612,51 @@ namespace EasySaveApp.model
         public void ModelFormat(bool extension)
         {
             Format = extension;
+        }
+
+        public static string[] getPriority() //Function that allows to recover the extensions of the files to be prioritized
+        {
+            using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtension.json"))//Function to read the json file
+            {
+                PriorityFormat[] item_Priolist;
+                string[] cryptlist_extensions_array;
+                string json = reader.ReadToEnd();
+                List<PriorityFormat> items = JsonConvert.DeserializeObject<List<PriorityFormat>>(json);
+                item_Priolist = items.ToArray();
+                cryptlist_extensions_array = item_Priolist[0].priority_extension.Split(',');
+
+                return cryptlist_extensions_array;
+            }
+        }
+
+        public static bool PriorityExt(string extension) //Function that compares the extensions of the file to be prioritized json and that of the saved file.
+        {
+            foreach (string prio_ext in getPriority())
+            {
+                if (prio_ext == extension)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool Play_click()
+        {
+            button_play = true;
+            return button_play;
+        }
+
+        public bool Pause_click()
+        {
+            button_pause = true;
+            return button_pause;
+        }
+        public bool Stop_click()
+        {
+            button_stop = true;
+            return button_stop;
         }
     }
 }

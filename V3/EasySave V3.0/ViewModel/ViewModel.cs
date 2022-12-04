@@ -58,5 +58,24 @@ namespace EasySaveApp.viewmodel
         {
             model.ModelFormat(format);
         }
+
+        public string Check_buttonStatus()
+        {
+
+            return model.StatusButton;
+        }
+
+        public void PlayButton_click()
+        {
+            model.Play_click();
+        }
+        public void PauseButton_click()
+        {
+            model.Pause_click();
+        }
+        public void StopButton_click()
+        {
+            model.Stop_click();
+        }
     }
 }
