@@ -614,9 +614,9 @@ namespace EasySaveApp.model
             Format = extension;
         }
 
-        public static string[] getPriority() //Function that allows to recover the extensions of the files to be prioritized
+        public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
         {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtension.json"))//Function to read the json file
+            using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtensions.json"))//Function to read the json file
             {
                 PriorityFormat[] item_Priolist;
                 string[] cryptlist_extensions_array;
@@ -631,7 +631,7 @@ namespace EasySaveApp.model
 
         public static bool PriorityExt(string extension) //Function that compares the extensions of the file to be prioritized json and that of the saved file.
         {
-            foreach (string prio_ext in getPriority())
+            foreach (string prio_ext in GetPriority())
             {
                 if (prio_ext == extension)
                 {

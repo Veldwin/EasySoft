@@ -62,6 +62,12 @@
                         <TextBlock x:Name="englishtext1"  Text="CryptoSoft" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </Button>
+                <Button Margin="10" Click="Open_extensionprio" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
+                    <Grid Width="150" Height="30">
+                        <materialDesigin:PackIcon Kind="PriorityHigh" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                        <TextBlock x:Name="textextensionprio" Text="{DynamicResource ResourceKey=btn_priority}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
+                    </Grid>
+                </Button>
 
                 <Button x:Name="button_fr" Margin="10" Click="ButtonClickFr" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
                     <Grid Width="150" Height="30">
@@ -79,13 +85,17 @@
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="73*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="111*"/>
                 <RowDefinition Height="124*"/>
             </Grid.RowDefinitions>
 
-            <Rectangle Margin="20,26,20,26" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
-            <Grid>
+            <Rectangle Margin="20,26,0,26" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
+            <Grid Grid.ColumnSpan="2">
                 <Button x:Name="buton_addsave" Click="ButtonAddSaveClick" Margin="510,138,40,36"  Background="#003E20" Height="48" BorderBrush="{x:Null}">
                     <Grid Width="150" Height="30">
                         <materialDesigin:PackIcon Kind="backup" Margin="-16,1,0,0" Foreground="White" Height="25" Width="25"/>
@@ -126,38 +136,38 @@
                 <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="611,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" />
             </Grid>
 
-            <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
-            <ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,129,110"/>
+            <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
+            <ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,109,110"/>
 
-            <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,148,44,64"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+            <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,148,24,64"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="150" Height="30">
                     <materialDesigin:PackIcon Kind="Update" Margin="-16,1,0,0" Foreground="White" Height="25" Width="25"/>
                     <TextBlock x:Name="text_startbackup" Text="{DynamicResource ResourceKey = text_startbackup}" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" FontSize="10" Foreground="White" Margin="4,0,-14,0" FontWeight="Bold"/>
                 </Grid>
             </Button>
 
-            <Rectangle Grid.Row="1"  Margin="50,147,337,27" Fill="#003E20" RadiusX="15" RadiusY="15"/>
+            <Rectangle Grid.Row="1"  Margin="50,147,317,27" Fill="#003E20" RadiusX="15" RadiusY="15"/>
             <materialDesigin:PackIcon Kind="Message" Margin="62,160,0,0" Foreground="White" Height="51" Width="56" Visibility="Visible" Grid.Row="1"/>
             <TextBlock x:Name="result" TextAlignment="Justify"  VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="122,158,0,0" FontFamily="Segoe UI Variable Text Semibold" Width="277" Grid.Row="1" Height="53" Foreground="White"/>
             <Button Content="{DynamicResource ResourceKey = btn_selectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,149,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonSelectAll" Height="34" Width="71" FontWeight="Bold"/>
-            <Button Click="ButtonDeleteSave" Background="#003E20" BorderBrush="{x:Null}" Margin="506,189,44,26" Grid.Row="1">
+            <Button Click="ButtonDeleteSave" Background="#003E20" BorderBrush="{x:Null}" Margin="506,189,24,26" Grid.Row="1">
                 <Grid Width="150" Height="30">
                     <materialDesigin:PackIcon Kind="Delete" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="White" Height="19" Width="20"/>
                     <TextBlock x:Name="textdeletebackup"  Text="{DynamicResource ResourceKey=delete_backup}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="White" FontWeight="Bold"/>
                 </Grid>
             </Button>
             <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,190,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
-            <Button x:Name="button_start_save_Copy" Click="ButtonStartSaveClick" Margin="645,13,44,199"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+            <Button x:Name="button_play" Click="Button_Play_click" Margin="645,13,24,199"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="54" Height="30">
                     <materialDesigin:PackIcon Kind="Play" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
                 </Grid>
             </Button>
-            <Button x:Name="button_start_save_Copy1" Click="ButtonStartSaveClick" Margin="645,56,44,156"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+            <Button x:Name="button_pause" Click="Button_Pause_click" Margin="645,56,24,156"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="54" Height="30">
                     <materialDesigin:PackIcon Kind="Pause" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
                 </Grid>
             </Button>
-            <Button x:Name="button_start_save_Copy2" Click="ButtonStartSaveClick" Margin="645,98,44,114"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+            <Button x:Name="button_stop" Click="Button_Stop_click" Margin="645,98,24,114"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="54" Height="30">
                     <materialDesigin:PackIcon Kind="Stop" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
                 </Grid>
@@ -167,6 +177,9 @@
 
         <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20" MouseDown="GridMenuMouseDown">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="#F3F3F4">
+                <Button x:Name="Buttonsmall" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#003E20" Click="Button_minimize">
+                    <materialDesigin:PackIcon Kind="WindowMinimize"/>
+                </Button>
                 <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="ButtonExit">
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>

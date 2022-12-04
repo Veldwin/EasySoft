@@ -1,8 +1,26 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using EasySaveApp.model;
 using EasySaveApp.viewmodel;
+using System.Diagnostics;
+using System.Threading;
+using System.Net.Sockets;
+using System.Net;
+using System.Windows.Forms;
+using MessageBox = System.Windows.MessageBox;
 
 namespace EasySaveApp.view
 {
@@ -129,7 +147,7 @@ namespace EasySaveApp.view
         }
 
 
-        
+
 
         private void SourceResourceClick(object sender, RoutedEventArgs e)//Function to retrieve the path to the source folder
         {
@@ -185,7 +203,7 @@ namespace EasySaveApp.view
 
         private void ButtonExit(object sender, RoutedEventArgs e)//Function of the button to close the software
         {
-            Application.Current.Shutdown();//Function that turns off the software
+            Process.GetCurrentProcess().Kill();//Function that turns off the software
         }
 
         private void GridMenuMouseDown(object sender, RoutedEventArgs e)//Function that allows you to move the software window.
@@ -251,5 +269,30 @@ namespace EasySaveApp.view
                 ShowListBox();//Function to update the list.
             }
         }
-    }
+
+        private void Button_Play_click(object sender, RoutedEventArgs e)
+        {
+            viewmodel.PlayButton_click();
+        }
+
+        private void Button_Pause_click(object sender, RoutedEventArgs e)
+        {
+            viewmodel.PauseButton_click();
+        }
+        
+        private void Button_Stop_click(object sender, RoutedEventArgs e)
+        {
+            viewmodel.StopButton_click();
+        }
+
+        private void Open_extensionprio(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
+        {
+            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Ressources\PriorityExtensions.json");
+        }
+
+        private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.
+        {
+            WindowState = (WindowState)FormWindowState.Minimized;
+        }
+    }   
 }

@@ -28,4 +28,5 @@
     <system:String x:Key="msg_successave">Sauvegarde effectuée ✅</system:String>
     <system:String x:Key="msg_parameters">Paramètres</system:String>
     <system:String x:Key="btn_unselectall">Aucune</system:String>
+    <system:String x:Key="btn_priority">Extensions prio</system:String>
 </ResourceDictionary>

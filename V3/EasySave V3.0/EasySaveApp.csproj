@@ -3,7 +3,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>EasySave_V2._0</RootNamespace>
+	<UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>EasySaveApp</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
