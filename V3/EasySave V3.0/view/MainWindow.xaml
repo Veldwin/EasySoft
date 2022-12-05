@@ -114,7 +114,6 @@
                         <ColumnDefinition Width="37*"/>
                         <ColumnDefinition Width="292*"/>
                     </Grid.ColumnDefinitions>
-
                     <Label x:Name="name_backup" Content="{DynamicResource ResourceKey = backup_name}" FontFamily="Segoe UI Variable Text Semibold" Margin="21,33,0,162"/>
                     <Label x:Name="source_name" FontFamily="Segoe UI Variable Text Semibold" Content="{DynamicResource ResourceKey = source_name}" Margin="21,65,4,131"/>
                     <Label x:Name="target_name" Content="{DynamicResource ResourceKey = target_name}" FontFamily="Segoe UI Variable Text Semibold" Margin="21,102,1,96"/>
@@ -137,7 +136,69 @@
             </Grid>
 
             <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
-            <ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,109,110"/>
+            <!--<ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,109,110"/>-->
+            <DataGrid Grid.Row="1" Margin="20,13,0,114" x:Name="Save_work" ItemsSource="{Binding NamesList}" IsReadOnly="True" AutoGenerateColumns = "False">
+                <DataGrid.Columns>
+                    <!--Add checkbox to select the line-->
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding ElementName=myListView, Path=SelectedItem}"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!-- Name save -->
+                    <DataGridTextColumn Binding="{Binding}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock x:Name="Grid_Name" Text="{DynamicResource backup_name}" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock x:Name="Grid_Source" Text="Play" />
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="button_play" Content="Play" Background="#003E20" Foreground="White" Width="50" Click="Button_Play_click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock x:Name="button_pause" Text="Pause" />
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="button_pause" Content="Pause" Background="#003E20" Foreground="White" Width="50" Click="Button_Pause_click"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock x:Name="button_stop" Text="Stop" />
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button x:Name="button_stop" Content="Stop" Background="#003E20" Foreground="White" Width="50" Click="Button_Stop_click"></Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.Header>
+                            <TextBlock x:Name="progress_bar" Text="Progression" />
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ProgressBar x:Name="progressBar" Width="100" Height="20" Value="{Binding Progression}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
 
             <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,148,24,64"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="150" Height="30">
@@ -157,21 +218,6 @@
                 </Grid>
             </Button>
             <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,190,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
-            <Button x:Name="button_play" Click="Button_Play_click" Margin="645,13,24,199"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
-                <Grid Width="54" Height="30">
-                    <materialDesigin:PackIcon Kind="Play" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
-                </Grid>
-            </Button>
-            <Button x:Name="button_pause" Click="Button_Pause_click" Margin="645,56,24,156"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
-                <Grid Width="54" Height="30">
-                    <materialDesigin:PackIcon Kind="Pause" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
-                </Grid>
-            </Button>
-            <Button x:Name="button_stop" Click="Button_Stop_click" Margin="645,98,24,114"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
-                <Grid Width="54" Height="30">
-                    <materialDesigin:PackIcon Kind="Stop" Margin="15,0,0,0" Foreground="White" Height="26" Width="26" VerticalAlignment="Center"/>
-                </Grid>
-            </Button>
 
         </Grid>
 

@@ -1,6 +1,6 @@
 namespace EasySaveApp.model
 {
-    class Backup
+    public class Backup
     {
         // Declaration of properties that are used for saving backup information for the backup job file
         public string ResourceBackup { get; set; }

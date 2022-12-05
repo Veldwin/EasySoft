@@ -2,12 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
 
-    <system:String x:Key="backup_name">Nom de la sauvegarde :</system:String>
+    <system:String x:Key="backup_name">Nom de la sauvegarde</system:String>
     <system:String x:Key="diff_button">Sauvegarde Différentielle</system:String>
     <system:String x:Key="mirror_button">Sauvegarde Complète</system:String>
-    <system:String x:Key="source_name">Chemin du dossier source :</system:String>
-    <system:String x:Key="target_name">Chemin du dossier cible :</system:String>
-    <system:String x:Key="mirror_name">Sauvegarde du dossier miroir :</system:String>
+    <system:String x:Key="source_name">Chemin du dossier source</system:String>
+    <system:String x:Key="target_name">Chemin du dossier cible</system:String>
+    <system:String x:Key="mirror_name">Sauvegarde du dossier miroir</system:String>
     <system:String x:Key="text_addsave">AJOUTER UNE SAUVEGARDE</system:String>
     <system:String x:Key="text_startbackup">DÉMARRER LA SAUVEGARDE</system:String>
     <system:String x:Key="text_jailapps">Logiciels bloqués</system:String>

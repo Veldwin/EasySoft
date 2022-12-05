@@ -1,26 +1,14 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using EasySaveApp.model;
 using EasySaveApp.viewmodel;
 using System.Diagnostics;
 using System.Threading;
-using System.Net.Sockets;
-using System.Net;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
+using EasySaveApp.model;
+using System.Linq;
 
 namespace EasySaveApp.view
 {
@@ -255,7 +243,8 @@ namespace EasySaveApp.view
         private void ButtonDeleteSave(object sender, RoutedEventArgs e)//Function that allows the deletion of a backup
         {
             string saveName = "";
-
+            /*var selectedItems = ((List<Backup>)Save_work.ItemsSource).Where(x => x.IsSelected).ToList();*/
+            
             if (Save_work.SelectedItem != null) //Condition that allows to check if the user has selected a backup.
             {
                 foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
@@ -285,12 +274,17 @@ namespace EasySaveApp.view
 
         private void Open_extensionprio(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
         {
-            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Ressources\PriorityExtensions.json");
+            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\PriorityExtensions.json");
         }
 
         private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.
         {
             WindowState = (WindowState)FormWindowState.Minimized;
         }
-    }   
+
+        //When checkbox is selected, select the backup in the datagrid
+
+
+
+    }
 }
