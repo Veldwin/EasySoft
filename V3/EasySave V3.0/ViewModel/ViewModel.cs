@@ -161,7 +161,7 @@ namespace EasySaveApp.viewmodel
                         else if (content.IndexOf("PLAY" + name) > -1)
                         {
                             // MessageBox.Show("PLAY" + name);
-                            LoadBackup(name, langue);
+                            LoadBackup(name, "en" );
 
                         }
                         else if (content.IndexOf("PAUSE" + name) > -1)

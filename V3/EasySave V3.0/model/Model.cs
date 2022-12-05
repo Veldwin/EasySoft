@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml;
+using System.Windows;
 
 namespace EasySaveApp.model
 {
