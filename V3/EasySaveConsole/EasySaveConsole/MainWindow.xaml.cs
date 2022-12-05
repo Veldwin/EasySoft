@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -76,7 +76,7 @@ namespace EasySaveConsole
             try
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(text_ipserevr.Text);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
@@ -102,7 +102,7 @@ namespace EasySaveConsole
             try
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(text_ipserevr.Text);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
@@ -129,7 +129,7 @@ namespace EasySaveConsole
             try
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(text_ipserevr.Text);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
@@ -158,7 +158,7 @@ namespace EasySaveConsole
             {
                 // Establish the local endpoint for the socket.
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(ip);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
@@ -299,7 +299,7 @@ namespace EasySaveConsole
             try
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(text_ipserevr.Text);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
 
                 // Create a TCP/IP socket.  
@@ -315,13 +315,18 @@ namespace EasySaveConsole
                 
                 Receive(client);
                 receiveDone.WaitOne();
-                MessageBox.Show("GET PRGRESSING....");
+                MessageBox.Show("GET PROGRESSING....");
                 progression.Content = "Progressing : " + response;
             }
             catch
             {
 
             }
+        }
+        
+        private void GridMenuMouseDown(object sender, RoutedEventArgs e)//Function that allows you to move the software window.
+        {
+            DragMove();//Function that allows movement
         }
     }
 }

@@ -102,10 +102,7 @@
         </Grid>
         <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20" MouseDown="GridMenuMouseDown">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="#F3F3F4">
-                <Button x:Name="Buttonsmall" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#003E20" Click="Button_minimize">
-                    <materialDesigin:PackIcon Kind="WindowMinimize"/>
-                </Button>
-                <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="ButtonExit">
+                <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="Button_exit">
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>
             </StackPanel>

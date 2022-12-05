@@ -25,7 +25,7 @@ namespace EasySaveApp.view
 
         public MainWindow()
         {
-            viewmodel = new ViewModel();
+            viewmodel = ViewModel.getInstance();
             InitializeComponent();
             ShowListBox();
 
@@ -95,7 +95,6 @@ namespace EasySaveApp.view
                 else
                 {
                     string type = "full";
-
                     viewmodel.AddSaveModel(type, saveName, sourceDir, targetDir, ""); //Function to add the backup
 
                     result.Text = (string)FindResource("msg_saveaddedfull");
@@ -212,7 +211,7 @@ namespace EasySaveApp.view
             {
                 foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
-                    string saveName = item.ToString();
+                    string saveName = item.ToString();                   
 
                     new Thread(() => viewmodel.LoadBackup(saveName, language)).Start();
                 }
@@ -243,8 +242,7 @@ namespace EasySaveApp.view
         private void ButtonDeleteSave(object sender, RoutedEventArgs e)//Function that allows the deletion of a backup
         {
             string saveName = "";
-            /*var selectedItems = ((List<Backup>)Save_work.ItemsSource).Where(x => x.IsSelected).ToList();*/
-            
+
             if (Save_work.SelectedItem != null) //Condition that allows to check if the user has selected a backup.
             {
                 foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
@@ -280,11 +278,6 @@ namespace EasySaveApp.view
         private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.
         {
             WindowState = (WindowState)FormWindowState.Minimized;
-        }
-
-        //When checkbox is selected, select the backup in the datagrid
-
-
-
+        }        
     }
 }

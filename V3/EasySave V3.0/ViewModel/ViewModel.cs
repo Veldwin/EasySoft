@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using System.ComponentModel;
+using System.Linq;
 
 namespace EasySaveApp.viewmodel
 {
@@ -26,6 +27,16 @@ namespace EasySaveApp.viewmodel
             model = new Model();
             Thread ServerThread = new Thread(StartServer);
             ServerThread.Start();
+        }
+
+        private static ViewModel? _viewModel;
+        public static ViewModel getInstance()
+        {
+            if (_viewModel == null)
+            {
+                _viewModel = new ViewModel();
+            }
+            return _viewModel;
         }
 
 
@@ -85,7 +96,7 @@ namespace EasySaveApp.viewmodel
         {
             // Establish the local endpoint for the socket.    
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
+            IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 66);
 
             // Create a TCP/IP socket.  

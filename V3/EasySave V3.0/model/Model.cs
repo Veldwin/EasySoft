@@ -43,6 +43,8 @@ namespace EasySaveApp.model
         public bool Button_pause { get; set; }
         public bool Button_stop { get; set; }
         public string StatusButton { get; set; }
+        
+        private static Mutex mut = new Mutex();
 
         public Model()
         {
@@ -111,11 +113,12 @@ namespace EasySaveApp.model
             {
                 if (this.Button_pause == true)
                 {
-                    MessageBox.Show("test");
+                    MessageBox.Show("La sauvegarde a été suspendue");
                 }
                 if (this.Button_stop == true)
                 {
                     Thread.ResetAbort();
+                    MessageBox.Show("La sauvegarde a été annulée");                   
                 }
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
 
@@ -259,6 +262,7 @@ namespace EasySaveApp.model
 
         private void UpdateStateFile()//Function that updates the status file.
         {
+            mut.WaitOne();
             List<DataState> stateList = new List<DataState>();
             this.serializeObj = null;
             if (!File.Exists(stateFile)) //Checking if the file exists
@@ -295,6 +299,8 @@ namespace EasySaveApp.model
 
                 File.WriteAllText(stateFile, this.serializeObj); //Function to write to JSON file
             }
+            
+            mut.ReleaseMutex();
         }
 
 
@@ -307,7 +313,9 @@ namespace EasySaveApp.model
         /// <param name="targetdir"></param>
         public void UpdateLogFile(string savename, string sourcelog, string targetlog)
         {
-            string Time = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
+            mut.WaitOne();
+            Stopwatch stopwatch = new Stopwatch(); //Declaration of the stopwatch
+            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
             string elapsedCrypt = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", CryptTransfert.Hours, CryptTransfert.Minutes, CryptTransfert.Seconds, CryptTransfert.Milliseconds / 10);
             DataLogs datalogs = new DataLogs
             {
@@ -316,7 +324,7 @@ namespace EasySaveApp.model
                 TargetLog = targetlog,
                 BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
                 TotalSizeLog = TotalSize,
-                TransactionTimeLog = Time,
+                TransactionTimeLog = elapsedTime,
                 CryptTime = elapsedCrypt,
             };
             string path = System.Environment.CurrentDirectory;
@@ -380,7 +388,11 @@ namespace EasySaveApp.model
                 jsonContent.Add(datalogs);
                 string serializedObj = JsonConvert.SerializeObject(jsonContent, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(pathfile, serializedObj);
+
+                
             }
+            stopwatch.Reset(); // Reset of stopwatch
+            mut.ReleaseMutex();
         }
 
 
@@ -480,7 +492,7 @@ namespace EasySaveApp.model
 
                 UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file
             }
-        }
+        }        
 
         public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
         {

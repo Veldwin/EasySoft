@@ -140,13 +140,13 @@
             <DataGrid Grid.Row="1" Margin="20,13,0,114" x:Name="Save_work" ItemsSource="{Binding NamesList}" IsReadOnly="True" AutoGenerateColumns = "False">
                 <DataGrid.Columns>
                     <!--Add checkbox to select the line-->
-                    <DataGridTemplateColumn>
+                    <!--<DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding ElementName=myListView, Path=SelectedItem}"></CheckBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    </DataGridTemplateColumn>-->
                     <!-- Name save -->
                     <DataGridTextColumn Binding="{Binding}">
                         <DataGridTextColumn.Header>
@@ -160,7 +160,7 @@
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button x:Name="button_play" Content="Play" Background="#003E20" Foreground="White" Width="50" Click="Button_Play_click"/>
+                                <Button x:Name="button_play" Content="Play" Background="#003E20" Foreground="White" Width="50" Click="ButtonStartSaveClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
