@@ -31,7 +31,7 @@ namespace EasySaveApp.view
     {
         private ViewModel viewmodel;
 
-        private string language = "fr";
+        public string language = "fr";
         private bool formatmw = false;
 
 
@@ -40,6 +40,21 @@ namespace EasySaveApp.view
             viewmodel = new ViewModel();
             InitializeComponent();
             ShowListBox();
+
+            Process Proc_EnCours = Process.GetCurrentProcess(); //Obtains the current process of the application
+
+            Process[] Les_Proc = Process.GetProcesses(); //Collection of currently launched processes
+
+            foreach (Process Processus in Les_Proc)
+                if (Proc_EnCours.Id != Processus.Id) ////If the IDs are different but of the same name
+                {
+                    if (Proc_EnCours.ProcessName == Processus.ProcessName)
+                    {
+                        MessageBox.Show("The EasySeave software is already running.");
+                        this.Close();
+                    }
+                }
+        
         }
 
 
@@ -88,14 +103,6 @@ namespace EasySaveApp.view
                 if (name_save.Text.Length.Equals(0) || SoureDir.Text.Length.Equals(0) || TargetDir.Text.Length.Equals(0))
                 {
                     result.Text = (string)FindResource("msg_emptyfield");
-                    /*if (language == "fr")
-                    {
-                        result.Text = " Veuillez remplir tous les champs ! ";
-                    }
-                    else
-                    {
-                        result.Text = " Please complete all fields ! ";
-                    }*/
                 }
                 else
                 {
@@ -219,16 +226,7 @@ namespace EasySaveApp.view
                 {
                     string saveName = item.ToString();
 
-                    bool backupSucceeded = viewmodel.LoadBackup(saveName);
-
-                    if (!backupSucceeded) //Check for message display if blacklisted software was detected.
-                    {
-                        result.Text = (string)FindResource("msg_failsave");
-                    }
-                    else
-                    {
-                        result.Text = (string)FindResource("msg_successave");
-                    }
+                    new Thread(() => viewmodel.LoadBackup(saveName, language)).Start();
                 }
             }
         }

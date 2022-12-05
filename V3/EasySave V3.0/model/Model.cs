@@ -4,6 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Diagnostics;
+using System.Threading;
 using System.Xml.Linq;
 using System.Xml;
 
@@ -37,9 +38,9 @@ namespace EasySaveApp.model
         public string UserMenuInput { get; set; }
         public string MirrorResource { get; set; }
         public bool Format { get; set; }
-        public bool button_play { get; set; }
-        public bool button_pause { get; set; }
-        public bool button_stop { get; set; }
+        public bool Button_play { get; set; }
+        public bool Button_pause { get; set; }
+        public bool Button_stop { get; set; }
         public string StatusButton { get; set; }
 
         public Model()
@@ -107,6 +108,14 @@ namespace EasySaveApp.model
 
             foreach (FileInfo file in files)
             {
+                if (this.Button_pause == true)
+                {
+                    MessageBox.Show("test");
+                }
+                if (this.Button_stop == true)
+                {
+                    Thread.ResetAbort();
+                }
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
 
                 if (Size > 0)
@@ -644,19 +653,19 @@ namespace EasySaveApp.model
 
         public bool Play_click()
         {
-            button_play = true;
-            return button_play;
+            Button_play = true;
+            return Button_play;
         }
 
         public bool Pause_click()
         {
-            button_pause = true;
-            return button_pause;
+            Button_pause = true;
+            return Button_pause;
         }
         public bool Stop_click()
         {
-            button_stop = true;
-            return button_stop;
+            Button_stop = true;
+            return Button_stop;
         }
     }
 }
