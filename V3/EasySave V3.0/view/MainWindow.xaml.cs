@@ -257,13 +257,11 @@ namespace EasySaveApp.view
 
         private void ButtonDeleteSave(object sender, RoutedEventArgs e)//Function that allows the deletion of a backup
         {
-            string saveName = "";
-
             if (Save_work.SelectedItem != null) //Condition that allows to check if the user has selected a backup.
             {
-                foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
+                foreach (BackupWithProgress item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
-                    saveName = item.ToString();
+                    string saveName = item.SaveName;
                     viewmodel.DeleteBackup(saveName);
                 }
 
