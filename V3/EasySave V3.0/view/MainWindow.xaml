@@ -94,7 +94,7 @@
                 <RowDefinition Height="124*"/>
             </Grid.RowDefinitions>
 
-            <Rectangle Margin="20,26,0,26" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
+            <Rectangle Margin="20,10,0,26" Fill="#F3F3F4" RadiusX="11" RadiusY="11"/>
             <Grid Grid.ColumnSpan="2">
                 <Button x:Name="buton_addsave" Click="ButtonAddSaveClick" Margin="510,138,40,36"  Background="#003E20" Height="48" BorderBrush="{x:Null}">
                     <Grid Width="150" Height="30">
@@ -127,12 +127,13 @@
                     <Button Content="..." Click="SourceResourceClick" Margin="7,68,7,137" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}"/>
                     <Button Name="target_directory" Content="..." Click="TargetResourceClick" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}" Margin="7,106,7,99"/>
                     <Button Name="mirror_directory" Content="..." IsEnabled="{Binding IsChecked, ElementName=diff_button}" Click="MirrorResourceClick" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}" Margin="7,142,7,63"/>
-                    <Label x:Name="name_backup_Copy" Content="{DynamicResource ResourceKey=msg_parameters}" FontFamily="Segoe UI Variable Text Semibold" Margin="0,27,0,168" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                    <Label x:Name="name_backup_Copy" Content="{DynamicResource ResourceKey=msg_parameters}" FontFamily="Segoe UI Variable Text Semibold" Margin="0,9,0,184" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
 
 
                 </Grid>
                 <RadioButton x:Name="xml_button" GroupName="LogFile"  Content="XML" HorizontalAlignment="Left" Margin="533,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="195" FontFamily="Segoe UI Variable Text Semibold" />
                 <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="611,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" />
+                <CheckBox x:Name="Cryptosoft" Content="Cryptosoft" HorizontalAlignment="Left" Margin="533,42,0,0" VerticalAlignment="Top" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="Cryptosoft_Checked"/>
             </Grid>
 
             <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>

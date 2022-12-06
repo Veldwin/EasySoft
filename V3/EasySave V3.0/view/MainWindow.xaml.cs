@@ -278,6 +278,19 @@ namespace EasySaveApp.view
         private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.
         {
             WindowState = (WindowState)FormWindowState.Minimized;
-        }        
+        }
+
+        private void Cryptosoft_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Cryptosoft.IsChecked.Value)
+            {
+                viewmodel.Cryptosoft = true;
+            }
+            else
+            {
+                viewmodel.Cryptosoft = false;
+            }
+            
+        }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading;
 using System.Xml.Linq;
 using System.Xml;
 using System.Windows;
+using System.Windows.Shell;
 
 namespace EasySaveApp.model
 {
@@ -43,7 +44,7 @@ namespace EasySaveApp.model
         public bool Button_pause { get; set; }
         public bool Button_stop { get; set; }
         public string StatusButton { get; set; }
-        
+
         private static Mutex mut = new Mutex();
 
         public Model()
@@ -118,7 +119,7 @@ namespace EasySaveApp.model
                 if (this.Button_stop == true)
                 {
                     Thread.ResetAbort();
-                    MessageBox.Show("La sauvegarde a été annulée");                   
+                    MessageBox.Show("La sauvegarde a été annulée");
                 }
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
 
@@ -138,6 +139,7 @@ namespace EasySaveApp.model
 
                 UpdateStateFile();
 
+
                 if (CryptExt(Path.GetExtension(file.Name)))
                 {
                     cryptwatch.Start();
@@ -148,7 +150,7 @@ namespace EasySaveApp.model
                 {
                     file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
                 }
-                
+
                 Nbfiles++;
                 Size += file.Length;
 
@@ -170,518 +172,518 @@ namespace EasySaveApp.model
             CryptTransfert = stopwatch.Elapsed;
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
-
-        /// <summary>
-        /// function called when differential backup is selected
-        /// </summary>
-        /// <param name="pathA"></param>
-        /// <param name="pathB"></param>
-        /// <param name="pathC"></param>
-        public void DifferentialSave(string pathA, string pathB, string pathC)
-        {
-            DataState = new DataState(NameStateFile);
-            Stopwatch stopwatch = new Stopwatch();
-            Stopwatch cryptwatch = new Stopwatch();
-            stopwatch.Start();
-
-            DataState.SaveState = true;
-            TotalSize = 0;
-            NbFileMmax = 0;
-
-            System.IO.DirectoryInfo resource1 = new System.IO.DirectoryInfo(pathA);
-            System.IO.DirectoryInfo resource2 = new System.IO.DirectoryInfo(pathB);
-
-            // Take a snapshot of the file system.  
-            IEnumerable<System.IO.FileInfo> list1 = resource1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
-            IEnumerable<System.IO.FileInfo> list2 = resource2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
-
-            //A custom file comparer defined below  
-            FileCompare myFileCompare = new FileCompare();
-
-            var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
-            Size = 0;
-            Nbfiles = 0;
-            Progs = 0;
-
-            foreach (var v in queryList1Only)
+        
+            /// <summary>
+            /// function called when differential backup is selected
+            /// </summary>
+            /// <param name="pathA"></param>
+            /// <param name="pathB"></param>
+            /// <param name="pathC"></param>
+            public void DifferentialSave(string pathA, string pathB, string pathC)
             {
-                TotalSize += v.Length;
-                NbFileMmax++;
+                DataState = new DataState(NameStateFile);
+                Stopwatch stopwatch = new Stopwatch();
+                Stopwatch cryptwatch = new Stopwatch();
+                stopwatch.Start();
 
+                DataState.SaveState = true;
+                TotalSize = 0;
+                NbFileMmax = 0;
+
+                System.IO.DirectoryInfo resource1 = new System.IO.DirectoryInfo(pathA);
+                System.IO.DirectoryInfo resource2 = new System.IO.DirectoryInfo(pathB);
+
+                // Take a snapshot of the file system.  
+                IEnumerable<System.IO.FileInfo> list1 = resource1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+                IEnumerable<System.IO.FileInfo> list2 = resource2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+                //A custom file comparer defined below  
+                FileCompare myFileCompare = new FileCompare();
+
+                var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
+                Size = 0;
+                Nbfiles = 0;
+                Progs = 0;
+
+                foreach (var v in queryList1Only)
+                {
+                    TotalSize += v.Length;
+                    NbFileMmax++;
+
+                }
+
+
+                foreach (var v in queryList1Only)
+                {
+                    string tempPath = Path.Combine(pathC, v.Name);
+                    DataState.SourceFileState = Path.Combine(pathA, v.Name);
+                    DataState.TargetFileState = tempPath;
+                    DataState.TotalSizeState = NbFileMmax;
+                    DataState.TotalFileState = TotalSize;
+                    DataState.TotalSizeRestState = TotalSize - Size;
+                    DataState.FileRestState = NbFileMmax - Nbfiles;
+                    DataState.ProgressState = Progs;
+                    UpdateStateFile();
+
+                    if (CryptExt(Path.GetExtension(v.Name)))
+                    {
+                        cryptwatch.Start();
+                        Encrypt(DataState.SourceFileState, tempPath);
+                        cryptwatch.Stop();
+                    }
+                    else
+                    {
+                        v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
+                    }
+
+                    Size += v.Length;
+                    Nbfiles++;
+                }
+
+                ResetValue();
+                UpdateStateFile();
+                stopwatch.Stop();
+                cryptwatch.Stop();
+                TimeTransfert = stopwatch.Elapsed; // Note the time passed
+                CryptTransfert = stopwatch.Elapsed;
             }
 
 
-            foreach (var v in queryList1Only)
+            private void ResetValue()
             {
-                string tempPath = Path.Combine(pathC, v.Name);
-                DataState.SourceFileState = Path.Combine(pathA, v.Name);
-                DataState.TargetFileState = tempPath;
-                DataState.TotalSizeState = NbFileMmax;
-                DataState.TotalFileState = TotalSize;
-                DataState.TotalSizeRestState = TotalSize - Size;
-                DataState.FileRestState = NbFileMmax - Nbfiles;
-                DataState.ProgressState = Progs;
-                UpdateStateFile();
-                
-                if (CryptExt(Path.GetExtension(v.Name)))
+                DataState.SourceFileState = null;
+                DataState.TargetFileState = null;
+                DataState.TotalFileState = 0;
+                DataState.TotalSizeState = 0;
+                DataState.TotalSizeRestState = 0;
+                DataState.FileRestState = 0;
+                DataState.ProgressState = 0;
+                DataState.SaveState = false;
+            }
+
+
+            private void UpdateStateFile()//Function that updates the status file.
+            {
+                mut.WaitOne();
+                List<DataState> stateList = new List<DataState>();
+                this.serializeObj = null;
+                if (!File.Exists(stateFile)) //Checking if the file exists
                 {
-                    cryptwatch.Start();
-                    Encrypt(DataState.SourceFileState, tempPath);
-                    cryptwatch.Stop();
+                    File.Create(stateFile).Close();
+                }
+
+                string jsonString = File.ReadAllText(stateFile);  //Reading the json file
+
+                if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+                {
+                    DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
+
+                    foreach (var obj in list) // Loop to allow filling of the JSON file
+                    {
+                        if (obj.SaveNameState == this.NameStateFile) //Verification so that the name in the json is the same as that of the backup
+                        {
+                            obj.SourceFileState = this.DataState.SourceFileState;
+                            obj.TargetFileState = this.DataState.TargetFileState;
+                            obj.TotalFileState = this.DataState.TotalFileState;
+                            obj.TotalSizeState = this.DataState.TotalSizeState;
+                            obj.FileRestState = this.DataState.FileRestState;
+                            obj.TotalSizeRestState = this.DataState.TotalSizeRestState;
+                            obj.ProgressState = this.DataState.ProgressState;
+                            obj.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                            obj.SaveState = this.DataState.SaveState;
+                        }
+
+                        stateList.Add(obj); //Allows you to prepare the objects for the json filling
+
+                    }
+
+                    this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+
+                    File.WriteAllText(stateFile, this.serializeObj); //Function to write to JSON file
+                }
+
+                mut.ReleaseMutex();
+            }
+
+
+
+            /// <summary>
+            /// update log file on: \EasySoft\bin
+            /// </summary>
+            /// <param name="savename"></param>
+            /// <param name="sourcedir"></param>
+            /// <param name="targetdir"></param>
+            public void UpdateLogFile(string savename, string sourcelog, string targetlog)
+            {
+                mut.WaitOne();
+                Stopwatch stopwatch = new Stopwatch(); //Declaration of the stopwatch
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
+                string elapsedCrypt = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", CryptTransfert.Hours, CryptTransfert.Minutes, CryptTransfert.Seconds, CryptTransfert.Milliseconds / 10);
+                DataLogs datalogs = new DataLogs
+                {
+                    SaveNameLog = savename,
+                    SourceLog = sourcelog,
+                    TargetLog = targetlog,
+                    BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
+                    TotalSizeLog = TotalSize,
+                    TransactionTimeLog = elapsedTime,
+                    CryptTime = elapsedCrypt,
+                };
+                string path = System.Environment.CurrentDirectory;
+                var directory = System.IO.Path.GetDirectoryName(path);
+                string pathfile = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
+                string pathfiles = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
+
+                if (Format == true)
+                {
+                    XmlDocument xdoc = new XmlDocument();
+
+                    try
+                    {
+                        xdoc.Load(pathfiles);
+                    }
+                    catch
+                    {
+                        XElement Logs = new XElement("Logs");
+                        StreamWriter sr = new StreamWriter(pathfiles);
+                        sr.WriteLine(Logs);
+                        sr.Close();
+                        xdoc.Load(pathfiles);
+
+                    }
+                    XmlNode Log = xdoc.CreateElement("log");
+
+                    XmlNode Name = xdoc.CreateElement("name");
+                    XmlNode SourceFile = xdoc.CreateElement("sourceFile");
+                    XmlNode TargetFile = xdoc.CreateElement("TargetFile");
+                    XmlNode Date = xdoc.CreateElement("date");
+                    XmlNode SizeOctet = xdoc.CreateElement("size");
+                    XmlNode TransfertTime = xdoc.CreateElement("transfertTime");
+                    XmlNode CryptTime = xdoc.CreateElement("cryptTime");
+
+                    Name.InnerText = datalogs.SaveNameLog;
+                    SourceFile.InnerText = datalogs.SourceLog;
+                    TargetFile.InnerText = datalogs.TargetLog;
+                    Date.InnerText = datalogs.BackupDateLog;
+                    SizeOctet.InnerText = datalogs.TotalSizeLog.ToString();
+                    TransfertTime.InnerText = datalogs.TransactionTimeLog;
+
+                    Log.AppendChild(Name);
+                    Log.AppendChild(SourceFile);
+                    Log.AppendChild(TargetFile);
+                    Log.AppendChild(Date);
+                    Log.AppendChild(SizeOctet);
+                    Log.AppendChild(TransfertTime);
+                    Log.AppendChild(CryptTime);
+
+                    xdoc.DocumentElement.PrependChild(Log);
+                    xdoc.Save(pathfiles);
                 }
                 else
                 {
-                    v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
-                }
-                
-                Size += v.Length;
-                Nbfiles++;
-            }
-
-            ResetValue();
-            UpdateStateFile();
-            stopwatch.Stop();
-            cryptwatch.Stop();
-            TimeTransfert = stopwatch.Elapsed; // Note the time passed
-            CryptTransfert = stopwatch.Elapsed;
-        }
-
-
-        private void ResetValue()
-        {
-            DataState.SourceFileState = null;
-            DataState.TargetFileState = null;
-            DataState.TotalFileState = 0;
-            DataState.TotalSizeState = 0;
-            DataState.TotalSizeRestState = 0;
-            DataState.FileRestState = 0;
-            DataState.ProgressState = 0;
-            DataState.SaveState = false;
-        }
-
-
-        private void UpdateStateFile()//Function that updates the status file.
-        {
-            mut.WaitOne();
-            List<DataState> stateList = new List<DataState>();
-            this.serializeObj = null;
-            if (!File.Exists(stateFile)) //Checking if the file exists
-            {
-                File.Create(stateFile).Close();
-            }
-
-            string jsonString = File.ReadAllText(stateFile);  //Reading the json file
-
-            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
-            {
-                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
-
-                foreach (var obj in list) // Loop to allow filling of the JSON file
-                {
-                    if (obj.SaveNameState == this.NameStateFile) //Verification so that the name in the json is the same as that of the backup
+                    List<object> jsonContent = new List<object>();
+                    if (File.Exists(pathfile))
                     {
-                        obj.SourceFileState = this.DataState.SourceFileState;
-                        obj.TargetFileState = this.DataState.TargetFileState;
-                        obj.TotalFileState = this.DataState.TotalFileState;
-                        obj.TotalSizeState = this.DataState.TotalSizeState;
-                        obj.FileRestState = this.DataState.FileRestState;
-                        obj.TotalSizeRestState = this.DataState.TotalSizeRestState;
-                        obj.ProgressState = this.DataState.ProgressState;
-                        obj.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                        obj.SaveState = this.DataState.SaveState;
+                        string oldJsonFileContent = File.ReadAllText(pathfile);
+                        jsonContent = JsonConvert.DeserializeObject<List<object>>(oldJsonFileContent);
                     }
+                    jsonContent.Add(datalogs);
+                    string serializedObj = JsonConvert.SerializeObject(jsonContent, Newtonsoft.Json.Formatting.Indented);
+                    File.WriteAllText(pathfile, serializedObj);
 
-                    stateList.Add(obj); //Allows you to prepare the objects for the json filling
 
                 }
-
-                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
-
-                File.WriteAllText(stateFile, this.serializeObj); //Function to write to JSON file
+                stopwatch.Reset(); // Reset of stopwatch
+                mut.ReleaseMutex();
             }
-            
-            mut.ReleaseMutex();
-        }
 
 
-
-        /// <summary>
-        /// update log file on: \EasySoft\bin
-        /// </summary>
-        /// <param name="savename"></param>
-        /// <param name="sourcedir"></param>
-        /// <param name="targetdir"></param>
-        public void UpdateLogFile(string savename, string sourcelog, string targetlog)
-        {
-            mut.WaitOne();
-            Stopwatch stopwatch = new Stopwatch(); //Declaration of the stopwatch
-            string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", TimeTransfert.Hours, TimeTransfert.Minutes, TimeTransfert.Seconds, TimeTransfert.Milliseconds / 10);
-            string elapsedCrypt = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", CryptTransfert.Hours, CryptTransfert.Minutes, CryptTransfert.Seconds, CryptTransfert.Milliseconds / 10);
-            DataLogs datalogs = new DataLogs
+            public void AddSave(Backup backup) //Function that creates a backup job
             {
-                SaveNameLog = savename,
-                SourceLog = sourcelog,
-                TargetLog = targetlog,
-                BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
-                TotalSizeLog = TotalSize,
-                TransactionTimeLog = elapsedTime,
-                CryptTime = elapsedCrypt,
-            };
-            string path = System.Environment.CurrentDirectory;
-            var directory = System.IO.Path.GetDirectoryName(path);
-            string pathfile = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".json";
-            string pathfiles = directory + @"DailyLogs_" + DateTime.Now.ToString("dd-MM-yyyy") + ".xml";
+                List<Backup> backupList = new List<Backup>();
+                this.serializeObj = null;
 
-            if (Format == true)
-            {
-                XmlDocument xdoc = new XmlDocument();
-
-                try
+                if (!File.Exists(backupListFile)) //Checking if the file exists
                 {
-                    xdoc.Load(pathfiles);
-                }
-                catch
-                {
-                    XElement Logs = new XElement("Logs");
-                    StreamWriter sr = new StreamWriter(pathfiles);
-                    sr.WriteLine(Logs);
-                    sr.Close();
-                    xdoc.Load(pathfiles);
-
-                }
-                XmlNode Log = xdoc.CreateElement("log");
-
-                XmlNode Name = xdoc.CreateElement("name");
-                XmlNode SourceFile = xdoc.CreateElement("sourceFile");
-                XmlNode TargetFile = xdoc.CreateElement("TargetFile");
-                XmlNode Date = xdoc.CreateElement("date");
-                XmlNode SizeOctet = xdoc.CreateElement("size");
-                XmlNode TransfertTime = xdoc.CreateElement("transfertTime");
-                XmlNode CryptTime = xdoc.CreateElement("cryptTime");
-
-                Name.InnerText = datalogs.SaveNameLog;
-                SourceFile.InnerText = datalogs.SourceLog;
-                TargetFile.InnerText = datalogs.TargetLog;
-                Date.InnerText = datalogs.BackupDateLog;
-                SizeOctet.InnerText = datalogs.TotalSizeLog.ToString();
-                TransfertTime.InnerText = datalogs.TransactionTimeLog;
-
-                Log.AppendChild(Name);
-                Log.AppendChild(SourceFile);
-                Log.AppendChild(TargetFile);
-                Log.AppendChild(Date);
-                Log.AppendChild(SizeOctet);
-                Log.AppendChild(TransfertTime);
-                Log.AppendChild(CryptTime);
-
-                xdoc.DocumentElement.PrependChild(Log);
-                xdoc.Save(pathfiles);
-            }
-            else
-            {
-                List<object> jsonContent = new List<object>();
-                if (File.Exists(pathfile))
-                {
-                    string oldJsonFileContent = File.ReadAllText(pathfile);
-                    jsonContent = JsonConvert.DeserializeObject<List<object>>(oldJsonFileContent);
-                }
-                jsonContent.Add(datalogs);
-                string serializedObj = JsonConvert.SerializeObject(jsonContent, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(pathfile, serializedObj);
-
-                
-            }
-            stopwatch.Reset(); // Reset of stopwatch
-            mut.ReleaseMutex();
-        }
-
-
-        public void AddSave(Backup backup) //Function that creates a backup job
-        {
-            List<Backup> backupList = new List<Backup>();
-            this.serializeObj = null;
-
-            if (!File.Exists(backupListFile)) //Checking if the file exists
-            {
-                File.WriteAllText(backupListFile, this.serializeObj);
-            }
-
-            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
-
-            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
-            {
-                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
-                foreach (var obj in list) //Loop to add the information in the json
-                {
-                    backupList.Add(obj);
-                }
-            }
-            backupList.Add(backup); //Allows you to prepare the objects for the json filling
-
-            this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
-            File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
-
-            DataState = new DataState(this.SaveName);//Class initiation
-
-            DataState.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); //Adding the time in the variable
-            AddState(); //Call of the function to add the backup in the report file.
-        }
-
-        public void AddState() //Function that allows you to add a backup job to the report file.
-        {
-            List<DataState> stateList = new List<DataState>();
-            this.serializeObj = null;
-
-            if (!File.Exists(stateFile)) //Checking if the file exists
-            {
-                File.Create(stateFile).Close();
-            }
-
-            string jsonString = File.ReadAllText(stateFile); //Reading the json file
-
-            if (jsonString.Length != 0)
-            {
-                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
-                foreach (var obj in list) //Loop to add the information in the json
-                {
-                    stateList.Add(obj);
-                }
-            }
-            this.DataState.SaveState = false;
-            stateList.Add(this.DataState); //Allows you to prepare the objects for the json filling
-
-            this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
-            File.WriteAllText(stateFile, this.serializeObj);// Writing to the json file
-
-
-        }
-
-        public void LoadSave(string backupname) //Function that allows you to load backup jobs
-        {
-            Backup selectedBackup = null;
-            this.TotalSize = 0;
-            BackupNameState = backupname;
-
-            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
-
-
-            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
-            {
-                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString);  //Derialization of the json file
-                foreach (var obj in list)
-                {
-                    if (obj.SaveName == backupname) //Check to have the correct name of the backup
-                    {
-                        selectedBackup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
-                    }
-                }
-            }
-
-            if (selectedBackup != null)
-            {
-                NameStateFile = selectedBackup.SaveName;
-
-                if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
-                {
-                    CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false); //Calling the function to run the full backup
-                }
-                else //If this is the wrong guy then, it means it's a differential backup
-                {
-                    DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup); //Calling the function to start the differential backup
+                    File.WriteAllText(backupListFile, this.serializeObj);
                 }
 
-                UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file
-            }
-        }        
+                string jsonString = File.ReadAllText(backupListFile); //Reading the json file
 
-        public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
-        {
-            checkDataBackup = 0;
-
-            if (File.Exists(backupListFile)) //Check on file exists
-            {
-                string jsonString = File.ReadAllText(backupListFile);//Reading the json file
-                if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
+                if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
                 {
                     Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
-                    checkDataBackup = list.Length; //Allows to count the number of backups
-                }
-            }
-        }
-
-        private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
-        {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
-            {
-                CryptFormat[] item_crypt;
-                string[] crypt_extensions_array;
-                string json = reader.ReadToEnd();
-                List<CryptFormat> items = JsonConvert.DeserializeObject<List<CryptFormat>>(json);
-                item_crypt = items.ToArray();
-                crypt_extensions_array = item_crypt[0].extensionCrypt.Split(',');
-
-                return crypt_extensions_array; //We return the variables that are stored in an array
-            }
-        }
-        public static bool CryptExt(string extension)//Function that compares the extensions of the json file and the one of the file being backed up.
-        {
-            foreach (string extensionExt in getExtensionCrypt())
-            {
-                if (extensionExt == extension)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Encrypt(string sourceDir, string targetDir)//This function allows you to encrypt files. 
-        {
-            using (Process process = new Process())//Declaration of the process
-            {
-                process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
-                process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
-                process.Start(); //Launching the process
-                process.Close();
-
-            }
-
-        }
-
-        public List<Backup> NameList()//Function that lets you know the names of the backups.
-        {
-            List<Backup> backupList = new List<Backup>();
-
-            if (!File.Exists(backupListFile)) //Checking if the file exists
-            {
-                File.WriteAllText(backupListFile, this.serializeObj);
-            }
-
-            List<Backup> names = new List<Backup>();
-            string jsonString = File.ReadAllText(backupListFile); //Function to read json file
-            Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); // Function to dezerialize the json file
-
-            if (jsonString.Length != 0)
-            {
-                foreach (var obj in list) //Loop to display the names of the backups
-                {
-                    names.Add(obj);
-                }
-
-            }
-
-            return names;
-
-        }
-
-        // Function Delete a backup
-        public void DeleteSave(string backupname)
-        {
-            List<Backup> backupList = new List<Backup>();
-            this.serializeObj = null;
-
-            if (!File.Exists(backupListFile)) //Checking if the file exists
-            {
-                File.WriteAllText(backupListFile, this.serializeObj);
-            }
-
-            string jsonString = File.ReadAllText(backupListFile); //Reading the json file
-
-            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
-            {
-                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
-                foreach (var obj in list) //Loop to add the information in the json
-                {
-                    if (obj.SaveName != backupname) //Check to have the correct name of the backup
+                    foreach (var obj in list) //Loop to add the information in the json
                     {
                         backupList.Add(obj);
                     }
                 }
+                backupList.Add(backup); //Allows you to prepare the objects for the json filling
+
+                this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+                File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
+
+                DataState = new DataState(this.SaveName);//Class initiation
+
+                DataState.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); //Adding the time in the variable
+                AddState(); //Call of the function to add the backup in the report file.
             }
 
-            this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
-            File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
-        }
-
-        public static string[] GetJailApps()//Function that allows to recover software that is blacklisted.
-        {
-            using StreamReader reader = new StreamReader(@"..\..\..\Resources\JailApps.json");//Function to read the json file
-            JailAppsFormat[] item_jailapps;
-            string[] jailapps_array;
-            string json = reader.ReadToEnd();
-            List<JailAppsFormat> items = JsonConvert.DeserializeObject<List<JailAppsFormat>>(json);
-            item_jailapps = items.ToArray();
-            jailapps_array = item_jailapps[0].jailed_apps.Split(',');
-
-            return jailapps_array;//We return the names of the softwares which are in the list of the json file.
-        }
-
-
-        public static bool CheckSoftware(string[] blacklist_app)//Function that allows you to compare a program that is in the list is running.
-        {
-            bool abortSave = false;
-            foreach (string App in blacklist_app)
+            public void AddState() //Function that allows you to add a backup job to the report file.
             {
-                Process[] ps = Process.GetProcessesByName(App);
-                if (ps.Length > 0)
+                List<DataState> stateList = new List<DataState>();
+                this.serializeObj = null;
+
+                if (!File.Exists(stateFile)) //Checking if the file exists
                 {
-                    abortSave = true;
+                    File.Create(stateFile).Close();
+                }
+
+                string jsonString = File.ReadAllText(stateFile); //Reading the json file
+
+                if (jsonString.Length != 0)
+                {
+                    DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
+                    foreach (var obj in list) //Loop to add the information in the json
+                    {
+                        stateList.Add(obj);
+                    }
+                }
+                this.DataState.SaveState = false;
+                stateList.Add(this.DataState); //Allows you to prepare the objects for the json filling
+
+                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+                File.WriteAllText(stateFile, this.serializeObj);// Writing to the json file
+
+
+            }
+
+            public void LoadSave(string backupname) //Function that allows you to load backup jobs
+            {
+                Backup selectedBackup = null;
+                this.TotalSize = 0;
+                BackupNameState = backupname;
+
+                string jsonString = File.ReadAllText(backupListFile); //Reading the json file
+
+
+                if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+                {
+                    Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString);  //Derialization of the json file
+                    foreach (var obj in list)
+                    {
+                        if (obj.SaveName == backupname) //Check to have the correct name of the backup
+                        {
+                            selectedBackup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
+                        }
+                    }
+                }
+
+                if (selectedBackup != null)
+                {
+                    NameStateFile = selectedBackup.SaveName;
+
+                    if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
+                    {
+                        CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false); //Calling the function to run the full backup
+                    }
+                    else //If this is the wrong guy then, it means it's a differential backup
+                    {
+                        DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup); //Calling the function to start the differential backup
+                    }
+
+                    UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file
                 }
             }
-            return abortSave;
-        }
 
-        public void ModelFormat(bool extension)
-        {
-            Format = extension;
-        }
-
-        public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
-        {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtensions.json"))//Function to read the json file
+            public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
             {
-                PriorityFormat[] item_Priolist;
-                string[] cryptlist_extensions_array;
+                checkDataBackup = 0;
+
+                if (File.Exists(backupListFile)) //Check on file exists
+                {
+                    string jsonString = File.ReadAllText(backupListFile);//Reading the json file
+                    if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
+                    {
+                        Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
+                        checkDataBackup = list.Length; //Allows to count the number of backups
+                    }
+                }
+            }
+
+            private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
+            {
+                using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
+                {
+                    CryptFormat[] item_crypt;
+                    string[] crypt_extensions_array;
+                    string json = reader.ReadToEnd();
+                    List<CryptFormat> items = JsonConvert.DeserializeObject<List<CryptFormat>>(json);
+                    item_crypt = items.ToArray();
+                    crypt_extensions_array = item_crypt[0].extensionCrypt.Split(',');
+
+                    return crypt_extensions_array; //We return the variables that are stored in an array
+                }
+            }
+            public static bool CryptExt(string extension)//Function that compares the extensions of the json file and the one of the file being backed up.
+            {
+                foreach (string extensionExt in getExtensionCrypt())
+                {
+                    if (extensionExt == extension)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public void Encrypt(string sourceDir, string targetDir)//This function allows you to encrypt files. 
+            {
+                using (Process process = new Process())//Declaration of the process
+                {
+                    process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
+                    process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
+                    process.Start(); //Launching the process
+                    process.Close();
+
+                }
+
+            }
+
+            public List<Backup> NameList()//Function that lets you know the names of the backups.
+            {
+                List<Backup> backupList = new List<Backup>();
+
+                if (!File.Exists(backupListFile)) //Checking if the file exists
+                {
+                    File.WriteAllText(backupListFile, this.serializeObj);
+                }
+
+                List<Backup> names = new List<Backup>();
+                string jsonString = File.ReadAllText(backupListFile); //Function to read json file
+                Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); // Function to dezerialize the json file
+
+                if (jsonString.Length != 0)
+                {
+                    foreach (var obj in list) //Loop to display the names of the backups
+                    {
+                        names.Add(obj);
+                    }
+
+                }
+
+                return names;
+
+            }
+
+            // Function Delete a backup
+            public void DeleteSave(string backupname)
+            {
+                List<Backup> backupList = new List<Backup>();
+                this.serializeObj = null;
+
+                if (!File.Exists(backupListFile)) //Checking if the file exists
+                {
+                    File.WriteAllText(backupListFile, this.serializeObj);
+                }
+
+                string jsonString = File.ReadAllText(backupListFile); //Reading the json file
+
+                if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+                {
+                    Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
+                    foreach (var obj in list) //Loop to add the information in the json
+                    {
+                        if (obj.SaveName != backupname) //Check to have the correct name of the backup
+                        {
+                            backupList.Add(obj);
+                        }
+                    }
+                }
+
+                this.serializeObj = JsonConvert.SerializeObject(backupList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
+                File.WriteAllText(backupListFile, this.serializeObj); // Writing to the json file
+            }
+
+            public static string[] GetJailApps()//Function that allows to recover software that is blacklisted.
+            {
+                using StreamReader reader = new StreamReader(@"..\..\..\Resources\JailApps.json");//Function to read the json file
+                JailAppsFormat[] item_jailapps;
+                string[] jailapps_array;
                 string json = reader.ReadToEnd();
-                List<PriorityFormat> items = JsonConvert.DeserializeObject<List<PriorityFormat>>(json);
-                item_Priolist = items.ToArray();
-                cryptlist_extensions_array = item_Priolist[0].priority_extension.Split(',');
+                List<JailAppsFormat> items = JsonConvert.DeserializeObject<List<JailAppsFormat>>(json);
+                item_jailapps = items.ToArray();
+                jailapps_array = item_jailapps[0].jailed_apps.Split(',');
 
-                return cryptlist_extensions_array;
+                return jailapps_array;//We return the names of the softwares which are in the list of the json file.
             }
-        }
 
-        public static bool PriorityExt(string extension) //Function that compares the extensions of the file to be prioritized json and that of the saved file.
-        {
-            foreach (string prio_ext in GetPriority())
+
+            public static bool CheckSoftware(string[] blacklist_app)//Function that allows you to compare a program that is in the list is running.
             {
-                if (prio_ext == extension)
+                bool abortSave = false;
+                foreach (string App in blacklist_app)
                 {
-                    return true;
+                    Process[] ps = Process.GetProcessesByName(App);
+                    if (ps.Length > 0)
+                    {
+                        abortSave = true;
+                    }
+                }
+                return abortSave;
+            }
+
+            public void ModelFormat(bool extension)
+            {
+                Format = extension;
+            }
+
+            public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
+            {
+                using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtensions.json"))//Function to read the json file
+                {
+                    PriorityFormat[] item_Priolist;
+                    string[] cryptlist_extensions_array;
+                    string json = reader.ReadToEnd();
+                    List<PriorityFormat> items = JsonConvert.DeserializeObject<List<PriorityFormat>>(json);
+                    item_Priolist = items.ToArray();
+                    cryptlist_extensions_array = item_Priolist[0].priority_extension.Split(',');
+
+                    return cryptlist_extensions_array;
                 }
             }
 
-            return false;
-        }
+            public static bool PriorityExt(string extension) //Function that compares the extensions of the file to be prioritized json and that of the saved file.
+            {
+                foreach (string prio_ext in GetPriority())
+                {
+                    if (prio_ext == extension)
+                    {
+                        return true;
+                    }
+                }
 
-        public bool Play_click()
-        {
-            Button_play = true;
-            return Button_play;
-        }
+                return false;
+            }
 
-        public bool Pause_click()
-        {
-            Button_pause = true;
-            return Button_pause;
-        }
-        public bool Stop_click()
-        {
-            Button_stop = true;
-            return Button_stop;
+            public bool Play_click()
+            {
+                Button_play = true;
+                return Button_play;
+            }
+
+            public bool Pause_click()
+            {
+                Button_pause = true;
+                return Button_pause;
+            }
+            public bool Stop_click()
+            {
+                Button_stop = true;
+                return Button_stop;
+            }
         }
     }
-}
 
 
 

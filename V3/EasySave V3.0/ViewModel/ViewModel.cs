@@ -91,7 +91,7 @@ namespace EasySaveApp.viewmodel
                 }
             }
         }
-
+     
         public void StartServer()//Function to start the server
         {
             // Establish the local endpoint for the socket.    
