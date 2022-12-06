@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 
-namespace EasySaveApp.viewmodel
+namespace EasySaveApp
+    
 {
     public class StateObject// State object for reading client data asynchronously  
     {

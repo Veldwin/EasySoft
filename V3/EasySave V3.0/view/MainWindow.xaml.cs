@@ -2,13 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using EasySaveApp.viewmodel;
+using EasySaveApp;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 using EasySaveApp.model;
 using System.Linq;
+using EasySaveApp.viewmodel;
+using System.Collections.ObjectModel;
 
 namespace EasySaveApp.view
 {
@@ -18,9 +20,11 @@ namespace EasySaveApp.view
     public partial class MainWindow : Window
     {
         private ViewModel viewmodel;
-
+        
         public string language = "fr";
         private bool formatmw = false;
+        private ObservableCollection<BackupWithProgress> _backupsWithProgress = new ObservableCollection<BackupWithProgress>();
+        public IEnumerable<BackupWithProgress> backupsWithProgress { get { return _backupsWithProgress; } }
 
 
         public MainWindow()
@@ -141,8 +145,6 @@ namespace EasySaveApp.view
         }
 
 
-
-
         private void SourceResourceClick(object sender, RoutedEventArgs e)//Function to retrieve the path to the source folder
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog(); //Declaration of the method to open the window to choose the folder path.
@@ -180,14 +182,21 @@ namespace EasySaveApp.view
 
         private void ShowListBox() //Function that displays the names of the backups in the list.
         {
-
-            Save_work.Items.Clear();
+            /*Save_work.Items.Clear();
 
             List<string> names = viewmodel.ListBackup();
             foreach (string name in names)//Loop that allows you to manage the names in the list.
             {
-                Save_work.Items.Add(name); //Function that allows you to insert the names of the backups in the list.
+                Save_work.Items.Add(new BackupWithProgress(name, progressPerBackup.ContainsKey(name) ? progressPerBackup[name] : 0)); //Function that allows you to insert the names of the backups in the list.
+            }*/
+            _backupsWithProgress.Clear();
+
+            List<string> names = viewmodel.ListBackup();
+            foreach (string name in names)//Loop that allows you to manage the names in the list.
+            {
+                _backupsWithProgress.Add(new BackupWithProgress(name, 0)); //Function that allows you to insert the names of the backups in the list.
             }
+            Save_work.ItemsSource = backupsWithProgress;
         }
 
         private void MirrorButtonChecked(object sender, RoutedEventArgs e)
@@ -209,11 +218,18 @@ namespace EasySaveApp.view
         {
             if (Save_work.SelectedItem != null) //Condition that allows to check if the user has selected a backup.
             {
-                foreach (string item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
+                foreach (BackupWithProgress item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
-                    string saveName = item.ToString();                   
-
-                    new Thread(() => viewmodel.LoadBackup(saveName, language)).Start();
+                    string saveName = item.SaveName.ToString();
+                    new Thread(() => {
+                        viewmodel.LoadBackup(saveName, language, (progress) =>
+                        {
+                            Console.WriteLine(progress);
+                            /*progressPerBackup[saveName] = progress;*/
+                            BackupWithProgress bk = _backupsWithProgress.Single(x => x.SaveName == saveName);
+                            bk.Progress = progress;
+                        });
+                    }).Start();
                 }
             }
         }
@@ -280,17 +296,10 @@ namespace EasySaveApp.view
             WindowState = (WindowState)FormWindowState.Minimized;
         }
 
-        private void Cryptosoft_Checked(object sender, RoutedEventArgs e)
+        private void Cryptosoft_check_Click(object sender, RoutedEventArgs e)
         {
-            if (Cryptosoft.IsChecked.Value)
-            {
-                viewmodel.Cryptosoft = true;
-            }
-            else
-            {
-                viewmodel.Cryptosoft = false;
-            }
-            
+            var checkbox = sender as System.Windows.Controls.CheckBox;
+            viewmodel.IsCryptChecked((bool) checkbox.IsChecked);
         }
     }
 }

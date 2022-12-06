@@ -8,6 +8,7 @@ using System.Threading;
 using System.Text;
 using System.ComponentModel;
 using System.Linq;
+using EasySaveApp.view;
 
 namespace EasySaveApp.viewmodel
 {
@@ -19,8 +20,9 @@ namespace EasySaveApp.viewmodel
         string[] jail_apps = Model.GetJailApps();
         public string[] BlackListApp { get => jail_apps; set => jail_apps = value; }
         public static ManualResetEvent allDone = new ManualResetEvent(false);
-
+        
         private List<string> nameslist;
+        public List<Backup> backups;
 
         public ViewModel()
         {
@@ -59,7 +61,7 @@ namespace EasySaveApp.viewmodel
             return nameslist;
         }
 
-        public void LoadBackup(string saveName, string language)//Function that allows you to load the backups that were selected by the user.
+        public void LoadBackup(string saveName, string language, Action<float> progressChangeFunction)//Function that allows you to load the backups that were selected by the user.
         {
             if (Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
             {
@@ -79,7 +81,7 @@ namespace EasySaveApp.viewmodel
             }
             else
             {
-                model.LoadSave(saveName);//Function that launches backups
+                model.LoadSave(saveName, progressChangeFunction);//Function that launches backups
 
                 if (language == "fr")
                 {
@@ -91,7 +93,13 @@ namespace EasySaveApp.viewmodel
                 }
             }
         }
-     
+
+        public void IsCryptChecked(bool state)
+        {           
+            model.isCheck = state;
+        }
+
+
         public void StartServer()//Function to start the server
         {
             // Establish the local endpoint for the socket.    
@@ -172,8 +180,7 @@ namespace EasySaveApp.viewmodel
                         else if (content.IndexOf("PLAY" + name) > -1)
                         {
                             // MessageBox.Show("PLAY" + name);
-                            LoadBackup(name, "en" );
-
+                            LoadBackup(name, "en", (float progress) => { }); //Function that allows you to launch the backups.
                         }
                         else if (content.IndexOf("PAUSE" + name) > -1)
                         {

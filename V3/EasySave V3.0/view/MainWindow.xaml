@@ -133,23 +133,14 @@
                 </Grid>
                 <RadioButton x:Name="xml_button" GroupName="LogFile"  Content="XML" HorizontalAlignment="Left" Margin="533,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="195" FontFamily="Segoe UI Variable Text Semibold" />
                 <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="611,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" />
-                <CheckBox x:Name="Cryptosoft" Content="Cryptosoft" HorizontalAlignment="Left" Margin="533,42,0,0" VerticalAlignment="Top" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="Cryptosoft_Checked"/>
             </Grid>
 
-            <Rectangle Grid.Row="1"  Margin="15,0,15,15" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
+            <Rectangle Grid.Row="1"  Margin="15,0,15,10" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
             <!--<ListBox x:Name="Save_work" SelectionMode="Multiple" Grid.Row="1" Margin="31,10,109,110"/>-->
-            <DataGrid Grid.Row="1" Margin="20,13,0,114" x:Name="Save_work" ItemsSource="{Binding NamesList}" IsReadOnly="True" AutoGenerateColumns = "False">
+            <DataGrid Grid.Row="1" Margin="20,15,0,112" x:Name="Save_work" IsReadOnly="True" AutoGenerateColumns = "False">
                 <DataGrid.Columns>
-                    <!--Add checkbox to select the line-->
-                    <!--<DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding ElementName=myListView, Path=SelectedItem}"></CheckBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>-->
                     <!-- Name save -->
-                    <DataGridTextColumn Binding="{Binding}">
+                    <DataGridTextColumn Binding="{Binding SaveName}">
                         <DataGridTextColumn.Header>
                             <TextBlock x:Name="Grid_Name" Text="{DynamicResource backup_name}" />
                         </DataGridTextColumn.Header>
@@ -194,31 +185,32 @@
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ProgressBar x:Name="progressBar" Width="100" Height="20" Value="{Binding Progression}" />
+                                <ProgressBar x:Name="progressBar" Width="100" Height="20" Value="{Binding Progress}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,148,24,64"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
+            <Button x:Name="button_start_save" Click="ButtonStartSaveClick" Margin="506,160,24,52"  Background="#003E20" BorderBrush="{x:Null}" Grid.Row="1">
                 <Grid Width="150" Height="30">
                     <materialDesigin:PackIcon Kind="Update" Margin="-16,1,0,0" Foreground="White" Height="25" Width="25"/>
                     <TextBlock x:Name="text_startbackup" Text="{DynamicResource ResourceKey = text_startbackup}" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" FontSize="10" Foreground="White" Margin="4,0,-14,0" FontWeight="Bold"/>
                 </Grid>
             </Button>
 
-            <Rectangle Grid.Row="1"  Margin="50,147,317,27" Fill="#003E20" RadiusX="15" RadiusY="15"/>
-            <materialDesigin:PackIcon Kind="Message" Margin="62,160,0,0" Foreground="White" Height="51" Width="56" Visibility="Visible" Grid.Row="1"/>
-            <TextBlock x:Name="result" TextAlignment="Justify"  VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="122,158,0,0" FontFamily="Segoe UI Variable Text Semibold" Width="277" Grid.Row="1" Height="53" Foreground="White"/>
-            <Button Content="{DynamicResource ResourceKey = btn_selectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,149,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonSelectAll" Height="34" Width="71" FontWeight="Bold"/>
-            <Button Click="ButtonDeleteSave" Background="#003E20" BorderBrush="{x:Null}" Margin="506,189,24,26" Grid.Row="1">
+            <Rectangle Grid.Row="1"  Margin="50,159,317,15" Fill="#003E20" RadiusX="15" RadiusY="15"/>
+            <materialDesigin:PackIcon Kind="Message" Margin="62,172,0,0" Foreground="White" Height="51" Width="56" Visibility="Visible" Grid.Row="1"/>
+            <TextBlock x:Name="result" TextAlignment="Justify"  VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="122,170,0,0" FontFamily="Segoe UI Variable Text Semibold" Width="277" Grid.Row="1" Height="53" Foreground="White"/>
+            <Button Content="{DynamicResource ResourceKey = btn_selectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,160,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonSelectAll" Height="34" Width="71" FontWeight="Bold"/>
+            <Button Click="ButtonDeleteSave" Background="#003E20" BorderBrush="{x:Null}" Margin="506,199,24,16" Grid.Row="1">
                 <Grid Width="150" Height="30">
                     <materialDesigin:PackIcon Kind="Delete" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="White" Height="19" Width="20"/>
                     <TextBlock x:Name="textdeletebackup"  Text="{DynamicResource ResourceKey=delete_backup}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="White" FontWeight="Bold"/>
                 </Grid>
             </Button>
-            <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,190,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
+            <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,200,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
+            <CheckBox x:Name="Cryptosoft_check" Content="Cryptosoft" HorizontalAlignment="Left" Margin="551,139,0,0" VerticalAlignment="Top" Height="20" Width="83" FontFamily="Segoe UI Variable Text Semibold" Click="Cryptosoft_check_Click" Grid.Row="1"/>
 
         </Grid>
 
