@@ -70,7 +70,7 @@ namespace EasySaveApp.model
             stateFile += @"state.json"; //Create a JSON file
         }
 
-        public void CompleteSave(string inputpathsave, string inputDestToSave, bool copyDir, bool verif, Action<float> progressChangeFunction)
+        public void CompleteSave(string inputpathsave, string inputDestToSave, bool copyDir, bool verif, BackupWithProgress backup, Action<float> progressChangeFunction)
         {
             DataState = new DataState(NameStateFile);
             DataState.SaveState = true;
@@ -117,15 +117,13 @@ namespace EasySaveApp.model
 
             foreach (FileInfo file in files)
             {
-                if (this.Button_pause == true)
+                backup.ResetEvent.WaitOne();
+                if (backup.IsAborted)
                 {
-                    MessageBox.Show("La sauvegarde a été suspendue");
+                    progressChangeFunction(100);
+                    break;
                 }
-                if (this.Button_stop == true)
-                {
-                    Thread.ResetAbort();
-                    MessageBox.Show("La sauvegarde a été annulée");
-                }
+
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
 
                 UpdateStateFile();
@@ -174,7 +172,7 @@ namespace EasySaveApp.model
                 foreach (DirectoryInfo subdir in Resource)
                 {
                     string tempPath = Path.Combine(inputDestToSave, subdir.Name);
-                    CompleteSave(subdir.FullName, tempPath, copyDir, true, progressChangeFunction);
+                    CompleteSave(subdir.FullName, tempPath, copyDir, true, backup, progressChangeFunction);
                 }
             }
             ResetValue();
@@ -207,7 +205,7 @@ namespace EasySaveApp.model
         /// <param name="pathA"></param>
         /// <param name="pathB"></param>
         /// <param name="pathC"></param>
-        public void DifferentialSave(string pathA, string pathB, string pathC, Action<float> progressChangeFunction)
+        public void DifferentialSave(string pathA, string pathB, string pathC, BackupWithProgress progress, Action<float> progressChangeFunction)
         {
             DataState = new DataState(NameStateFile);
             Stopwatch stopwatch = new Stopwatch();
@@ -251,6 +249,7 @@ namespace EasySaveApp.model
                 DataState.TotalSizeRestState = TotalSize - Size;
                 DataState.FileRestState = NbFileMmax - Nbfiles;
                 DataState.ProgressState = Progs;
+                progressChangeFunction(Progs);
                 UpdateStateFile();
 
                 if (CryptExt(Path.GetExtension(v.Name)))
@@ -486,11 +485,11 @@ namespace EasySaveApp.model
 
         }
 
-        public void LoadSave(string backupname, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
+        public void LoadSave(BackupWithProgress backup, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
         {
             Backup selectedBackup = null;
             this.TotalSize = 0;
-            BackupNameState = backupname;
+            BackupNameState = backup.SaveName;
 
             string jsonString = File.ReadAllText(backupListFile); //Reading the json file
 
@@ -500,7 +499,7 @@ namespace EasySaveApp.model
                 Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString);  //Derialization of the json file
                 foreach (var obj in list)
                 {
-                    if (obj.SaveName == backupname) //Check to have the correct name of the backup
+                    if (obj.SaveName == backup.SaveName) //Check to have the correct name of the backup
                     {
                         selectedBackup = new Backup(obj.SaveName, obj.ResourceBackup, obj.TargetBackup, obj.Type, obj.MirrorBackup); //Function that allows you to retrieve information about the backup
                     }
@@ -513,11 +512,11 @@ namespace EasySaveApp.model
 
                 if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
                 {
-                    CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false, progressChangeFunction); //Calling the function to run the full backup
+                    CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false, backup, progressChangeFunction); //Calling the function to run the full backup
                 }
                 else //If this is the wrong guy then, it means it's a differential backup
                 {
-                    DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup, progressChangeFunction); //Calling the function to start the differential backup
+                    DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup, backup, progressChangeFunction); //Calling the function to start the differential backup
                 }
 
                 UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file

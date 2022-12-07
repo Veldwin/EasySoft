@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace EasySaveApp.model
 {
@@ -31,14 +32,26 @@ namespace EasySaveApp.model
 
         private string _SaveName;
         private float _Progress;
+        private ManualResetEvent _ResetEvent;
+        private bool _IsSuspended;
+        private bool _IsAborted;
+        private bool _IsRunning;
 
         public string SaveName { get { return _SaveName; } set { _SaveName = value; OnPropertyChanged(); } }
         public float Progress { get { return _Progress; } set { _Progress = value; OnPropertyChanged(); } }
+        public ManualResetEvent ResetEvent { get { return _ResetEvent; } set { _ResetEvent = value; OnPropertyChanged(); } }
+        public bool IsSuspended { get { return _IsSuspended; } set { _IsSuspended = value; OnPropertyChanged(); } }
+        public bool IsAborted { get { return _IsAborted; } set { _IsAborted = value; OnPropertyChanged(); } }
+        public bool IsRunning { get { return _IsRunning; } set { _IsRunning = value; OnPropertyChanged(); } }
 
-        public BackupWithProgress(string saveName, float progress)
+        public BackupWithProgress(string saveName, float progress, ManualResetEvent re)
         {
             _SaveName = saveName;
             _Progress = progress;
+            _ResetEvent = re;
+            _IsSuspended = false;
+            _IsAborted = false;
+            _IsRunning = false;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

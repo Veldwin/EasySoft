@@ -29,15 +29,12 @@ namespace EasySaveApp.view
 
         public MainWindow()
         {
-            viewmodel = ViewModel.getInstance();
-            InitializeComponent();
-            ShowListBox();
-
             Process Proc_EnCours = Process.GetCurrentProcess(); //Obtains the current process of the application
 
             Process[] Les_Proc = Process.GetProcesses(); //Collection of currently launched processes
 
             foreach (Process Processus in Les_Proc)
+            {
                 if (Proc_EnCours.Id != Processus.Id) ////If the IDs are different but of the same name
                 {
                     if (Proc_EnCours.ProcessName == Processus.ProcessName)
@@ -46,7 +43,11 @@ namespace EasySaveApp.view
                         this.Close();
                     }
                 }
-        
+            }
+
+            viewmodel = ViewModel.getInstance();
+            InitializeComponent();
+            ShowListBox();
         }
 
 
@@ -194,7 +195,7 @@ namespace EasySaveApp.view
             List<string> names = viewmodel.ListBackup();
             foreach (string name in names)//Loop that allows you to manage the names in the list.
             {
-                _backupsWithProgress.Add(new BackupWithProgress(name, 0)); //Function that allows you to insert the names of the backups in the list.
+                _backupsWithProgress.Add(new BackupWithProgress(name, 0, new ManualResetEvent(true))); //Function that allows you to insert the names of the backups in the list.
             }
             Save_work.ItemsSource = backupsWithProgress;
         }
@@ -221,15 +222,34 @@ namespace EasySaveApp.view
                 foreach (BackupWithProgress item in Save_work.SelectedItems)//Loop that allows you to select multiple saves
                 {
                     string saveName = item.SaveName.ToString();
-                    new Thread(() => {
-                        viewmodel.LoadBackup(saveName, language, (progress) =>
+                    BackupWithProgress backup = backupsWithProgress.Single(b => b.SaveName == saveName);
+
+                    if (backup.IsRunning)
+                    {
+                        MessageBox.Show("Sauvegarde déjà en cours d'exécution");
+                        break;
+                    }
+                    
+                    if (backup.IsSuspended)
+                    {
+                        backup.ResetEvent.Set();
+                        backup.IsSuspended = false;
+                    }
+                    else
+                    {
+                        backup.IsSuspended = false;
+                        backup.IsAborted = false;
+                        backup.IsRunning = true;
+
+                        new Thread(() =>
                         {
-                            Console.WriteLine(progress);
-                            /*progressPerBackup[saveName] = progress;*/
-                            BackupWithProgress bk = _backupsWithProgress.Single(x => x.SaveName == saveName);
-                            bk.Progress = progress;
-                        });
-                    }).Start();
+                            viewmodel.LoadBackup(backup, language, (progress) =>
+                            {
+                                BackupWithProgress bk = _backupsWithProgress.Single(x => x.SaveName == saveName);
+                                bk.Progress = progress;
+                            });
+                        }).Start();
+                    }
                 }
             }
         }
@@ -276,11 +296,17 @@ namespace EasySaveApp.view
 
         private void Button_Pause_click(object sender, RoutedEventArgs e)
         {
-            viewmodel.PauseButton_click();
+            BackupWithProgress backup = ((BackupWithProgress)Save_work.SelectedItem);
+            backup.ResetEvent.Reset();
+            backup.IsSuspended = true;
+            backup.IsRunning = false;
+            /*viewmodel.PauseButton_click();*/
         }
         
         private void Button_Stop_click(object sender, RoutedEventArgs e)
         {
+            BackupWithProgress backup = ((BackupWithProgress)Save_work.SelectedItem);
+            backup.IsAborted = true;
             viewmodel.StopButton_click();
         }
 

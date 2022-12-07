@@ -61,7 +61,7 @@ namespace EasySaveApp.viewmodel
             return nameslist;
         }
 
-        public void LoadBackup(string saveName, string language, Action<float> progressChangeFunction)//Function that allows you to load the backups that were selected by the user.
+        public void LoadBackup(BackupWithProgress backup, string language, Action<float> progressChangeFunction)//Function that allows you to load the backups that were selected by the user.
         {
             if (Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
             {
@@ -81,15 +81,22 @@ namespace EasySaveApp.viewmodel
             }
             else
             {
-                model.LoadSave(saveName, progressChangeFunction);//Function that launches backups
+                model.LoadSave(backup, progressChangeFunction);//Function that launches backups
 
-                if (language == "fr")
+                backup.IsRunning = false;
+                if (!backup.IsAborted)
                 {
-                    MessageBox.Show("SAUVEGARDE REUSSIE ");
-                }
-                else
+                    if (language == "fr")
+                    {
+                        MessageBox.Show("SAUVEGARDE REUSSIE ");
+                    }
+                    else
+                    {
+                        MessageBox.Show("SUCCESSFUL BACKUP ");
+                    }
+                } else
                 {
-                    MessageBox.Show("SUCCESSFUL BACKUP ");
+                    MessageBox.Show("SAUVEGARDE ABORTEE ");
                 }
             }
         }
@@ -180,7 +187,7 @@ namespace EasySaveApp.viewmodel
                         else if (content.IndexOf("PLAY" + name) > -1)
                         {
                             // MessageBox.Show("PLAY" + name);
-                            LoadBackup(name, "en", (float progress) => { }); //Function that allows you to launch the backups.
+                            LoadBackup(new BackupWithProgress(name, 0, new ManualResetEvent(true)), "en", (float progress) => { }); //Function that allows you to launch the backups.
                         }
                         else if (content.IndexOf("PAUSE" + name) > -1)
                         {
