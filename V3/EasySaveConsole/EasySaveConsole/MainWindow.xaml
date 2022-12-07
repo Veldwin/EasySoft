@@ -96,6 +96,7 @@
                         <TextBlock x:Name="PlayText1" Text="PLAY" Margin="29,0,0,0" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="54" FontSize="10" Foreground="White"/>
                     </Grid>
                 </Button>
+                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="275,106,0,0" VerticalAlignment="Top" Width="242"/>
 
             </Grid>
 

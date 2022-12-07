@@ -74,9 +74,11 @@ namespace EasySaveApp.model
         {
             DataState = new DataState(NameStateFile);
             DataState.SaveState = true;
+
             Stopwatch stopwatch = new Stopwatch();
             Stopwatch cryptwatch = new Stopwatch();
             stopwatch.Start();
+
             TotalSize = 0;
             NbFileMmax = 0;
             Size = 0;
@@ -120,13 +122,13 @@ namespace EasySaveApp.model
                 backup.ResetEvent.WaitOne();
                 if (backup.IsAborted)
                 {
-                    progressChangeFunction(100);
+                    progressChangeFunction(0);
                     break;
                 }
 
                 string tempPath = Path.Combine(inputDestToSave, file.Name);
 
-                UpdateStateFile();
+                /*UpdateStateFile();*/
 
                 if (CryptExt(Path.GetExtension(file.Name)))
                 {
@@ -135,8 +137,8 @@ namespace EasySaveApp.model
                         CryptFunction(inputDestToSave, inputpathsave);
                     }
                     else
-                    {                    
-                        file.CopyTo(tempPath, true);                   
+                    {
+                        file.CopyTo(tempPath, true);
                     }
                     /*cryptwatch.Start();
                     Encrypt(DataState.SourceFileState, tempPath);
@@ -164,6 +166,8 @@ namespace EasySaveApp.model
                 DataState.FileRestState = NbFileMmax - Nbfiles;
                 DataState.ProgressState = Progs;
                 progressChangeFunction(Progs);
+
+                UpdateStateFile();
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -176,11 +180,11 @@ namespace EasySaveApp.model
                 }
             }
             ResetValue();
-            UpdateStateFile();
             cryptwatch.Stop();
             stopwatch.Stop();
             CryptTransfert = stopwatch.Elapsed;
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
+            ;
         }
 
 
@@ -205,7 +209,7 @@ namespace EasySaveApp.model
         /// <param name="pathA"></param>
         /// <param name="pathB"></param>
         /// <param name="pathC"></param>
-        public void DifferentialSave(string pathA, string pathB, string pathC, BackupWithProgress progress, Action<float> progressChangeFunction)
+        public void DifferentialSave(string pathA, string pathB, string pathC, BackupWithProgress backup, Action<float> progressChangeFunction)
         {
             DataState = new DataState(NameStateFile);
             Stopwatch stopwatch = new Stopwatch();
@@ -231,6 +235,7 @@ namespace EasySaveApp.model
             Nbfiles = 0;
             Progs = 0;
 
+
             foreach (var v in queryList1Only)
             {
                 TotalSize += v.Length;
@@ -238,9 +243,16 @@ namespace EasySaveApp.model
 
             }
 
-
             foreach (var v in queryList1Only)
             {
+                Nbfiles++;
+                Size += v.Length;
+
+                if (Size > 0)
+                {
+                    Progs = ((float)Size / TotalSize) * 100;
+                }
+
                 string tempPath = Path.Combine(pathC, v.Name);
                 DataState.SourceFileState = Path.Combine(pathA, v.Name);
                 DataState.TargetFileState = tempPath;
@@ -252,6 +264,15 @@ namespace EasySaveApp.model
                 progressChangeFunction(Progs);
                 UpdateStateFile();
 
+
+                backup.ResetEvent.WaitOne();
+
+                if (backup.IsAborted)
+                {
+                    progressChangeFunction(0);
+                    break;
+                }
+
                 if (CryptExt(Path.GetExtension(v.Name)))
                 {
                     cryptwatch.Start();
@@ -261,6 +282,7 @@ namespace EasySaveApp.model
                 else
                 {
                     v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
+
                 }
 
                 Size += v.Length;
@@ -268,7 +290,6 @@ namespace EasySaveApp.model
             }
 
             ResetValue();
-            UpdateStateFile();
             stopwatch.Stop();
             cryptwatch.Stop();
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
@@ -288,51 +309,28 @@ namespace EasySaveApp.model
             DataState.SaveState = false;
         }
 
-
-        private void UpdateStateFile()//Function that updates the status file.
+        private void UpdateStateFile()
         {
-            mut.WaitOne();
             List<DataState> stateList = new List<DataState>();
-            this.serializeObj = null;
+
             if (!File.Exists(stateFile)) //Checking if the file exists
             {
                 File.Create(stateFile).Close();
             }
 
-            string jsonString = File.ReadAllText(stateFile);  //Reading the json file
+            string jsonString = File.ReadAllText(stateFile); //Reading the json file
 
-            if (jsonString.Length != 0) //Checking the contents of the json file is empty or not
+            if (jsonString.Length != 0)
             {
-                DataState[] list = JsonConvert.DeserializeObject<DataState[]>(jsonString); //Derialization of the json file
-
-                foreach (var obj in list) // Loop to allow filling of the JSON file
-                {
-                    if (obj.SaveNameState == this.NameStateFile) //Verification so that the name in the json is the same as that of the backup
-                    {
-                        obj.SourceFileState = this.DataState.SourceFileState;
-                        obj.TargetFileState = this.DataState.TargetFileState;
-                        obj.TotalFileState = this.DataState.TotalFileState;
-                        obj.TotalSizeState = this.DataState.TotalSizeState;
-                        obj.FileRestState = this.DataState.FileRestState;
-                        obj.TotalSizeRestState = this.DataState.TotalSizeRestState;
-                        obj.ProgressState = this.DataState.ProgressState;
-                        obj.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
-                        obj.SaveState = this.DataState.SaveState;
-                    }
-
-                    stateList.Add(obj); //Allows you to prepare the objects for the json filling
-
-                }
-
-                this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
-
-                File.WriteAllText(stateFile, this.serializeObj); //Function to write to JSON file
+                stateList = System.Text.Json.JsonSerializer.Deserialize<List<DataState>>(jsonString, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
             }
 
-            mut.ReleaseMutex();
+            stateList.Add(DataState);
+
+            jsonString = System.Text.Json.JsonSerializer.Serialize<List<DataState>>(stateList);
+
+            File.WriteAllText(stateFile, jsonString); //Function to write to JSON file
         }
-
-
 
         /// <summary>
         /// update log file on: \EasySoft\bin

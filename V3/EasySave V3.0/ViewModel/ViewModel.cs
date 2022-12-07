@@ -96,7 +96,14 @@ namespace EasySaveApp.viewmodel
                     }
                 } else
                 {
-                    MessageBox.Show("SAUVEGARDE ABORTEE ");
+                    if (language == "fr")
+                    {
+                        MessageBox.Show("SAUVEGARDE ABORTEE ");
+                    }
+                    else
+                    {
+                        MessageBox.Show("BACKUP ABORTED ");
+                    }
                 }
             }
         }
@@ -191,12 +198,12 @@ namespace EasySaveApp.viewmodel
                         }
                         else if (content.IndexOf("PAUSE" + name) > -1)
                         {
-                            MessageBox.Show("PAUSE" + name);
+                            MessageBox.Show("PAUSE" + "" + name);
 
                         }
                         else if (content.IndexOf("STOP" + name) > -1)
                         {
-                            MessageBox.Show("STOP" + name);
+                            MessageBox.Show("STOP" + " " + name);
                         }
                         else if (content.IndexOf("getprogressing" + name) > -1)
                         {
