@@ -7,11 +7,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Xml.Linq;
 using System.Xml;
-using System.Windows;
-using System.Windows.Shell;
-using System.Security.Cryptography.X509Certificates;
-using System.IO.Packaging;
-using System.Diagnostics.Eventing.Reader;
 
 namespace EasySaveApp.model
 {
@@ -26,22 +21,15 @@ namespace EasySaveApp.model
         public DataState DataState { get; set; }
         public string NameStateFile { get; set; }
         public string BackupNameState { get; set; }
-        public string Resource { get; set; }
-        public int Nbfilesmax { get; set; }
         public int Nbfiles { get; set; }
         public long Size { get; set; }
         public float Progs { get; set; }
-        public string TargetResource { get; set; }
         public string SaveName { get; set; }
-        public int Type { get; set; }
-        public string SourceFile { get; set; }
-        public string TypeString { get; set; }
         public long TotalSize { get; set; }
         public int NbFileMmax { get; private set; }
         public TimeSpan TimeTransfert { get; set; }
         public TimeSpan CryptTransfert { get; set; }
         public string UserMenuInput { get; set; }
-        public string MirrorResource { get; set; }
         public bool Format { get; set; }
         public bool Button_play { get; set; }
         public bool Button_pause { get; set; }
@@ -518,21 +506,6 @@ namespace EasySaveApp.model
                 }
 
                 UpdateLogFile(selectedBackup.SaveName, selectedBackup.ResourceBackup, selectedBackup.TargetBackup); //Call of the function to start the modifications of the log file
-            }
-        }
-
-        public void CheckDataFile()  // Function that allows to count the number of backups in the json file of backup jobs
-        {
-            checkDataBackup = 0;
-
-            if (File.Exists(backupListFile)) //Check on file exists
-            {
-                string jsonString = File.ReadAllText(backupListFile);//Reading the json file
-                if (jsonString.Length != 0)//Checking the contents of the json file is empty or not
-                {
-                    Backup[] list = JsonConvert.DeserializeObject<Backup[]>(jsonString); //Derialization of the json file
-                    checkDataBackup = list.Length; //Allows to count the number of backups
-                }
             }
         }
 

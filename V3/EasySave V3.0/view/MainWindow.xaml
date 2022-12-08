@@ -68,6 +68,16 @@
                         <TextBlock x:Name="textextensionprio" Text="{DynamicResource ResourceKey=btn_priority}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </Button>
+                <Button Click="Open_logs" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}" Width="179">
+                    <Grid Width="150" Height="30">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="8*"/>
+                            <RowDefinition Height="7*"/>
+                        </Grid.RowDefinitions>
+                        <materialDesigin:PackIcon Kind="Journal" Margin="-4,7,0,0" Foreground="Black" Grid.RowSpan="2"/>
+                        <TextBlock x:Name="logs" Text="Logs" Margin="0,5,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Top" HorizontalAlignment="Left" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold" Grid.RowSpan="2"/>
+                    </Grid>
+                </Button>
 
                 <Button x:Name="button_fr" Margin="10" Click="ButtonClickFr" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
                     <Grid Width="150" Height="30">
@@ -103,8 +113,8 @@
                     </Grid>
                 </Button>
 
-                <RadioButton GroupName="BackupMode" x:Name="mirror_button" Content="{DynamicResource ResourceKey = mirror_button}" HorizontalAlignment="Left" Margin="533,81,0,0" VerticalAlignment="Top" Height="14" IsChecked="True"  Width="195" FontFamily="Segoe UI Variable Text Semibold"   />
-                <RadioButton GroupName="BackupMode" x:Name="diff_button" Content="{DynamicResource ResourceKey = diff_button}" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Center" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold"/>
+                <RadioButton GroupName="BackupMode" x:Name="mirror_button" Content="{DynamicResource ResourceKey = mirror_button}" HorizontalAlignment="Left" Margin="533,81,0,0" VerticalAlignment="Top" Height="14" IsChecked="True"  Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="mirror_button_Checked"   />
+                <RadioButton GroupName="BackupMode" x:Name="diff_button" Content="{DynamicResource ResourceKey = diff_button}" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Center" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="diff_button_Checked"/>
 
 
                 <Grid Grid.Column="1" Grid.Row="1">
@@ -185,7 +195,7 @@
                         </DataGridTemplateColumn.Header>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ProgressBar x:Name="progressBar" Width="100" Height="20" Value="{Binding Progress}" />
+                                <ProgressBar x:Name="progressBar" Width="400" Height="20" Value="{Binding Progress}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

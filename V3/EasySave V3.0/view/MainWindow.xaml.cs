@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using EasySaveApp;
 using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
@@ -183,13 +182,6 @@ namespace EasySaveApp.view
 
         private void ShowListBox() //Function that displays the names of the backups in the list.
         {
-            /*Save_work.Items.Clear();
-
-            List<string> names = viewmodel.ListBackup();
-            foreach (string name in names)//Loop that allows you to manage the names in the list.
-            {
-                Save_work.Items.Add(new BackupWithProgress(name, progressPerBackup.ContainsKey(name) ? progressPerBackup[name] : 0)); //Function that allows you to insert the names of the backups in the list.
-            }*/
             _backupsWithProgress.Clear();
 
             List<string> names = viewmodel.ListBackup();
@@ -198,11 +190,6 @@ namespace EasySaveApp.view
                 _backupsWithProgress.Add(new BackupWithProgress(name, 0, new ManualResetEvent(true))); //Function that allows you to insert the names of the backups in the list.
             }
             Save_work.ItemsSource = backupsWithProgress;
-        }
-
-        private void MirrorButtonChecked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void ButtonExit(object sender, RoutedEventArgs e)//Function of the button to close the software
@@ -256,12 +243,12 @@ namespace EasySaveApp.view
 
         private void OpenBlacklist(object sender, RoutedEventArgs e)//Function that allows the button to open the file of blacklisted software
         {
-            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\JailApps.json");
+            Process.Start("notepad.exe", @"..\..\..\Resources\JailApps.json");
         }
 
         private void OpenCryptExt(object sender, RoutedEventArgs e)//Function that allows the button to open the file of blacklisted software
         {
-            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\CryptExtension.json");
+            Process.Start("notepad.exe", @"..\..\..\Resources\CryptExtension.json");
         }
 
 
@@ -312,7 +299,11 @@ namespace EasySaveApp.view
 
         private void Open_extensionprio(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
         {
-            System.Diagnostics.Process.Start("notepad.exe", @"..\..\..\Resources\PriorityExtensions.json");
+            Process.Start("notepad.exe", @"..\..\..\Resources\PriorityExtensions.json");
+        }
+        private void Open_logs(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
+        {
+            Process.Start("notepad.exe", @"..\..\..\bin\Debug\net6.0-windows\state\state.json");
         }
 
         private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.

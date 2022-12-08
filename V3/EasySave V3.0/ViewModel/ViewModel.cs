@@ -8,7 +8,6 @@ using System.Threading;
 using System.Text;
 using System.ComponentModel;
 using System.Linq;
-using EasySaveApp.view;
 
 namespace EasySaveApp.viewmodel
 {

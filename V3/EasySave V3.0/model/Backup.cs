@@ -12,7 +12,6 @@ namespace EasySaveApp.model
         public string SaveName { get; set; }
         public string Type { get; set; }
         public string MirrorBackup { get; set; }
-        public bool IsSelected { get; set; }
         public float Progress { get; set; }
 
         public Backup(string saveName, string source, string target, string type, string mirror, float progress = 0)
