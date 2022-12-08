@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesigin="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="360" Width="750" ResizeMode="NoResize" WindowStyle="None">
+        Title="MainWindow" Height="360" Width="750" ResizeMode="NoResize" WindowStyle="None"
+        Name="MyMainWindow">
 
     <Window.Background>
         <SolidColorBrush Color="#35524A"/>
@@ -42,10 +43,16 @@
             </Grid>
 
             <StackPanel Grid.Row="1">
-                <Button Margin="10" Click="StartClient" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
+                <Button Margin="10" Click="StartConnexionToServer" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
                     <Grid Width="150" Height="30">
-                        <materialDesigin:PackIcon Kind="Shutdown" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                        <materialDesigin:PackIcon Kind="Connection" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
                         <TextBlock x:Name="StartCo" Text="Start connexion" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
+                    </Grid>
+                </Button>
+                <Button Click="StopConnexionToServer" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}" Width="180">
+                    <Grid Width="150" Height="30">
+                        <materialDesigin:PackIcon Kind="StopCircle" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                        <TextBlock x:Name="StartCo1" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"><Run Text="S"/><Run Language="fr-fr" Text="top"/><Run Text=" connexion"/></TextBlock>
                     </Grid>
                 </Button>
 
@@ -57,53 +64,47 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid>
-                <Rectangle Grid.Row="1"  Margin="15" Fill="#FFD0D1D0" RadiusX="11" RadiusY="11"/>
-                <ListBox x:Name="Save_work" Margin="27,65,363,27" SelectionChanged="SelectionChanged"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle  Margin="15,15,15,15" Fill="#FFD0D1D0" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
+                <ListBox x:Name="ListSaveWork" Margin="27,65,347,27"/>
 
-                <Label x:Name="ipserver" Content="IP SERVER : " FontFamily="Sitka Text" Margin="21,33,0,264"/>
-                <TextBox x:Name="text_ipserevr" Margin="105,32,0,269" HorizontalAlignment="Left" Width="188" TextChanged="Ip_TextChanged" />
-
-                <Label x:Name="name_backup" Content="Name:" FontFamily="Sitka Text" Margin="191,70,22,224"/>
-                <Label x:Name="progression" Content="Progressing : " FontFamily="Sitka Text" Margin="190,98,148,204"/>
+                <Label x:Name="ipserver" Content="IP SERVER : " FontFamily="Sitka Text" Margin="21,33,0,264" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="AdresseTextBox" Margin="105,32,0,269" HorizontalAlignment="Left" Width="188" Text="192.168.0.171" />
 
 
 
-                <Button Click="PauseBackup" Background="#003E20" BorderBrush="{x:Null}" Margin="314,129,154,156">
+                <Button  Background="#003E20" BorderBrush="{x:Null}" Margin="314,129,138,156" Click="PauseBackup_Click">
                     <Grid Width="74" Height="30">
                         <materialDesigin:PackIcon Kind="Pause" VerticalAlignment="Center" Foreground="White" Margin="1,0,0,0"/>
                         <TextBlock x:Name="PlauseText" Text="PAUSE" Margin="27,0,0,0" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="54" FontSize="10" Foreground="White"/>
                     </Grid>
                 </Button>
 
-                <Button Click="StopBackup" Background="#003E20" BorderBrush="{x:Null}" Margin="416,129,52,156">
+                <Button  Background="#003E20" BorderBrush="{x:Null}" Margin="416,129,36,156">
                     <Grid Width="74" Height="30">
                         <materialDesigin:PackIcon Kind="Stop" VerticalAlignment="Center" Foreground="White" Margin="1,0,0,0"/>
                         <TextBlock x:Name="StopText" Text="STOP" Margin="27,0,0,0" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="54" FontSize="10" Foreground="White"/>
                     </Grid>
                 </Button>
 
-                <Button Margin="283,233,114,45" Click="LoadProgress" Background="#003E20" Height="48" BorderBrush="{x:Null}">
-                    <Grid Width="150" Height="30">
-                        <materialDesigin:PackIcon Kind="Show" VerticalAlignment="Center" Foreground="White" Margin="11,0,0,0"/>
-                        <TextBlock x:Name="LoadProgressText" Text="PROGRESSING" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="84" FontSize="10" Foreground="White" Margin="41,0,0,0"/>
-                    </Grid>
-                </Button>
 
-
-                <Button Click="PlayBackup" Background="#003E20" BorderBrush="{x:Null}" Margin="212,129,256,156">
+                <Button  Background="#003E20" BorderBrush="{x:Null}" Margin="212,129,240,156" Click="StartBackup_Click">
                     <Grid Width="74" Height="30">
                         <materialDesigin:PackIcon Kind="Play" VerticalAlignment="Center" Foreground="White" Margin="1,0,0,0"/>
                         <TextBlock x:Name="PlayText1" Text="PLAY" Margin="29,0,0,0" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="54" FontSize="10" Foreground="White"/>
                     </Grid>
                 </Button>
-                <ProgressBar HorizontalAlignment="Left" Height="10" Margin="275,106,0,0" VerticalAlignment="Top" Width="242"/>
+                <ProgressBar x:Name="ProgressionBar" HorizontalAlignment="Left" Height="10" Margin="234,197,0,0" VerticalAlignment="Top" Width="242"/>
 
             </Grid>
 
         </Grid>
-        <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20" MouseDown="GridMenuMouseDown">
+        <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="#F3F3F4">
-                <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="Button_exit">
+                <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="CloseWindow_Click">
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>
             </StackPanel>

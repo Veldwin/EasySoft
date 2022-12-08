@@ -8,6 +8,10 @@ using System.Threading;
 using System.Text;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Controls;
+using System.Collections.ObjectModel;
+using EasySaveApp.ViewModel;
+using EasySaveApp.Socket;
 
 namespace EasySaveApp.viewmodel
 {
@@ -19,15 +23,16 @@ namespace EasySaveApp.viewmodel
         string[] jail_apps = Model.GetJailApps();
         public string[] BlackListApp { get => jail_apps; set => jail_apps = value; }
         public static ManualResetEvent allDone = new ManualResetEvent(false);
-        
+        public ObservableCollection<BackupWithProgress> _backupsWithProgress = new ObservableCollection<BackupWithProgress>();
+
         private List<string> nameslist;
         public List<Backup> backups;
 
         public ViewModel()
         {
             model = new Model();
-            Thread ServerThread = new Thread(StartServer);
-            ServerThread.Start();
+
+            Server server = new Server(3);
         }
 
         private static ViewModel? _viewModel;
@@ -93,7 +98,8 @@ namespace EasySaveApp.viewmodel
                     {
                         MessageBox.Show("SUCCESSFUL BACKUP ");
                     }
-                } else
+                }
+                else
                 {
                     if (language == "fr")
                     {
@@ -108,153 +114,11 @@ namespace EasySaveApp.viewmodel
         }
 
         public void IsCryptChecked(bool state)
-        {           
+        {
             model.isCheck = state;
         }
-
-
-        public void StartServer()//Function to start the server
-        {
-            // Establish the local endpoint for the socket.    
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).First();
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 66);
-
-            // Create a TCP/IP socket.  
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-            // Bind the socket to the local endpoint and listen for incoming connections.  
-            try
-            {
-                listener.Bind(localEndPoint);
-                listener.Listen(100);
-
-                while (true)
-                {
-                    allDone.Reset();// Set the event to nonsignaled state.  
-
-                    // Start an asynchronous socket to listen for connections. 
-                    listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
-
-                    allDone.WaitOne();// Wait until a connection is made before continuing.  
-                }
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-        }
-
-        public void AcceptCallback(IAsyncResult ar)
-        {
-            allDone.Set();// Signal the main thread to continue.  
-
-            // Get the socket that handles the client request.  
-            Socket listener = (Socket)ar.AsyncState;
-            Socket handler = listener.EndAccept(ar);
-
-            // Create the state object.  
-            StateObject state = new StateObject();
-            state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0, new AsyncCallback(ReadCallback), state);
-        }
-
-        public void ReadCallback(IAsyncResult ar)
-        {
-            String content = String.Empty;
-
-            try
-            {
-                // Retrieve the state object and the handler socket  
-                // from the asynchronous state object.  
-                StateObject state = (StateObject)ar.AsyncState;
-                Socket handler = state.workSocket;
-
-                // Read data from the client socket.
-                int bytesRead = handler.EndReceive(ar);
-
-                if (bytesRead >= 0)
-                {
-                    // There  might be more data, so store the data received so far.  
-                    state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-
-                    // Check for end-of-file tag. If it is not there, read
-                    // more data.  
-                    content = state.sb.ToString();
-
-                    List<string> names = ListBackup();
-                    foreach (var name in names)//Loop that allows you to manage the names in the list.
-                    {
-                        if (content.IndexOf("getdata") > -1)
-                        {
-                            Send(handler, name + Environment.NewLine); //Function that allows you to insert the names of the backups in the list.
-                        }
-                        else if (content.IndexOf("PLAY" + name) > -1)
-                        {
-                            // MessageBox.Show("PLAY" + name);
-                            LoadBackup(new BackupWithProgress(name, 0, new ManualResetEvent(true)), "en", (float progress) => { }); //Function that allows you to launch the backups.
-                        }
-                        else if (content.IndexOf("PAUSE" + name) > -1)
-                        {
-                            MessageBox.Show("PAUSE" + "" + name);
-
-                        }
-                        else if (content.IndexOf("STOP" + name) > -1)
-                        {
-                            MessageBox.Show("STOP" + " " + name);
-                        }
-                        else if (content.IndexOf("getprogressing" + name) > -1)
-                        {
-                            string prog = "Progressions de la Save";
-                            Send(handler, prog);
-                        }
-                        else
-                        {
-                            // Not all data received. Get more.  
-                            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                            new AsyncCallback(ReadCallback), state);
-                        }
-
-                    }
-                }
-                handler.Shutdown(SocketShutdown.Both);
-                handler.Close();
-            }
-            catch
-            {
-
-            }
-        }
-
-        private void Send(Socket handler, String data)//Function to send a message
-        {
-            try
-            {
-                byte[] byteData = Encoding.ASCII.GetBytes(data);// Convert the string data to byte data using ASCII encoding.  
-
-                handler.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), handler); // Begin sending the data to the remote device. 
-
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-
-        }
-        private void SendCallback(IAsyncResult ar)//Function to send a message a asynchronous
-        {
-            try
-            {
-                Socket handler = (Socket)ar.AsyncState;// Retrieve the socket from the state object.  
-
-                int bytesSent = handler.EndSend(ar); // Complete sending the data to the remote device.  
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-        }
+                
+        
 
         public void DeleteBackup(string backupname)//Function that allows you to delete the backups that were selected by the user.
         {

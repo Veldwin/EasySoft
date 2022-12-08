@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
 using EasySaveApp.model;
 using System.Linq;
-using EasySaveApp.viewmodel;
+using EasySaveApp;
 using System.Collections.ObjectModel;
 
 namespace EasySaveApp.view
@@ -18,12 +18,11 @@ namespace EasySaveApp.view
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ViewModel viewmodel;
+        private EasySaveApp.viewmodel.ViewModel viewmodel;
         
         public string language = "fr";
         private bool formatmw = false;
-        private ObservableCollection<BackupWithProgress> _backupsWithProgress = new ObservableCollection<BackupWithProgress>();
-        public IEnumerable<BackupWithProgress> backupsWithProgress { get { return _backupsWithProgress; } }
+        public IEnumerable<BackupWithProgress> backupsWithProgress { get { return viewmodel._backupsWithProgress; } }
 
 
         public MainWindow()
@@ -44,7 +43,7 @@ namespace EasySaveApp.view
                 }
             }
 
-            viewmodel = ViewModel.getInstance();
+            viewmodel = EasySaveApp.viewmodel.ViewModel.getInstance();
             InitializeComponent();
             ShowListBox();
         }
@@ -182,12 +181,12 @@ namespace EasySaveApp.view
 
         private void ShowListBox() //Function that displays the names of the backups in the list.
         {
-            _backupsWithProgress.Clear();
+            viewmodel._backupsWithProgress.Clear();
 
             List<string> names = viewmodel.ListBackup();
             foreach (string name in names)//Loop that allows you to manage the names in the list.
             {
-                _backupsWithProgress.Add(new BackupWithProgress(name, 0, new ManualResetEvent(true))); //Function that allows you to insert the names of the backups in the list.
+                viewmodel._backupsWithProgress.Add(new BackupWithProgress(name, 0, new ManualResetEvent(true))); //Function that allows you to insert the names of the backups in the list.
             }
             Save_work.ItemsSource = backupsWithProgress;
         }
@@ -228,14 +227,16 @@ namespace EasySaveApp.view
                         backup.IsAborted = false;
                         backup.IsRunning = true;
 
-                        new Thread(() =>
+                        Thread t = new(() =>
                         {
                             viewmodel.LoadBackup(backup, language, (progress) =>
                             {
-                                BackupWithProgress bk = _backupsWithProgress.Single(x => x.SaveName == saveName);
+                                BackupWithProgress bk = viewmodel._backupsWithProgress.Single(x => x.SaveName == saveName);
                                 bk.Progress = progress;
                             });
-                        }).Start();
+                        });
+                        t.Name = saveName;
+                        t.Start();
                     }
                 }
             }
@@ -281,13 +282,12 @@ namespace EasySaveApp.view
             viewmodel.PlayButton_click();
         }
 
-        private void Button_Pause_click(object sender, RoutedEventArgs e)
+        public void Button_Pause_click(object sender, RoutedEventArgs e)
         {
             BackupWithProgress backup = ((BackupWithProgress)Save_work.SelectedItem);
             backup.ResetEvent.Reset();
             backup.IsSuspended = true;
             backup.IsRunning = false;
-            /*viewmodel.PauseButton_click();*/
         }
         
         private void Button_Stop_click(object sender, RoutedEventArgs e)

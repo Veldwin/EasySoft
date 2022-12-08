@@ -113,8 +113,8 @@
                     </Grid>
                 </Button>
 
-                <RadioButton GroupName="BackupMode" x:Name="mirror_button" Content="{DynamicResource ResourceKey = mirror_button}" HorizontalAlignment="Left" Margin="533,81,0,0" VerticalAlignment="Top" Height="14" IsChecked="True"  Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="mirror_button_Checked"   />
-                <RadioButton GroupName="BackupMode" x:Name="diff_button" Content="{DynamicResource ResourceKey = diff_button}" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Center" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold" Checked="diff_button_Checked"/>
+                <RadioButton GroupName="BackupMode" x:Name="mirror_button" Content="{DynamicResource ResourceKey = mirror_button}" HorizontalAlignment="Left" Margin="533,81,0,0" VerticalAlignment="Top" Height="14" IsChecked="True"  Width="195" FontFamily="Segoe UI Variable Text Semibold"/>
+                <RadioButton GroupName="BackupMode" x:Name="diff_button" Content="{DynamicResource ResourceKey = diff_button}" HorizontalAlignment="Left" Margin="533,0,0,0" VerticalAlignment="Center" Height="20" Width="195" FontFamily="Segoe UI Variable Text Semibold"/>
 
 
                 <Grid Grid.Column="1" Grid.Row="1">

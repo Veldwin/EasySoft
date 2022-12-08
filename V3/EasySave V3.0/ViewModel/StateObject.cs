@@ -1,13 +1,12 @@
 ﻿using System.Net.Sockets;
 using System.Text;
 
-namespace EasySaveApp
-    
+namespace EasySaveApp.ViewModel
+
 {
     public class StateObject// State object for reading client data asynchronously  
     {
         // Client socket.  
-        public Socket workSocket = null;
         // Size of receive buffer.  
         public const int BufferSize = 4096;
         // Receive buffer.  
