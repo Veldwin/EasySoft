@@ -28,13 +28,8 @@ namespace EasySaveApp.Socket
                 TcpClient client = _listener.AcceptTcpClient();
                 Connection connection = new(client);
                 ConnectionPool.GetInstance().AddConnection(connection);
-
-                Thread thread = new(() => {
-                    _pool.WaitOne();
-                    connection.HandleConnection();
-                    _pool.Release();
-                });
-                thread.Start();
+                
+                connection.thread.Start();
             }
         }
     }

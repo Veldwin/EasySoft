@@ -72,7 +72,7 @@
                 <ListBox x:Name="ListSaveWork" Margin="27,65,347,27"/>
 
                 <Label x:Name="ipserver" Content="IP SERVER : " FontFamily="Sitka Text" Margin="21,33,0,264" Grid.ColumnSpan="2"/>
-                <TextBox x:Name="AdresseTextBox" Margin="105,32,0,269" HorizontalAlignment="Left" Width="188" Text="192.168.0.171" />
+                <TextBox x:Name="AdresseTextBox" Margin="105,32,0,269" HorizontalAlignment="Left" Width="188" Text="127.0.0.1" />
 
 
 
@@ -102,7 +102,7 @@
             </Grid>
 
         </Grid>
-        <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20">
+        <Grid x:Name="Grid_Menu" Grid.ColumnSpan="2" Background="#003E20" MouseDown="GridMenuMouseDown">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Background="#F3F3F4">
                 <Button x:Name="Buttonexit" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="Red" Click="CloseWindow_Click">
                     <materialDesigin:PackIcon Kind="Power"/>

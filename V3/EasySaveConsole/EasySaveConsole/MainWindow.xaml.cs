@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using EasySaveApp.model;
 using System.Text.Json;
 using EasySaveApp.Socket;
+using System.Net.Http;
+using System.Threading;
+using System.IO;
+using System.Windows.Documents;
+using System.Threading.Tasks;
 
 namespace EasySaveConsole
 {
@@ -18,7 +23,9 @@ namespace EasySaveConsole
         private TcpClient _connection = null;
         private NetworkStream _serverStream = null;
         private BackgroundWorker thread;
-        
+        private bool IsConnected;
+
+
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +40,7 @@ namespace EasySaveConsole
             _connection.Connect(IPAddress.Parse(address), 66);
 
             _serverStream = _connection.GetStream();
+            IsConnected = true;
 
             thread = new BackgroundWorker();
             thread.WorkerReportsProgress = true;
@@ -44,15 +52,16 @@ namespace EasySaveConsole
                 byte[] bytes = new byte[1024];
                 String data = null;
 
-                while ((i = _serverStream.Read(bytes, 0, bytes.Length)) != 0)
-                {
+
+                while (!(sender as BackgroundWorker).CancellationPending && (i = _serverStream.Read(bytes, 0, bytes.Length)) != 0)
+                {                    
                     data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                     var msg = JsonSerializer.Deserialize<MessageContent>(data);
 
-                    thread.ReportProgress(1, msg);
+                    thread.ReportProgress(1, msg);                    
                 }
-                
+
             };
 
             thread.ProgressChanged += (sender, eventArgs) =>
@@ -72,8 +81,28 @@ namespace EasySaveConsole
                 }
             };
 
+            thread.RunWorkerCompleted += (s, e) =>
+            {
+                var message = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ClientStopConnection, Body = null });
+                _serverStream.Write(message);
+                Task.Run(() =>
+                {
+                    Thread.Sleep(10000);
+                    _serverStream.Close();
+                    _connection.Close();
+                });
+                MessageBox.Show("Connexion interrompu");
+            };
+
             thread.RunWorkerAsync();
         }
+
+        //stop the connection
+        private void StopConnexionToServer(object sender, RoutedEventArgs e)
+        {
+            thread.CancelAsync();
+        }
+
 
         private void ListAllBackups(List<Backup> l)
         {
@@ -89,7 +118,7 @@ namespace EasySaveConsole
         {
             string selected = ListSaveWork.SelectedItem.ToString();
 
-            var message = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ClientStartTask, Body = selected});
+            var message = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ClientStartTask, Body = selected });
 
             _serverStream.Write(message);
         }
@@ -103,9 +132,9 @@ namespace EasySaveConsole
             _serverStream.Write(message);
         }
 
-        private void StopConnexionToServer(object sender, RoutedEventArgs e)
+        private void GridMenuMouseDown(object sender, RoutedEventArgs e)//Function that allows you to move the software window.
         {
-
+            DragMove();//Function that allows movement
         }
     }
 }

@@ -15,13 +15,19 @@ using System.Xml.Linq;
 
 namespace EasySaveApp.Socket
 {
-    public class Connection
+    public class Connection : IDisposable
     {
+        private bool disposedValue;
+
         public TcpClient connection { get; set; }
-        
+        public Thread thread = null;
+
 
         public Connection(TcpClient client) { 
             connection = client;
+            thread = new(() => {
+                this.HandleConnection();
+            });
         }
 
         internal void HandleConnection()
@@ -55,16 +61,23 @@ namespace EasySaveApp.Socket
                                 
                                 var v = EasySaveApp.viewmodel.ViewModel.getInstance();
 
-                                v.LoadBackup(new BackupWithProgress(BackupName, 0, new ManualResetEvent(true)), "en", (progress) =>
-                                {
-                                    BackupWithProgress bk = v._backupsWithProgress.Single(x => x.SaveName == BackupName);
-                                    bk.Progress = progress;
+                                Thread temp = new(() => {
+                                    v.LoadBackup(new BackupWithProgress(BackupName, 0, new ManualResetEvent(true)), "en", (progress) =>
+                                    {
+                                        BackupWithProgress bk = v._backupsWithProgress.Single(x => x.SaveName == BackupName);
+                                        bk.Progress = progress;
 
-                                    var msgToSend = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.BackupProgress, Body = progress.ToString().Replace(",", ".") });
+                                        var msgToSend = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.BackupProgress, Body = progress.ToString().Replace(",", ".") });
 
-                                    connection.GetStream().Write(msgToSend);
+                                        if (connection != null)
+                                        {
+                                            connection.GetStream().Write(msgToSend);
+                                        }
+                                    });
                                 });
+                                temp.Start();
                                 break;
+                                
                             case MessageType.ClientPauseTask:
                                 BackupName = msg.Body;
                                 var vm = EasySaveApp.viewmodel.ViewModel.getInstance();
@@ -75,6 +88,14 @@ namespace EasySaveApp.Socket
                                 backup.IsRunning = false;
                                 break;
 
+                            case MessageType.ClientStopConnection:
+                                ConnectionPool.GetInstance().RemoveConnection(this);
+                                connection.GetStream().Close();
+                                connection.Close();
+                                connection.Dispose();
+                                connection = null;
+                                break;
+
                         }
                     }
                 }
@@ -83,6 +104,35 @@ namespace EasySaveApp.Socket
                     MessageBox.Show($"[Client Connection] Error : {e.Message}");
                 }
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: supprimer l'état managé (objets managés)
+                }
+
+                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
+                // TODO: affecter aux grands champs une valeur null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: substituer le finaliseur uniquement si 'Dispose(bool disposing)' a du code pour libérer les ressources non managées
+        // ~Connection()
+        // {
+        //     // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Ne changez pas ce code. Placez le code de nettoyage dans la méthode 'Dispose(bool disposing)'
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

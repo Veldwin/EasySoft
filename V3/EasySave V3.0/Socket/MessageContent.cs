@@ -12,7 +12,9 @@ namespace EasySaveApp.Socket
         BackupList,
         ClientStartTask,
         BackupProgress,
-        ClientPauseTask
+        ClientPauseTask,
+        ClientStopTask,
+        ClientStopConnection
     }
 
     public class MessageContent

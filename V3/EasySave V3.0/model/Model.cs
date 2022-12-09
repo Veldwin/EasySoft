@@ -98,6 +98,8 @@ namespace EasySaveApp.model
             }
 
 
+/*            PriorityList(filesPath);*/
+
             foreach (FileInfo file in files)
             {
                 backup.ResetEvent.WaitOne();
@@ -251,7 +253,7 @@ namespace EasySaveApp.model
                     progressChangeFunction(0);
                     break;
                 }
-
+                
                 if (CryptExt(Path.GetExtension(v.Name)))
                 {
                     cryptwatch.Start();
@@ -481,47 +483,8 @@ namespace EasySaveApp.model
                     DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup, backup, progressChangeFunction); //Calling the function to start the differential backup
                 }
 
-                //UpdateLogFile(); //Call of the function to start the modifications of the log file
+                /*UpdateLogFile(DataState dataState);*/ //Call of the function to start the modifications of the log file
             }
-        }
-
-        private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
-        {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
-            {
-                CryptFormat[] item_crypt;
-                string[] crypt_extensions_array;
-                string json = reader.ReadToEnd();
-                List<CryptFormat> items = JsonConvert.DeserializeObject<List<CryptFormat>>(json);
-                item_crypt = items.ToArray();
-                crypt_extensions_array = item_crypt[0].extensionCrypt.Split(',');
-
-                return crypt_extensions_array; //We return the variables that are stored in an array
-            }
-        }
-        public static bool CryptExt(string extension)//Function that compares the extensions of the json file and the one of the file being backed up.
-        {
-            foreach (string extensionExt in getExtensionCrypt())
-            {
-                if (extensionExt == extension)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void Encrypt(string sourceDir, string targetDir)//This function allows you to encrypt files. 
-        {
-            using (Process process = new Process())//Declaration of the process
-            {
-                process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
-                process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
-                process.Start(); //Launching the process
-                process.Close();
-
-            }
-
         }
 
         public List<Backup> NameList()//Function that lets you know the names of the backups.
@@ -612,7 +575,7 @@ namespace EasySaveApp.model
             Format = extension;
         }
 
-        public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
+/*        public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
         {
             using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtensions.json"))//Function to read the json file
             {
@@ -638,6 +601,53 @@ namespace EasySaveApp.model
             }
 
             return false;
+        }*/
+
+        //Add file with priority extension to a new priority list
+        public static List<string> PriorityList(List<string> filesPath)
+        {
+            List<string> filesPrio = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(@"..\..\..\Ressources\PriorityExtensions.json"))
+                .Where(x => filesPath.Contains(x)).ToList();           
+            return filesPrio.Concat(filesPath.Except(filesPrio).ToList()).ToList();
+        }
+
+        private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
+        {
+            using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
+            {
+                CryptFormat[] item_crypt;
+                string[] crypt_extensions_array;
+                string json = reader.ReadToEnd();
+                List<CryptFormat> items = JsonConvert.DeserializeObject<List<CryptFormat>>(json);
+                item_crypt = items.ToArray();
+                crypt_extensions_array = item_crypt[0].extensionCrypt.Split(',');
+
+                return crypt_extensions_array; //We return the variables that are stored in an array
+            }
+        }
+        public static bool CryptExt(string extension)//Function that compares the extensions of the json file and the one of the file being backed up.
+        {
+            foreach (string extensionExt in getExtensionCrypt())
+            {
+                if (extensionExt == extension)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void Encrypt(string sourceDir, string targetDir)//This function allows you to encrypt files. 
+        {
+            using (Process process = new Process())//Declaration of the process
+            {
+                process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
+                process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
+                process.Start(); //Launching the process
+                process.Close();
+
+            }
+
         }
 
         public bool Play_click()
