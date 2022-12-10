@@ -7,7 +7,13 @@
     <RootNamespace>EasySaveApp</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <Version>3.0.0</Version>
+    <ApplicationIcon>EasySaveLogo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="EasySaveLogo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.6.1" />
