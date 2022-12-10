@@ -12,8 +12,8 @@ namespace EasySaveApp.model
 {
     class Model
     {
-
         //Declaration of all variables and properties
+        public int HEAVY_FILE_SIZE_THRESHOLD_IN_BYTES = JsonConvert.DeserializeObject<int>(File.ReadAllText(@"..\..\..\Resources\LimitSize.json"));
         public int checkDataBackup;
         private string serializeObj;
         public string backupListFile = System.Environment.CurrentDirectory + @"\Works\";
@@ -25,6 +25,7 @@ namespace EasySaveApp.model
         public TimeSpan CryptTransfert { get; set; }
         public string UserMenuInput { get; set; }
         public bool Format { get; set; }
+        public long TotalSize { get; set; }
         public bool Button_play { get; set; }
         public bool Button_pause { get; set; }
         public bool Button_stop { get; set; }
@@ -52,7 +53,7 @@ namespace EasySaveApp.model
             stateFile += @"state.json"; //Create a JSON file
         }
 
-        public void CompleteSave(string inputpathsave, string inputDestToSave, bool copyDir, bool verif, BackupWithProgress backup, Action<float> progressChangeFunction)
+        public void CompleteSave(Backup backup, bool copyDir, bool verif, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction)
         {
             DataState dataState = new DataState(NameStateFile);
             dataState.SaveState = true;
@@ -67,15 +68,15 @@ namespace EasySaveApp.model
             int Nbfiles = 0;
             float Progs = 0;
 
-            DirectoryInfo resource = new DirectoryInfo(inputpathsave);
+            DirectoryInfo resource = new DirectoryInfo(backup.ResourceBackup);
 
             if (!resource.Exists)
             {
-                throw new DirectoryNotFoundException("ERROR: Directory Not Found ! " + inputpathsave);
+                throw new DirectoryNotFoundException("ERROR: Directory Not Found ! " + backup.ResourceBackup);
             }
 
             DirectoryInfo[] Resource = resource.GetDirectories();
-            Directory.CreateDirectory(inputDestToSave); // if already exist do nothing
+            Directory.CreateDirectory(backup.TargetBackup); // if already exist do nothing
 
             FileInfo[] files = resource.GetFiles();
 
@@ -96,41 +97,56 @@ namespace EasySaveApp.model
                     }
                 }
             }
+            backup.TotalSize = TotalSize;
 
+            FileInQueue[] filesInQueue = PrioritizeFiles(files);
 
-/*            PriorityList(filesPath);*/
-
-            foreach (FileInfo file in files)
+            foreach (FileInQueue fileInQueue in filesInQueue)
             {
-                backup.ResetEvent.WaitOne();
-                if (backup.IsAborted)
+                FileInfo file = fileInQueue.MFileInfo;
+
+                if (fileInQueue.IsPrioritized)
+                {
+                    backupWithProgress.IsProcessingPrioritizedFile = true;
+                }
+                else
+                {
+                    backupWithProgress.IsProcessingPrioritizedFile = false;
+                    REProcessingPrioritizedFiles.WaitOne();
+                }
+
+                if (file.Length > HEAVY_FILE_SIZE_THRESHOLD_IN_BYTES)
+                {
+                    RETransferingHeavyFile.WaitOne();
+                    backupWithProgress.IsTransferingHeavyFile = true;
+                }
+
+                backupWithProgress.ResetEvent.WaitOne();
+                if (backupWithProgress.IsAborted)
                 {
                     progressChangeFunction(0);
                     break;
                 }
 
-                string tempPath = Path.Combine(inputDestToSave, file.Name);
+                string tempPath = Path.Combine(backup.TargetBackup, file.Name);
 
-                /*UpdateStateFile();*/
 
                 if (CryptExt(Path.GetExtension(file.Name)))
                 {
                     if (isCheck == true)
                     {
-                        CryptFunction(inputDestToSave, inputpathsave, dataState);
+                        CryptFunction(backup.TargetBackup, backup.ResourceBackup, dataState);
                     }
                     else
                     {
                         file.CopyTo(tempPath, true);
                     }
-                    /*cryptwatch.Start();
-                    Encrypt(DataState.SourceFileState, tempPath);
-                    cryptwatch.Stop();*/
                 }
                 else
                 {
                     file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
                 }
+                backupWithProgress.IsTransferingHeavyFile = false;
 
                 Nbfiles++;
                 Size += file.Length;
@@ -141,7 +157,7 @@ namespace EasySaveApp.model
                 }
 
                 //Systems which allows to insert the values ​​of each file in the report file.
-                dataState.SourceFileState = Path.Combine(inputpathsave, file.Name);
+                dataState.SourceFileState = Path.Combine(backup.ResourceBackup, file.Name);
                 dataState.TargetFileState = tempPath;
                 dataState.TotalFileState = NbFileMmax;
                 dataState.TotalSizeState = TotalSize;
@@ -158,8 +174,7 @@ namespace EasySaveApp.model
             {
                 foreach (DirectoryInfo subdir in Resource)
                 {
-                    string tempPath = Path.Combine(inputDestToSave, subdir.Name);
-                    CompleteSave(subdir.FullName, tempPath, copyDir, true, backup, progressChangeFunction);
+                    CompleteSave(backup, copyDir, true, backupWithProgress, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction);
                 }
             }
             cryptwatch.Stop();
@@ -168,6 +183,120 @@ namespace EasySaveApp.model
             TimeTransfert = stopwatch.Elapsed; // Note the time passed
         }
 
+        /// <summary>
+        /// function called when differential backup is selected
+        /// </summary>
+        /// <param name="pathA"></param>
+        /// <param name="pathB"></param>
+        /// <param name="pathC"></param>
+        public void DifferentialSave(Backup backup, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction)
+        {
+            DataState dataState = new DataState(NameStateFile);
+            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch cryptwatch = new Stopwatch();
+            stopwatch.Start();
+
+            dataState.SaveState = true;
+            long TotalSize = 0;
+            int NbFileMmax = 0;
+
+            System.IO.DirectoryInfo resource1 = new System.IO.DirectoryInfo(backup.ResourceBackup);
+            System.IO.DirectoryInfo resource2 = new System.IO.DirectoryInfo(backup.MirrorBackup);
+
+            // Take a snapshot of the file system.  
+            IEnumerable<System.IO.FileInfo> list1 = resource1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+            IEnumerable<System.IO.FileInfo> list2 = resource2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
+
+            //A custom file comparer defined below  
+            FileCompare myFileCompare = new FileCompare();
+
+            var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare).ToArray();
+            long Size = 0;
+            int Nbfiles = 0;
+            float Progs = 0;
+
+
+            foreach (var v in queryList1Only)
+            {
+                TotalSize += v.Length;
+                NbFileMmax++;
+            }
+            backup.TotalSize = TotalSize;
+
+            FileInQueue[] filesInQueue = PrioritizeFiles(queryList1Only);
+
+            foreach (FileInQueue fileInQueue in filesInQueue)
+            {
+                FileInfo file = fileInQueue.MFileInfo;
+
+                if (fileInQueue.IsPrioritized)
+                {
+                    backupWithProgress.IsProcessingPrioritizedFile = true;
+                }
+                else
+                {
+                    backupWithProgress.IsProcessingPrioritizedFile = false;
+                    REProcessingPrioritizedFiles.WaitOne();
+                }
+
+                if (file.Length > HEAVY_FILE_SIZE_THRESHOLD_IN_BYTES)
+                {
+                    RETransferingHeavyFile.WaitOne();
+                    backupWithProgress.IsTransferingHeavyFile = true;
+                }
+
+                backupWithProgress.ResetEvent.WaitOne();
+
+                if (backupWithProgress.IsAborted)
+                {
+                    progressChangeFunction(0);
+                    break;
+                }
+
+                string tempPath = Path.Combine(backup.TargetBackup, file.Name);
+                if (CryptExt(Path.GetExtension(file.Name)))
+                {
+                    if (isCheck == true)
+                    {
+                        cryptwatch.Start();
+                        Encrypt(dataState.SourceFileState, tempPath);
+                        cryptwatch.Stop();
+                    }
+                    else
+                    {
+                        file.CopyTo(tempPath, true);
+                    }
+                }
+                else
+                {
+                    file.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
+                }
+
+                Nbfiles++;
+                Size += file.Length;
+
+                if (Size > 0)
+                {
+                    Progs = ((float)Size / TotalSize) * 100;
+                }
+                backupWithProgress.IsTransferingHeavyFile = false;
+
+                dataState.SourceFileState = Path.Combine(backup.ResourceBackup, file.Name);
+                dataState.TargetFileState = tempPath;
+                dataState.TotalSizeState = NbFileMmax;
+                dataState.TotalFileState = TotalSize;
+                dataState.TotalSizeRestState = TotalSize - Size;
+                dataState.FileRestState = NbFileMmax - Nbfiles;
+                dataState.ProgressState = Progs;
+                progressChangeFunction(Progs);
+                UpdateStateFile(dataState);
+            }
+
+            stopwatch.Stop();
+            cryptwatch.Stop();
+            TimeTransfert = stopwatch.Elapsed; // Note the time passed
+            CryptTransfert = stopwatch.Elapsed;
+        }
 
         public void CryptFunction(string inputDestToSave, string inputpathsave, DataState dataState)
         {
@@ -181,99 +310,6 @@ namespace EasySaveApp.model
                 Encrypt(dataState.SourceFileState, tempPath);
                 cryptwatch.Stop();
             }
-        }
-
-
-        /// <summary>
-        /// function called when differential backup is selected
-        /// </summary>
-        /// <param name="pathA"></param>
-        /// <param name="pathB"></param>
-        /// <param name="pathC"></param>
-        public void DifferentialSave(string pathA, string pathB, string pathC, BackupWithProgress backup, Action<float> progressChangeFunction)
-        {
-            DataState dataState = new DataState(NameStateFile);
-            Stopwatch stopwatch = new Stopwatch();
-            Stopwatch cryptwatch = new Stopwatch();
-            stopwatch.Start();
-
-            dataState.SaveState = true;
-            long TotalSize = 0;
-            int NbFileMmax = 0;
-
-            System.IO.DirectoryInfo resource1 = new System.IO.DirectoryInfo(pathA);
-            System.IO.DirectoryInfo resource2 = new System.IO.DirectoryInfo(pathB);
-
-            // Take a snapshot of the file system.  
-            IEnumerable<System.IO.FileInfo> list1 = resource1.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
-            IEnumerable<System.IO.FileInfo> list2 = resource2.GetFiles("*.*", System.IO.SearchOption.AllDirectories);
-
-            //A custom file comparer defined below  
-            FileCompare myFileCompare = new FileCompare();
-
-            var queryList1Only = (from file in list1 select file).Except(list2, myFileCompare);
-            long Size = 0;
-            int Nbfiles = 0;
-            float Progs = 0;
-
-
-            foreach (var v in queryList1Only)
-            {
-                TotalSize += v.Length;
-                NbFileMmax++;
-
-            }
-
-            foreach (var v in queryList1Only)
-            {
-                Nbfiles++;
-                Size += v.Length;
-
-                if (Size > 0)
-                {
-                    Progs = ((float)Size / TotalSize) * 100;
-                }
-
-                string tempPath = Path.Combine(pathC, v.Name);
-                dataState.SourceFileState = Path.Combine(pathA, v.Name);
-                dataState.TargetFileState = tempPath;
-                dataState.TotalSizeState = NbFileMmax;
-                dataState.TotalFileState = TotalSize;
-                dataState.TotalSizeRestState = TotalSize - Size;
-                dataState.FileRestState = NbFileMmax - Nbfiles;
-                dataState.ProgressState = Progs;
-                progressChangeFunction(Progs);
-                UpdateStateFile(dataState);
-
-
-                backup.ResetEvent.WaitOne();
-
-                if (backup.IsAborted)
-                {
-                    progressChangeFunction(0);
-                    break;
-                }
-                
-                if (CryptExt(Path.GetExtension(v.Name)))
-                {
-                    cryptwatch.Start();
-                    Encrypt(dataState.SourceFileState, tempPath);
-                    cryptwatch.Stop();
-                }
-                else
-                {
-                    v.CopyTo(tempPath, true); //Function that allows you to copy the file to its new folder.
-
-                }
-
-                Size += v.Length;
-                Nbfiles++;
-            }
-
-            stopwatch.Stop();
-            cryptwatch.Stop();
-            TimeTransfert = stopwatch.Elapsed; // Note the time passed
-            CryptTransfert = stopwatch.Elapsed;
         }
 
         private void UpdateStateFile(DataState dataState)
@@ -307,7 +343,7 @@ namespace EasySaveApp.model
         /// <param name="savename"></param>
         /// <param name="sourcedir"></param>
         /// <param name="targetdir"></param>
-        public void UpdateLogFile(DataState dataState)
+        public void UpdateLogFile(Backup backup)
         {
             mut.WaitOne();
             Stopwatch stopwatch = new Stopwatch(); //Declaration of the stopwatch
@@ -315,11 +351,11 @@ namespace EasySaveApp.model
             string elapsedCrypt = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", CryptTransfert.Hours, CryptTransfert.Minutes, CryptTransfert.Seconds, CryptTransfert.Milliseconds / 10);
             DataLogs datalogs = new DataLogs
             {
-                SaveNameLog = dataState.SaveNameState,
-                SourceLog = dataState.SourceFileState,
-                TargetLog = dataState.TargetFileState,
+                SaveNameLog = backup.SaveName,
+                SourceLog = backup.ResourceBackup,
+                TargetLog = backup.TargetBackup,
                 BackupDateLog = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
-                TotalSizeLog = dataState.TotalSizeState,
+                TotalSizeLog = backup.TotalSize,
                 TransactionTimeLog = elapsedTime,
                 CryptTime = elapsedCrypt,
             };
@@ -421,6 +457,7 @@ namespace EasySaveApp.model
 
             dataState.BackupDateState = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"); //Adding the time in the variable
             AddState(dataState); //Call of the function to add the backup in the report file.
+
         }
 
         public void AddState(DataState dataState) //Function that allows you to add a backup job to the report file.
@@ -449,8 +486,8 @@ namespace EasySaveApp.model
             this.serializeObj = JsonConvert.SerializeObject(stateList.ToArray(), Newtonsoft.Json.Formatting.Indented) + Environment.NewLine; //Serialization for writing to json file
             File.WriteAllText(stateFile, this.serializeObj);// Writing to the json file
         }
-        
-        public void LoadSave(BackupWithProgress backup, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
+
+        public void LoadSave(BackupWithProgress backup, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
         {
             Backup selectedBackup = null;
             BackupNameState = backup.SaveName;
@@ -476,14 +513,14 @@ namespace EasySaveApp.model
 
                 if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
                 {
-                    CompleteSave(selectedBackup.ResourceBackup, selectedBackup.TargetBackup, true, false, backup, progressChangeFunction); //Calling the function to run the full backup
+                    CompleteSave(selectedBackup, true, false, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction); //Calling the function to run the full backup
                 }
                 else //If this is the wrong guy then, it means it's a differential backup
                 {
-                    DifferentialSave(selectedBackup.ResourceBackup, selectedBackup.MirrorBackup, selectedBackup.TargetBackup, backup, progressChangeFunction); //Calling the function to start the differential backup
+                    DifferentialSave(selectedBackup, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction); //Calling the function to start the differential backup
                 }
 
-                /*UpdateLogFile(DataState dataState);*/ //Call of the function to start the modifications of the log file
+                UpdateLogFile(selectedBackup); //Call of the function to start the modifications of the log file
             }
         }
 
@@ -575,40 +612,12 @@ namespace EasySaveApp.model
             Format = extension;
         }
 
-/*        public static string[] GetPriority() //Function that allows to recover the extensions of the files to be prioritized
+        public static FileInQueue[] PrioritizeFiles(FileInfo[] filesPath)
         {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Ressources\PriorityExtensions.json"))//Function to read the json file
-            {
-                PriorityFormat[] item_Priolist;
-                string[] priority_extensions_array;
-                string json = reader.ReadToEnd();
-                List<PriorityFormat> items = JsonConvert.DeserializeObject<List<PriorityFormat>>(json);
-                item_Priolist = items.ToArray();
-                priority_extensions_array = item_Priolist[0].priority_extension.Split(',');
-
-                return priority_extensions_array;
-            }
-        }
-
-        public static bool PriorityExt(string extension) //Function that compares the extensions of the file to be prioritized json and that of the saved file.
-        {
-            foreach (string prio_ext in GetPriority())
-            {
-                if (prio_ext == extension)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }*/
-
-        //Add file with priority extension to a new priority list
-        public static List<string> PriorityList(List<string> filesPath)
-        {
-            List<string> filesPrio = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(@"..\..\..\Ressources\PriorityExtensions.json"))
-                .Where(x => filesPath.Contains(x)).ToList();           
-            return filesPrio.Concat(filesPath.Except(filesPrio).ToList()).ToList();
+            List<string> prioritisedExtensions = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(@"..\..\..\Resources\PriorityExtensions.json"));
+            FileInQueue[] filesPrioritized = filesPath.Where(x => prioritisedExtensions.Contains(x.Extension)).Select(f => new FileInQueue(f, true)).ToArray();
+            FileInQueue[] filesNormal = filesPath.Where(x => !prioritisedExtensions.Contains(x.Extension)).Select(f => new FileInQueue(f, false)).ToArray();
+            return filesPrioritized.Concat(filesNormal).ToArray();
         }
 
         private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.

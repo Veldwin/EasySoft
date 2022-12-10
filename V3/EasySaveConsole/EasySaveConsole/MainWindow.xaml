@@ -83,7 +83,7 @@
                     </Grid>
                 </Button>
 
-                <Button  Background="#003E20" BorderBrush="{x:Null}" Margin="416,129,36,156">
+                <Button  Background="#003E20" BorderBrush="{x:Null}" Margin="416,129,36,156" Click="StopBackup_Click">
                     <Grid Width="74" Height="30">
                         <materialDesigin:PackIcon Kind="Stop" VerticalAlignment="Center" Foreground="White" Margin="1,0,0,0"/>
                         <TextBlock x:Name="StopText" Text="STOP" Margin="27,0,0,0" FontFamily="Sitka Text" TextAlignment="Justify"  VerticalAlignment="Center" HorizontalAlignment="Left" Width="54" FontSize="10" Foreground="White"/>

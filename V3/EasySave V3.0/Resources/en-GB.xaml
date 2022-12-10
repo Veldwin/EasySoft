@@ -29,4 +29,5 @@
     <system:String x:Key="msg_parameters">Parameters</system:String>
     <system:String x:Key="btn_unselectall">None</system:String>
     <system:String x:Key="btn_priority">First Extension</system:String>
+    <system:String x:Key="maxsize_btn">Max Size File</system:String>
 </ResourceDictionary>

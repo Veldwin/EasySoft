@@ -50,25 +50,25 @@
 
             <StackPanel Grid.Row="1">
 
-                <Button Margin="10" Click="OpenBlacklist" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
+                <Button Margin="10" Click="OpenBlacklist" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="171">
                     <Grid Width="150" Height="30">
                         <materialDesigin:PackIcon Kind="Block" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
                         <TextBlock x:Name="textjailapps"  Text="{DynamicResource ResourceKey = text_jailapps}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </Button>
-                <Button x:Name="button_ext_apps" Click="OpenCryptExt" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}" Width="181">
+                <Button x:Name="button_ext_apps" Click="OpenCryptExt" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="172">
                     <Grid Width="150" Height="30">
                         <materialDesigin:PackIcon Kind="Decrypted" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
                         <TextBlock x:Name="englishtext1"  Text="CryptoSoft" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </Button>
-                <Button Margin="10" Click="Open_extensionprio" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
+                <Button Margin="10" Click="Open_extensionprio" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="171">
                     <Grid Width="150" Height="30">
                         <materialDesigin:PackIcon Kind="PriorityHigh" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
                         <TextBlock x:Name="textextensionprio" Text="{DynamicResource ResourceKey=btn_priority}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
                     </Grid>
                 </Button>
-                <Button Click="Open_logs" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}" Width="179">
+                <Button Click="Open_logs" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="171">
                     <Grid Width="150" Height="30">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="8*"/>
@@ -79,19 +79,25 @@
                     </Grid>
                 </Button>
 
-                <Button x:Name="button_fr" Margin="10" Click="ButtonClickFr" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}">
+                <Button x:Name="button_MaxFiles" Margin="10" Click="OpenMaxSizeFile" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="171">
                     <Grid Width="150" Height="30">
-                        <materialDesigin:PackIcon Kind="translate" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
-                        <TextBlock x:Name="francaistext"  Text="{DynamicResource ResourceKey = francais_text}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
+                        <materialDesigin:PackIcon Kind="Weight" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                        <TextBlock x:Name="filesize" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold" Text="{DynamicResource ResourceKey=maxsize_btn}"></TextBlock>
                     </Grid>
                 </Button>
-                <Button x:Name="button_en" Click="ButtonClickEn" Background="#F3F3F4" Height="48" BorderBrush="{x:Null}" Width="181">
+                <Button x:Name="button_en" Click="ButtonClickFr" Background="#F3F3F4" Height="41" BorderBrush="{x:Null}" Width="172">
                     <Grid Width="150" Height="30">
                         <materialDesigin:PackIcon Kind="language" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
-                        <TextBlock x:Name="englishtext"  Text="{DynamicResource ResourceKey=english_text}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
+                        <TextBlock x:Name="frenchtext" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"><Run Language="fr-fr" Text="FRANCAIS"/></TextBlock>
                     </Grid>
                 </Button>
             </StackPanel>
+            <Button x:Name="button_en_Copy" Click="ButtonClickEn" Background="#F3F3F4" BorderBrush="{x:Null}" Margin="14,317,14,12" Grid.Row="1">
+                <Grid Width="150" Height="30">
+                    <materialDesigin:PackIcon Kind="language" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                    <TextBlock x:Name="englishtext"  Text="{DynamicResource ResourceKey=english_text}" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"/>
+                </Grid>
+            </Button>
         </Grid>
 
         <Grid Grid.Column="1" Grid.Row="1">
@@ -137,12 +143,10 @@
                     <Button Content="..." Click="SourceResourceClick" Margin="7,68,7,137" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}"/>
                     <Button Name="target_directory" Content="..." Click="TargetResourceClick" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}" Margin="7,106,7,99"/>
                     <Button Name="mirror_directory" Content="..." IsEnabled="{Binding IsChecked, ElementName=diff_button}" Click="MirrorResourceClick" Grid.Column="2" Background="#003E20" Foreground="White" BorderBrush="{x:Null}" Margin="7,142,7,63"/>
-                    <Label x:Name="name_backup_Copy" Content="{DynamicResource ResourceKey=msg_parameters}" FontFamily="Segoe UI Variable Text Semibold" Margin="0,9,0,184" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                    <Label x:Name="name_backup_Copy" Content="{DynamicResource ResourceKey=msg_parameters}" FontFamily="Segoe UI Variable Text Semibold" Margin="109,42,0,151" Grid.Column="3" HorizontalAlignment="Left" FontSize="16" FontWeight="Bold"/>
 
 
                 </Grid>
-                <RadioButton x:Name="xml_button" GroupName="LogFile"  Content="XML" HorizontalAlignment="Left" Margin="533,62,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="195" FontFamily="Segoe UI Variable Text Semibold" />
-                <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="611,62,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" />
             </Grid>
 
             <Rectangle Grid.Row="1"  Margin="15,0,15,10" Fill="#F3F3F4" RadiusX="11" RadiusY="11" Grid.ColumnSpan="2"/>
@@ -209,9 +213,9 @@
                 </Grid>
             </Button>
 
-            <Rectangle Grid.Row="1"  Margin="50,159,317,15" Fill="#003E20" RadiusX="15" RadiusY="15"/>
-            <materialDesigin:PackIcon Kind="Message" Margin="62,172,0,0" Foreground="White" Height="51" Width="56" Visibility="Visible" Grid.Row="1"/>
-            <TextBlock x:Name="result" TextAlignment="Justify"  VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="122,170,0,0" FontFamily="Segoe UI Variable Text Semibold" Width="277" Grid.Row="1" Height="53" Foreground="White"/>
+            <Rectangle Grid.Row="1"  Margin="50,147,317,15" Fill="#003E20" RadiusX="15" RadiusY="15"/>
+            <materialDesigin:PackIcon Kind="Message" Margin="64,164,0,0" Foreground="White" Height="52" Width="56" Visibility="Visible" Grid.Row="1"/>
+            <TextBlock x:Name="result" TextAlignment="Justify"  VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="122,160,0,0" FontFamily="Segoe UI Variable Text Semibold" Width="277" Grid.Row="1" Height="63" Foreground="White"/>
             <Button Content="{DynamicResource ResourceKey = btn_selectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,160,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonSelectAll" Height="34" Width="71" FontWeight="Bold"/>
             <Button Click="ButtonDeleteSave" Background="#003E20" BorderBrush="{x:Null}" Margin="506,199,24,16" Grid.Row="1">
                 <Grid Width="150" Height="30">
@@ -220,7 +224,10 @@
                 </Grid>
             </Button>
             <Button Content="{DynamicResource ResourceKey=btn_unselectall}" HorizontalAlignment="Left" Background="#003E20" Foreground="White" Margin="423,200,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ButtonUnselectAll" Height="32" Width="71" FontWeight="Bold"/>
-            <CheckBox x:Name="Cryptosoft_check" Content="Cryptosoft" HorizontalAlignment="Left" Margin="551,139,0,0" VerticalAlignment="Top" Height="20" Width="83" FontFamily="Segoe UI Variable Text Semibold" Click="Cryptosoft_check_Click" Grid.Row="1"/>
+            <CheckBox x:Name="Cryptosoft_check" Content="Cryptosoft" HorizontalAlignment="Left" Margin="636,140,0,0" VerticalAlignment="Top" Height="16" Width="83" FontFamily="Segoe UI Variable Text Semibold" Click="Cryptosoft_check_Click" Grid.Row="1"/>
+            <RadioButton x:Name="xml_button" GroupName="LogFile"  Content="XML" HorizontalAlignment="Left" Margin="520,140,0,0" VerticalAlignment="Top" Height="14"  IsChecked="True" Checked="XmlLog" Width="52" FontFamily="Segoe UI Variable Text Semibold" Grid.Row="1" />
+            <RadioButton x:Name="Json_button" GroupName="LogFile" Content="Json" HorizontalAlignment="Left" Margin="578,140,0,0" VerticalAlignment="Top" Height="14"  Checked="JsonLog" Width="58" FontFamily="Segoe UI Variable Text Semibold" Grid.Row="1" />
+            <Label x:Name="name_backup_Copy1" Content="Logs :" FontFamily="Segoe UI Variable Text Semibold" Margin="470,130,0,88" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="1" FontSize="14" Width="82"/>
 
         </Grid>
 
@@ -233,7 +240,7 @@
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>
             </StackPanel>
-            <Label Content="EasySave V3.0" HorizontalAlignment="Left" Height="30" VerticalAlignment="Top" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="434,-5,0,0"/>
+            <Label Content="EasySave V3.0" HorizontalAlignment="Left" Height="35" VerticalAlignment="Top" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="434,-5,0,0"/>
         </Grid>
 
 

@@ -132,6 +132,16 @@ namespace EasySaveConsole
             _serverStream.Write(message);
         }
 
+        private void StopBackup_Click(object sender, RoutedEventArgs e)
+        {
+            string selected = ListSaveWork.SelectedItem.ToString();
+
+            var message = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ClientStopTask, Body = selected });
+
+            _serverStream.Write(message);
+        }
+        
+
         private void GridMenuMouseDown(object sender, RoutedEventArgs e)//Function that allows you to move the software window.
         {
             DragMove();//Function that allows movement

@@ -10,6 +10,7 @@ using EasySaveApp.model;
 using System.Linq;
 using EasySaveApp;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace EasySaveApp.view
 {
@@ -23,6 +24,8 @@ namespace EasySaveApp.view
         public string language = "fr";
         private bool formatmw = false;
         public IEnumerable<BackupWithProgress> backupsWithProgress { get { return viewmodel._backupsWithProgress; } }
+        public ManualResetEvent REProcessingPrioritizedFiles = new ManualResetEvent(true);
+        public ManualResetEvent RETransferingHeavyFile = new ManualResetEvent(true);
 
 
         public MainWindow()
@@ -179,6 +182,48 @@ namespace EasySaveApp.view
 
         }
 
+        private void calculateGlobalIsProcessingPrioritizedFilesFlag()
+        {
+            bool isProcessingPrioritizedFiles = false;
+            foreach (BackupWithProgress backupWithProgress in backupsWithProgress)
+            {
+                if (backupWithProgress.IsProcessingPrioritizedFile)
+                {
+                    isProcessingPrioritizedFiles = true;
+                    break;
+                }
+            }
+            if (isProcessingPrioritizedFiles)
+            {
+                REProcessingPrioritizedFiles.Reset();
+            }
+            else
+            {
+                REProcessingPrioritizedFiles.Set();
+            }
+        }
+
+        private void calculateGlobalIstransferingHeavyFileFlag()
+        {
+            bool isTransferingHeavyFiles = false;
+            foreach (BackupWithProgress backupWithProgress in backupsWithProgress)
+            {
+                if (backupWithProgress.IsTransferingHeavyFile)
+                {
+                    isTransferingHeavyFiles = true;
+                    break;
+                }
+            }
+            if (isTransferingHeavyFiles)
+            {
+                RETransferingHeavyFile.Reset();
+            }
+            else
+            {
+                RETransferingHeavyFile.Set();
+            }
+        }
+
         private void ShowListBox() //Function that displays the names of the backups in the list.
         {
             viewmodel._backupsWithProgress.Clear();
@@ -186,7 +231,17 @@ namespace EasySaveApp.view
             List<string> names = viewmodel.ListBackup();
             foreach (string name in names)//Loop that allows you to manage the names in the list.
             {
-                viewmodel._backupsWithProgress.Add(new BackupWithProgress(name, 0, new ManualResetEvent(true))); //Function that allows you to insert the names of the backups in the list.
+                BackupWithProgress backupWithProgress = new BackupWithProgress(name, 0, new ManualResetEvent(true));
+                backupWithProgress.IsProcessingPrioritizedFileChanged += (object? sender, PropertyChangedEventArgs e) =>
+                {
+                    calculateGlobalIsProcessingPrioritizedFilesFlag();
+                };
+                backupWithProgress.IsTransferingHeavyFileChanged += (object? sender, PropertyChangedEventArgs e) =>
+                {
+                    calculateGlobalIstransferingHeavyFileFlag();
+                };
+
+                viewmodel._backupsWithProgress.Add(backupWithProgress); //Function that allows you to insert the names of the backups in the list.
             }
             Save_work.ItemsSource = backupsWithProgress;
         }
@@ -218,8 +273,12 @@ namespace EasySaveApp.view
                     
                     if (backup.IsSuspended)
                     {
-                        backup.ResetEvent.Set();
-                        backup.IsSuspended = false;
+                        if (backup.IsRunning)
+                        {
+                            backup.ResetEvent.Set();
+                            backup.IsSuspended = false;
+                            backup.IsAborted = false;
+                        }
                     }
                     else
                     {
@@ -229,7 +288,7 @@ namespace EasySaveApp.view
 
                         Thread t = new(() =>
                         {
-                            viewmodel.LoadBackup(backup, language, (progress) =>
+                            viewmodel.LoadBackup(backup, language, REProcessingPrioritizedFiles, RETransferingHeavyFile, (progress) =>
                             {
                                 BackupWithProgress bk = viewmodel._backupsWithProgress.Single(x => x.SaveName == saveName);
                                 bk.Progress = progress;
@@ -315,6 +374,11 @@ namespace EasySaveApp.view
         {
             var checkbox = sender as System.Windows.Controls.CheckBox;
             viewmodel.IsCryptChecked((bool) checkbox.IsChecked);
+        }
+
+        private void OpenMaxSizeFile(object sender, RoutedEventArgs e)
+        {
+            Process.Start("notepad.exe", @"..\..\..\Resources\LimitSize.json");
         }
     }
 }
