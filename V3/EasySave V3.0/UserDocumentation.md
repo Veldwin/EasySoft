@@ -10,44 +10,65 @@ Here is the folder structure of the project :
 
 ```bash
 EasySoft
-    └───V2
-        └───EasySave V2.0
-            ├───bin
-            │   ├───DebugDailyLogs-<date>.xml
-            │   ├───DebugDailyLogs-<date>.json
-            │   └───Debug
-            │       └───net6.0-windows
-            │           ├───State
-            │           │   └───state.json
-            │           └───Works
-            │               └───backupList.js
-            ├───model
-            │   ├───Backup.cs
-            │   ├───DataLog.cs
-            │   ├───DataState.cs
-            │   ├───FileCompare.cs
-            │   ├───JailAppsFormat.cs
-            │   └───Model.cs
-            │
-            ├───Resources
-            │   ├───en-GB.xaml
-            │   ├───fr-FR.xaml
-            │   └───JailApps.json
-            │
-            ├───view
-            │   ├───MainWindow.xaml
-            │   └───MainWindow.xaml.cs
-            │
-            ├───ViewModel
-            │   └───ViewModel.cs
-            │
-            ├───App.xaml
-            │   └───App.xaml.cs
-            │
-            ├───AssemblyInfo.cs
-            │
-            ├───EasySoft.csproj
-            └───Program.cs
+    └───V3
+        ├───EasySaveApp
+        |    ├───bin
+        |    │   ├───DebugDailyLogs-<date>.xml
+        |    │   ├───DebugDailyLogs-<date>.json
+        |    │   └───Debug
+        |    │       └───net6.0-windows
+        |    │           ├───State
+        |    │           │   └───state.json
+        |    │           └───Works
+        |    │               └───backupList.js
+        |    ├───model
+        |    │   ├───Backup.cs
+        |    │   ├───CryptFormat.cs
+        |    │   ├───DataLog.cs
+        |    │   ├───DataState.cs
+        |    │   ├───FileCompare.cs
+        |    │   ├───FileInQueue.cs
+        |    │   ├───JailAppsFormat.cs
+        |    │   ├───PriorityFormat.cs
+        |    │   └───Model.cs
+        |    │
+        |    ├───Resources
+        |    │   ├───Cryptosoft
+        |    │   ├───en-GB.xaml
+        |    │   ├───fr-FR.xaml
+        |    │   ├───LimitSize.json
+        |    │   ├───PriorityExtensions.json
+        |    │   └───JailApps.json
+        |    │
+        |    ├───Socket
+        |    │   ├───Connection.cs
+        |    │   ├───Server.cs
+        |    │   ├───ConnectionPool.cs
+        |    │   ├───MessageContent.cs
+        |    │   └───Socket.cs
+        |    │
+        |    ├───view
+        |    │   ├───MainWindow.xaml
+        |    │   └───MainWindow.xaml.cs
+        |    │
+        |    ├───ViewModel
+        |    │   ├───StateObject.cs
+        |    │   └───ViewModel.cs
+        |    │
+        |    ├───App.xaml
+        |    │   └───App.xaml.cs
+        |    │
+        |    └───AssemblyInfo.cs
+        |
+        ├───EasySaveConsole
+             ├───App.xaml
+             │   └───App.xaml.cs
+             │
+             ├───AssemblyInfo.cs
+             ├───StateObject.cs
+             │
+             └───MainWindow.xaml
+                 └───MainWindow.xaml.cs
 ```
 
 ### Minimum characteristics
@@ -57,12 +78,12 @@ To run EasySoft, you need at least :
 - .NET Core 6.0
 - Windows 10 or higher
 - 2 Gb of ram
-- 1 Gb of storage
+- 500 Mb of storage
 
 ### Next Versions
 
-A version 3 of the software is planned in the next few days.
-This version will have more features coming soon.
+A version 4 of the software is planned in the next few days.
+This version will have more features coming soon especially with new interfaces.
 
 # EasySoft v2.0 By PROSOFT FR
 
@@ -76,44 +97,65 @@ Voici l'arborescence des dossiers du projet :
 
 ```bash
 EasySoft
-    └───V2
-        └───EasySave V2.0
-            ├───bin
-            │   ├───DebugDailyLogs-<date>.xml
-            │   ├───DebugDailyLogs-<date>.json
-            │   └───Debug
-            │       └───net6.0-windows
-            │           ├───State
-            │           │   └───state.json
-            │           └───Works
-            │               └───backupList.js
-            ├───model
-            │   ├───Backup.cs
-            │   ├───DataLog.cs
-            │   ├───DataState.cs
-            │   ├───FileCompare.cs
-            │   ├───JailAppsFormat.cs
-            │   └───Model.cs
-            │
-            ├───Resources
-            │   ├───en-GB.xaml
-            │   ├───fr-FR.xaml
-            │   └───JailApps.json
-            │
-            ├───view
-            │   ├───MainWindow.xaml
-            │   └───MainWindow.xaml.cs
-            │
-            ├───ViewModel
-            │   └───ViewModel.cs
-            │
-            ├───App.xaml
-            │   └───App.xaml.cs
-            │
-            ├───AssemblyInfo.cs
-            │
-            ├───EasySoft.csproj
-            └───Program.cs
+    └───V3
+        ├───EasySaveApp
+        |    ├───bin
+        |    │   ├───DebugDailyLogs-<date>.xml
+        |    │   ├───DebugDailyLogs-<date>.json
+        |    │   └───Debug
+        |    │       └───net6.0-windows
+        |    │           ├───State
+        |    │           │   └───state.json
+        |    │           └───Works
+        |    │               └───backupList.js
+        |    ├───model
+        |    │   ├───Backup.cs
+        |    │   ├───CryptFormat.cs
+        |    │   ├───DataLog.cs
+        |    │   ├───DataState.cs
+        |    │   ├───FileCompare.cs
+        |    │   ├───FileInQueue.cs
+        |    │   ├───JailAppsFormat.cs
+        |    │   ├───PriorityFormat.cs
+        |    │   └───Model.cs
+        |    │
+        |    ├───Resources
+        |    │   ├───Cryptosoft
+        |    │   ├───en-GB.xaml
+        |    │   ├───fr-FR.xaml
+        |    │   ├───LimitSize.json
+        |    │   ├───PriorityExtensions.json
+        |    │   └───JailApps.json
+        |    │
+        |    ├───Socket
+        |    │   ├───Connection.cs
+        |    │   ├───Server.cs
+        |    │   ├───ConnectionPool.cs
+        |    │   ├───MessageContent.cs
+        |    │   └───Socket.cs
+        |    │
+        |    ├───view
+        |    │   ├───MainWindow.xaml
+        |    │   └───MainWindow.xaml.cs
+        |    │
+        |    ├───ViewModel
+        |    │   ├───StateObject.cs
+        |    │   └───ViewModel.cs
+        |    │
+        |    ├───App.xaml
+        |    │   └───App.xaml.cs
+        |    │
+        |    └───AssemblyInfo.cs
+        |
+        ├───EasySaveConsole
+             ├───App.xaml
+             │   └───App.xaml.cs
+             │
+             ├───AssemblyInfo.cs
+             ├───StateObject.cs
+             │
+             └───MainWindow.xaml
+                 └───MainWindow.xaml.cs
 ```
 
 ### Caractéristiques minimales
@@ -123,9 +165,9 @@ Pour executer le logiciel EasySoft, il est necessaire d'avoir au minimum :
 - .NET Core 6.0
 - Windows 10 ou ulterieur
 - 2 Gb de ram
-- 1 Gb de stockage
+- 500 Mb de stockage
 
 ### Prochaines Versions
 
-Une version 3 du logiciel est prévue dans les prochains jours.
+Une version 4 du logiciel est prévue dans les prochains jours.
 Cette version plus de fonctionalités.

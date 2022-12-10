@@ -49,13 +49,11 @@ namespace EasySaveConsole
             thread.DoWork += (sender, eventArgs) =>
             {
                 int i;
-                byte[] bytes = new byte[1024];
-                String data = null;
-
-
+                byte[] bytes = new byte[8192];
+                
                 while (!(sender as BackgroundWorker).CancellationPending && (i = _serverStream.Read(bytes, 0, bytes.Length)) != 0)
-                {                    
-                    data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                {
+                    String data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                     var msg = JsonSerializer.Deserialize<MessageContent>(data);
 

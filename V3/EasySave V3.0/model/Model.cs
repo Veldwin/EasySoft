@@ -128,19 +128,12 @@ namespace EasySaveApp.model
                     break;
                 }
 
+                string sourcePath = Path.Combine(backup.ResourceBackup, file.Name);
                 string tempPath = Path.Combine(backup.TargetBackup, file.Name);
 
 
-                if (CryptExt(Path.GetExtension(file.Name)))
-                {
-                    if (isCheck == true)
-                    {
-                        CryptFunction(backup.TargetBackup, backup.ResourceBackup, dataState);
-                    }
-                    else
-                    {
-                        file.CopyTo(tempPath, true);
-                    }
+                if (isCheck == true && CryptExt(Path.GetExtension(file.Name))) { 
+                    CryptFunction(sourcePath, tempPath);
                 }
                 else
                 {
@@ -253,19 +246,16 @@ namespace EasySaveApp.model
                     break;
                 }
 
+                string sourcePath = Path.Combine(backup.ResourceBackup, file.Name);
                 string tempPath = Path.Combine(backup.TargetBackup, file.Name);
-                if (CryptExt(Path.GetExtension(file.Name)))
+
+                if (isCheck == true && CryptExt(Path.GetExtension(file.Name)))
                 {
-                    if (isCheck == true)
-                    {
-                        cryptwatch.Start();
-                        Encrypt(dataState.SourceFileState, tempPath);
-                        cryptwatch.Stop();
-                    }
-                    else
-                    {
-                        file.CopyTo(tempPath, true);
-                    }
+                    CryptFunction(sourcePath, tempPath);
+
+                    /*cryptwatch.Start();
+                    Encrypt(dataState.SourceFileState, tempPath);
+                    cryptwatch.Stop();*/
                 }
                 else
                 {
@@ -298,18 +288,9 @@ namespace EasySaveApp.model
             CryptTransfert = stopwatch.Elapsed;
         }
 
-        public void CryptFunction(string inputDestToSave, string inputpathsave, DataState dataState)
+        public void CryptFunction(string sourcePath, string destPath)
         {
-            DirectoryInfo resource = new DirectoryInfo(inputpathsave);
-            FileInfo[] files = resource.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                string tempPath = Path.Combine(inputDestToSave, file.Name);
-                Stopwatch cryptwatch = new Stopwatch();
-                cryptwatch.Start();
-                Encrypt(dataState.SourceFileState, tempPath);
-                cryptwatch.Stop();
-            }
+            Encrypt(sourcePath, destPath);
         }
 
         private void UpdateStateFile(DataState dataState)
@@ -653,10 +634,9 @@ namespace EasySaveApp.model
                 process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
                 process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
                 process.Start(); //Launching the process
+                process.WaitForExit();
                 process.Close();
-
             }
-
         }
 
         public bool Play_click()
