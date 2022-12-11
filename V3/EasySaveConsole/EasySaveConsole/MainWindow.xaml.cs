@@ -7,11 +7,9 @@ using System.Collections.Generic;
 using EasySaveApp.model;
 using System.Text.Json;
 using EasySaveApp.Socket;
-using System.Net.Http;
 using System.Threading;
-using System.IO;
-using System.Windows.Documents;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EasySaveConsole
 {
@@ -89,7 +87,7 @@ namespace EasySaveConsole
                     _serverStream.Close();
                     _connection.Close();
                 });
-                MessageBox.Show("Connexion interrompu");
+                System.Windows.Forms.MessageBox.Show("Connexion interrompu");
             };
 
             thread.RunWorkerAsync();
@@ -99,6 +97,7 @@ namespace EasySaveConsole
         private void StopConnexionToServer(object sender, RoutedEventArgs e)
         {
             thread.CancelAsync();
+            System.Windows.Forms.MessageBox.Show("Connexion interrompu");
         }
 
 
@@ -143,6 +142,11 @@ namespace EasySaveConsole
         private void GridMenuMouseDown(object sender, RoutedEventArgs e)//Function that allows you to move the software window.
         {
             DragMove();//Function that allows movement
+        }
+
+        private void Button_Minimize_Console(object sender, RoutedEventArgs e)
+        {
+            WindowState = (WindowState)FormWindowState.Minimized;
         }
     }
 }

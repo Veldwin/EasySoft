@@ -9,7 +9,7 @@
     <system:String x:Key="target_name">Target folder path</system:String>
     <system:String x:Key="mirror_name">Mirror folder backup</system:String>
     <system:String x:Key="text_addsave">ADD SAVE</system:String>
-    <system:String x:Key="text_startbackup">START THE BACKUP</system:String>
+    <system:String x:Key="text_startbackup">START BACKUPS</system:String>
     <system:String x:Key="text_jailapps">BlackList Apps</system:String>
     <system:String x:Key="francais_text">FRANCAIS</system:String>
     <system:String x:Key="english_text">ENGLISH</system:String>

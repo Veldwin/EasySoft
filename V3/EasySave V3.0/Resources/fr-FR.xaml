@@ -9,7 +9,7 @@
     <system:String x:Key="target_name">Chemin du dossier cible</system:String>
     <system:String x:Key="mirror_name">Sauvegarde du dossier miroir</system:String>
     <system:String x:Key="text_addsave">AJOUTER UNE SAUVEGARDE</system:String>
-    <system:String x:Key="text_startbackup">DÉMARRER LA SAUVEGARDE</system:String>
+    <system:String x:Key="text_startbackup">DÉMARRER LES SAUVEGARDES</system:String>
     <system:String x:Key="text_jailapps">Logiciels bloqués</system:String>
     <system:String x:Key="francais_text">FRANÇAIS</system:String>
     <system:String x:Key="english_text">ENGLISH</system:String>

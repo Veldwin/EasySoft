@@ -108,7 +108,12 @@
                     <materialDesigin:PackIcon Kind="Power"/>
                 </Button>
             </StackPanel>
-            <Label Content="EasySave V3.0" HorizontalAlignment="Center" Height="30" VerticalAlignment="Top" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="0,-2,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Background="#F3F3F4" Margin="700,0,0,0">
+                <Button x:Name="ButtonMinimize" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#003E20" Click="Button_Minimize_Console">
+                    <materialDesigin:PackIcon Kind="Minimize" Height="21" Width="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+            <Label Content="EasySave V3.0" HorizontalAlignment="Left" Height="34" VerticalAlignment="Center" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="342,0,0,0"/>
         </Grid>
     </Grid>
 </Window>

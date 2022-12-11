@@ -2,6 +2,6 @@
 {
     class CryptFormat
     {
-        public string extensionCrypt;
+        public string ?extensionCrypt;
     }
 }

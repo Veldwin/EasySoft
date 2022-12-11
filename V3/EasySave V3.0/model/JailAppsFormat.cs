@@ -2,6 +2,6 @@
 {
     class JailAppsFormat
     {
-        public string jailed_apps;
+        public string ?jailed_apps;
     }
 }

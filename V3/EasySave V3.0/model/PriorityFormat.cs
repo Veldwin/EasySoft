@@ -2,6 +2,6 @@
 {
     class PriorityFormat
     {
-        public string priority_extension;
+        public string ?priority_extension;
     }
 }
