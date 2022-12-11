@@ -13,7 +13,7 @@ namespace EasySaveApp.model
     class Model
     {
         //Declaration of all variables and properties
-        public int HEAVY_FILE_SIZE_THRESHOLD_IN_BYTES = JsonConvert.DeserializeObject<int>(File.ReadAllText(@"..\..\..\Resources\LimitSize.json"));
+        public int HEAVY_FILE_SIZE_THRESHOLD_IN_BYTES = JsonConvert.DeserializeObject<int>(File.ReadAllText(@"Resources\LimitSize.json"));
         public int checkDataBackup;
         private string serializeObj;
         public string backupListFile = System.Environment.CurrentDirectory + @"\Works\";
@@ -562,7 +562,7 @@ namespace EasySaveApp.model
 
         public static string[] GetJailApps()//Function that allows to recover software that is blacklisted.
         {
-            using StreamReader reader = new StreamReader(@"..\..\..\Resources\JailApps.json");//Function to read the json file
+            using StreamReader reader = new StreamReader(@"Resources\JailApps.json");//Function to read the json file
             JailAppsFormat[] item_jailapps;
             string[] jailapps_array;
             string json = reader.ReadToEnd();
@@ -595,7 +595,7 @@ namespace EasySaveApp.model
 
         public static FileInQueue[] PrioritizeFiles(FileInfo[] filesPath)
         {
-            List<string> prioritisedExtensions = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(@"..\..\..\Resources\PriorityExtensions.json"));
+            List<string> prioritisedExtensions = JsonConvert.DeserializeObject<List<string>>(File.ReadAllText(@"Resources\PriorityExtensions.json"));
             FileInQueue[] filesPrioritized = filesPath.Where(x => prioritisedExtensions.Contains(x.Extension)).Select(f => new FileInQueue(f, true)).ToArray();
             FileInQueue[] filesNormal = filesPath.Where(x => !prioritisedExtensions.Contains(x.Extension)).Select(f => new FileInQueue(f, false)).ToArray();
             return filesPrioritized.Concat(filesNormal).ToArray();
@@ -603,7 +603,7 @@ namespace EasySaveApp.model
 
         private static string[] getExtensionCrypt()//Function that allows to recover the extensions that the user wants to encrypt in the json file.
         {
-            using (StreamReader reader = new StreamReader(@"..\..\..\Resources\CryptExtension.json"))//Function to read the json file
+            using (StreamReader reader = new StreamReader(@"Resources\CryptExtension.json"))//Function to read the json file
             {
                 CryptFormat[] item_crypt;
                 string[] crypt_extensions_array;
@@ -631,7 +631,7 @@ namespace EasySaveApp.model
         {
             using (Process process = new Process())//Declaration of the process
             {
-                process.StartInfo.FileName = @"..\..\..\Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
+                process.StartInfo.FileName = @"Resources\CryptoSoft\CryptoSoft.exe"; //Calls the process that is CryptoSoft
                 process.StartInfo.Arguments = String.Format("\"{0}\"", sourceDir) + " " + String.Format("\"{0}\"", targetDir); //Preparation of variables for the process.
                 process.Start(); //Launching the process
                 process.WaitForExit();

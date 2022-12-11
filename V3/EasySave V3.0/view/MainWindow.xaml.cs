@@ -303,12 +303,12 @@ namespace EasySaveApp.view
 
         private void OpenBlacklist(object sender, RoutedEventArgs e)//Function that allows the button to open the file of blacklisted software
         {
-            Process.Start("notepad.exe", @"..\..\..\Resources\JailApps.json");
+            Process.Start("notepad.exe", @"Resources\JailApps.json");
         }
 
         private void OpenCryptExt(object sender, RoutedEventArgs e)//Function that allows the button to open the file of blacklisted software
         {
-            Process.Start("notepad.exe", @"..\..\..\Resources\CryptExtension.json");
+            Process.Start("notepad.exe", @"Resources\CryptExtension.json");
         }
 
 
@@ -358,11 +358,11 @@ namespace EasySaveApp.view
 
         private void Open_extensionprio(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
         {
-            Process.Start("notepad.exe", @"..\..\..\Resources\PriorityExtensions.json");
+            Process.Start("notepad.exe", @"Resources\PriorityExtensions.json");
         }
         private void Open_logs(object sender, RoutedEventArgs e)//Function allowing the button to open the file for priority extensions
         {
-            Process.Start("notepad.exe", @"..\..\..\bin\Debug\net6.0-windows\state\state.json");
+            Process.Start("notepad.exe", @"State\state.json");
         }
 
         private void Button_minimize(object sender, RoutedEventArgs e)//Function to reduce the window.
@@ -378,7 +378,7 @@ namespace EasySaveApp.view
 
         private void OpenMaxSizeFile(object sender, RoutedEventArgs e)
         {
-            Process.Start("notepad.exe", @"..\..\..\Resources\LimitSize.json");
+            Process.Start("notepad.exe", @"Resources\LimitSize.json");
         }
     }
 }
