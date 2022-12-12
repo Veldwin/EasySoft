@@ -1,17 +1,10 @@
 ﻿using EasySaveApp.model;
-using Microsoft.VisualBasic.ApplicationServices;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Markup;
-using System.Xml.Linq;
 
 namespace EasySaveApp.Socket
 {
@@ -129,11 +122,7 @@ namespace EasySaveApp.Socket
             {
                 if (disposing)
                 {
-                    // TODO: supprimer l'état managé (objets managés)
                 }
-
-                // TODO: libérer les ressources non managées (objets non managés) et substituer le finaliseur
-                // TODO: affecter aux grands champs une valeur null
                 disposedValue = true;
             }
         }

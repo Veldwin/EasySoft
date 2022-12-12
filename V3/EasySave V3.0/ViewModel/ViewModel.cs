@@ -2,15 +2,9 @@ using System;
 using EasySaveApp.model;
 using System.Collections.Generic;
 using MessageBox = System.Windows.MessageBox;
-using System.Net;
-using System.Net.Sockets;
 using System.Threading;
-using System.Text;
 using System.ComponentModel;
-using System.Linq;
-using System.Windows.Controls;
 using System.Collections.ObjectModel;
-using EasySaveApp.ViewModel;
 using EasySaveApp.Socket;
 
 namespace EasySaveApp.viewmodel
