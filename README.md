@@ -4,6 +4,20 @@
 
 Easysave is a back up folder software. It's a school project created by a team of 4 students - Group 4.
 
+## Instalation
+
+To install the software, you have to download the latest version of the software. Then, unzip the file and run the EasySaveApp.exe and EsaySaveConsole.exe files.
+
+## Clone our project
+
+Getting Started To get a local copy up and running follow these simple example steps. But before anything else you should be sure to have Visual Studio 2022 in order to run the program.
+
+Once you will have set up your computer You will have to clone this project.
+
+With Git:
+
+`git clone https://github.com/Veldwin/EasySoft.git`
+
 ## Built with
 
 * Visual Studio 2022 (enterprise version)
@@ -52,22 +66,37 @@ The number of backup jobs is now unlimited. 
 
 ### Evolution of the Daily Log file
 
-The daily log file can be generate with a json or xml extension at the user's choice.
+The daily log file can be generate with a json or xml extension at the user's choice with the time of the encryption.
 
 ### Business software
 
 If the presence of business software is detected, the software must prohibit the launch of a backup job. In the case of sequential jobs, the software must complete the current job and stop before launching the next job. The user will be able to define the business software in the general settings of the software. (Note: the calculator application can substitute the business software during demonstrations). 
 
-## Clone our project
+## Version 3.0
 
-Getting Started To get a local copy up and running follow these simple example steps. But before anything else you should be sure to have Visual Studio 2022 in order to run the program.
+### Pause and resume
 
-Once you will have set up your computer You will have to clone this project.
+The user can pause and resume one or more backups
 
-With Git:
+### Parallel backups
 
-`git clone https://github.com/Veldwin/EasySoft.git`
-Then refer to the usage section and you will be ready to go !
+The user can launch several backups at the same time with multithreading methods.
+
+### Priority file management
+
+The user can set priority files in the backups. Thus, other backups will be stopped, as long as a priority file is being backed up
+
+### Prohibition of simultaneous backups for large files 
+
+In order to optimize the backups, if 2 large files are present in the backups, then they will be processed separately.
+
+### Remote display interface
+
+The user can run, pause or stop a backup and display the progress of the backups on a remote computer.
+
+### Mono Instance Application
+
+The application can only be launched once at a time.
 
 ## EasySave Documentation
 
@@ -78,13 +107,13 @@ Then refer to the usage section and you will be ready to go !
 
 ## The versions of EasySave
 
-Version	Available
+Version	3 Available
 | Version | Available          |
 | ------- | ------------------ |
 |   [1.0](V1/)   | :white_check_mark: |
 |   [1.1](https://github.com/Veldwin/EasySoft/tree/V1_1/V1)   | :white_check_mark: |
 |   [2.0](V2/EasySave%20V2.0)   | :white_check_mark: |
-|   [3.0](V3/EasySave%20V3.0)   | ❎ |
+|   [3.0](V3/EasySave%20V3.0)   | :white_check_matk: |
 
 ## Authors
 

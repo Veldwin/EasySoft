@@ -35,6 +35,15 @@ namespace EasySaveConsole
 
             string address = AdresseTextBox.Text;
 
+            try {
+                IPAddress.Parse(address);
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show("Adresse IP invalide");
+                return;
+            }
+
             _connection.Connect(IPAddress.Parse(address), 66);
 
             _serverStream = _connection.GetStream();
@@ -97,6 +106,7 @@ namespace EasySaveConsole
         private void StopConnexionToServer(object sender, RoutedEventArgs e)
         {
             thread.CancelAsync();
+            ListSaveWork.Items.Clear();
             System.Windows.Forms.MessageBox.Show("Connexion interrompu");
         }
 
