@@ -115,5 +115,11 @@
             </StackPanel>
             <Label Content="EasySave V3.0" HorizontalAlignment="Left" Height="34" VerticalAlignment="Center" Width="126" FontWeight="Bold" FontFamily="Segoe UI Variable Text Semibold" Foreground="White" FontSize="18" Margin="342,0,0,0"/>
         </Grid>
+        <Button Click="RefreshConnexionToServer" Background="#F3F3F4" BorderBrush="{x:Null}" Margin="10,224,10,58" Grid.Row="1">
+            <Grid Width="150" Height="30">
+                <materialDesigin:PackIcon Kind="Refresh" VerticalAlignment="Center" Margin="-4,0,0,0" Foreground="Black"/>
+                <TextBlock x:Name="StartCo2" Margin="16,0,0,0" FontFamily="Segoe UI Variable Text Semibold" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="154" FontSize="14" Foreground="Black" FontWeight="Bold"><Run Language="fr-fr" Text="Refresh"/><Run Text=" connexion"/></TextBlock>
+            </Grid>
+        </Button>
     </Grid>
 </Window>

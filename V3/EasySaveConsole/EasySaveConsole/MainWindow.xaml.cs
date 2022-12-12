@@ -96,7 +96,7 @@ namespace EasySaveConsole
                     _serverStream.Close();
                     _connection.Close();
                 });
-                System.Windows.Forms.MessageBox.Show("Connexion interrompu");
+                System.Windows.Forms.MessageBox.Show("Connexion interrompue");
             };
 
             thread.RunWorkerAsync();
@@ -107,13 +107,13 @@ namespace EasySaveConsole
         {
             thread.CancelAsync();
             ListSaveWork.Items.Clear();
-            System.Windows.Forms.MessageBox.Show("Connexion interrompu");
+            System.Windows.Forms.MessageBox.Show("Connexion interrompue");
         }
 
 
         private void ListAllBackups(List<Backup> l)
         {
-            foreach (Backup b in l) ListSaveWork.Items.Add(b.SaveName);
+                foreach (Backup b in l) ListSaveWork.Items.Add(b.SaveName);
         }
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
@@ -157,6 +157,12 @@ namespace EasySaveConsole
         private void Button_Minimize_Console(object sender, RoutedEventArgs e)
         {
             WindowState = (WindowState)FormWindowState.Minimized;
+        }
+
+        private void RefreshConnexionToServer(object sender, RoutedEventArgs e)
+        {
+            StopConnexionToServer(sender, e);
+            StartConnexionToServer(sender, e);
         }
     }
 }

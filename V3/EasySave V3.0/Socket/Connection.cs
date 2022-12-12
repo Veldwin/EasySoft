@@ -16,9 +16,11 @@ namespace EasySaveApp.Socket
         public Thread? thread = null;
 
 
-        public Connection(TcpClient client) { 
+        public Connection(TcpClient client)
+        {
             connection = client;
-            thread = new(() => {
+            thread = new(() =>
+            {
                 this.HandleConnection();
             });
         }
@@ -29,10 +31,10 @@ namespace EasySaveApp.Socket
             String? data = null;
 
             // Send list of
-            var message = File.ReadAllText(System.Environment.CurrentDirectory + @"\Works\backupList.json");
-            var viewModel = EasySaveApp.viewmodel.ViewModel.getInstance();
+                var message = File.ReadAllText(System.Environment.CurrentDirectory + @"\Works\backupList.json");
+                var viewModel = EasySaveApp.viewmodel.ViewModel.getInstance();
 
-            var msgToSend = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ConnectionInit, Body = message });
+                var msgToSend = JsonSerializer.SerializeToUtf8Bytes(new MessageContent { Type = MessageType.ConnectionInit, Body = message });
 
             if (connection != null)
             {
