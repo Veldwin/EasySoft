@@ -26,7 +26,8 @@ namespace EasySaveApp.view
         public IEnumerable<BackupWithProgress> backupsWithProgress { get { return viewmodel._backupsWithProgress; } }
         public ManualResetEvent REProcessingPrioritizedFiles = new ManualResetEvent(true);
         public ManualResetEvent RETransferingHeavyFile = new ManualResetEvent(true);
-
+        public ManualResetEvent REBusinessSoftwareOpened = new ManualResetEvent(true);
+        System.Threading.Timer CheckForBusinessAppsTimer;
 
         public MainWindow()
         {
@@ -46,12 +47,40 @@ namespace EasySaveApp.view
                 }
             }
 
+            CheckForBusinessAppsTimer = new(CheckForBusinessSoftwares, null, 0, 1000);
+
             viewmodel = EasySaveApp.viewmodel.ViewModel.getInstance();
             InitializeComponent();
             ShowListBox();
         }
 
+        public bool IsBusinessSoftwareOpened()
+        {
+            string[] businessApps = Model.GetJailApps();
 
+            bool isBusinessAppOpened = false;
+            foreach (string App in businessApps)
+            {
+                Process[] ps = Process.GetProcessesByName(App);
+                if (ps.Length > 0)
+                {
+                    isBusinessAppOpened = true;
+                }
+            }
+            return isBusinessAppOpened;
+        }
+
+        public void CheckForBusinessSoftwares(object? state)
+        {
+            if (IsBusinessSoftwareOpened())
+            {
+                REBusinessSoftwareOpened.Reset();
+            }
+            else
+            {
+                REBusinessSoftwareOpened.Set();
+            }
+        }
 
         private void ButtonClickFr(object sender, RoutedEventArgs e)//Function to translate the software into French
         {
@@ -288,7 +317,7 @@ namespace EasySaveApp.view
 
                         Thread t = new(() =>
                         {
-                            viewmodel.LoadBackup(backup, language, REProcessingPrioritizedFiles, RETransferingHeavyFile, (progress) =>
+                            viewmodel.LoadBackup(backup, language, REProcessingPrioritizedFiles, RETransferingHeavyFile, REBusinessSoftwareOpened, (progress) =>
                             {
                                 BackupWithProgress bk = viewmodel._backupsWithProgress.Single(x => x.SaveName == saveName);
                                 bk.Progress = progress;

@@ -53,7 +53,7 @@ namespace EasySaveApp.model
             stateFile += @"state.json"; //Create a JSON file
         }
 
-        public void CompleteSave(Backup backup, bool copyDir, bool verif, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction)
+        public void CompleteSave(Backup backup, bool copyDir, bool verif, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, ManualResetEvent REBusinessSoftwareOpened, Action<float> progressChangeFunction)
         {
             DataState dataState = new DataState(NameStateFile);
             dataState.SaveState = true;
@@ -127,6 +127,7 @@ namespace EasySaveApp.model
                     progressChangeFunction(0);
                     break;
                 }
+                REBusinessSoftwareOpened.WaitOne();
 
                 string sourcePath = Path.Combine(backup.ResourceBackup, file.Name);
                 string tempPath = Path.Combine(backup.TargetBackup, file.Name);
@@ -167,7 +168,7 @@ namespace EasySaveApp.model
             {
                 foreach (DirectoryInfo subdir in Resource)
                 {
-                    CompleteSave(backup, copyDir, true, backupWithProgress, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction);
+                    CompleteSave(backup, copyDir, true, backupWithProgress, REProcessingPrioritizedFiles, RETransferingHeavyFile, REBusinessSoftwareOpened, progressChangeFunction);
                 }
             }
             cryptwatch.Stop();
@@ -182,7 +183,7 @@ namespace EasySaveApp.model
         /// <param name="pathA"></param>
         /// <param name="pathB"></param>
         /// <param name="pathC"></param>
-        public void DifferentialSave(Backup backup, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction)
+        public void DifferentialSave(Backup backup, BackupWithProgress backupWithProgress, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, ManualResetEvent REBusinessSoftwareOpened, Action<float> progressChangeFunction)
         {
             DataState dataState = new DataState(NameStateFile);
             Stopwatch stopwatch = new Stopwatch();
@@ -245,6 +246,7 @@ namespace EasySaveApp.model
                     progressChangeFunction(0);
                     break;
                 }
+                REBusinessSoftwareOpened.WaitOne();
 
                 string sourcePath = Path.Combine(backup.ResourceBackup, file.Name);
                 string tempPath = Path.Combine(backup.TargetBackup, file.Name);
@@ -252,10 +254,6 @@ namespace EasySaveApp.model
                 if (isCheck == true && CryptExt(Path.GetExtension(file.Name)))
                 {
                     CryptFunction(sourcePath, tempPath);
-
-                    /*cryptwatch.Start();
-                    Encrypt(dataState.SourceFileState, tempPath);
-                    cryptwatch.Stop();*/
                 }
                 else
                 {
@@ -468,7 +466,7 @@ namespace EasySaveApp.model
             File.WriteAllText(stateFile, this.serializeObj);// Writing to the json file
         }
 
-        public void LoadSave(BackupWithProgress backup, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
+        public void LoadSave(BackupWithProgress backup, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, ManualResetEvent REBusinessSoftwareOpened, Action<float> progressChangeFunction) //Function that allows you to load backup jobs
         {
             Backup selectedBackup = null;
             BackupNameState = backup.SaveName;
@@ -494,11 +492,11 @@ namespace EasySaveApp.model
 
                 if (selectedBackup.Type == "full") //If the type is 1, it means it's a full backup
                 {
-                    CompleteSave(selectedBackup, true, false, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction); //Calling the function to run the full backup
+                    CompleteSave(selectedBackup, true, false, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, REBusinessSoftwareOpened, progressChangeFunction); //Calling the function to run the full backup
                 }
                 else //If this is the wrong guy then, it means it's a differential backup
                 {
-                    DifferentialSave(selectedBackup, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction); //Calling the function to start the differential backup
+                    DifferentialSave(selectedBackup, backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, REBusinessSoftwareOpened, progressChangeFunction); //Calling the function to start the differential backup
                 }
 
                 UpdateLogFile(selectedBackup); //Call of the function to start the modifications of the log file

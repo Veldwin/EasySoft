@@ -59,7 +59,7 @@ namespace EasySaveApp.viewmodel
             return nameslist;
         }
 
-        public void LoadBackup(BackupWithProgress backup, string language, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, Action<float> progressChangeFunction)//Function that allows you to load the backups that were selected by the user.
+        public void LoadBackup(BackupWithProgress backup, string language, ManualResetEvent REProcessingPrioritizedFiles, ManualResetEvent RETransferingHeavyFile, ManualResetEvent REBusinessSoftwareOpened, Action<float> progressChangeFunction)//Function that allows you to load the backups that were selected by the user.
         {
             if (Model.CheckSoftware(BlackListApp))//If a program is in the blacklist we do not start the backup.
             {
@@ -76,10 +76,11 @@ namespace EasySaveApp.viewmodel
                         "ERROR N°1 : BLACKLIST SOFTWARE\n" +
                         "IN PROGRESS");
                 }
+                backup.IsRunning = false;
             }
             else
             {
-                model.LoadSave(backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, progressChangeFunction);//Function that launches backups
+                model.LoadSave(backup, REProcessingPrioritizedFiles, RETransferingHeavyFile, REBusinessSoftwareOpened, progressChangeFunction);//Function that launches backups
 
 
                 backup.IsRunning = false;

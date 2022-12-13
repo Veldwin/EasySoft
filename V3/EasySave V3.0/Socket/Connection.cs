@@ -72,7 +72,7 @@ namespace EasySaveApp.Socket
 
                                     new Thread(() =>
                                     {
-                                        viewModel.LoadBackup(backup, "en", new ManualResetEvent(true), new ManualResetEvent(true), (progress) =>
+                                        viewModel.LoadBackup(backup, "en", new ManualResetEvent(true), new ManualResetEvent(true), new ManualResetEvent(true), (progress) =>
                                         {
                                             backup.Progress = progress;
 
