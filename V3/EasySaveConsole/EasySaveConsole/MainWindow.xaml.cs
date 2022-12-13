@@ -76,8 +76,14 @@ namespace EasySaveConsole
                 switch (m.Type)
                 {
                     case MessageType.ConnectionInit:
-                        List<Backup> backups = JsonSerializer.Deserialize<List<Backup>>(m.Body);
-                        ListAllBackups(backups);
+                        try
+                        {
+                            List<Backup> backups = JsonSerializer.Deserialize<List<Backup>>(m.Body);
+                            ListAllBackups(backups);
+                        } catch (Exception)
+                        {
+                            System.Windows.Forms.MessageBox.Show("Aucune sauvegarde trouvée");
+                        }
                         break;
                     case MessageType.BackupProgress:
                         int backupWithProgress = (int)JsonSerializer.Deserialize<float>(m.Body);
