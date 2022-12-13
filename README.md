@@ -104,6 +104,8 @@ The application can only be launched once at a time.
 * Version 1.0 : [User's Manual](V1/Readme.md)
 * Version 2.0 : [Documentation User](V2/EasySave%20V2.0/UserDocumentation.md)
 * Version 2.0 : [User's Manual](V2/EasySave%20V2.0/UsersManual.md)
+* Version 3.0 : [Documentation User](V3/UserDocumentation.md)
+* Version 3.0 : [User's Manual](V3/User%20Manual%20EN.pdf)
 
 ## The versions of EasySave
 
@@ -113,7 +115,7 @@ Version	3 Available
 |   [1.0](V1/)   | :white_check_mark: |
 |   [1.1](https://github.com/Veldwin/EasySoft/tree/V1_1/V1)   | :white_check_mark: |
 |   [2.0](V2/EasySave%20V2.0)   | :white_check_mark: |
-|   [3.0](V3/EasySave%20V3.0)   | :white_check_matk: |
+|   [3.0](V3/EasySave%20V3.0)   | :white_check_mark: |
 
 ## Authors
 

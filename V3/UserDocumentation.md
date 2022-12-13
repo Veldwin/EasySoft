@@ -2,9 +2,9 @@
 
 Easysave is a back up software. It's a school project created by a team of 4 students.
 
-## User Documentation / Documentation Utilisateur
+## User Documentation
 
-### Tree structure / Arborescence
+### Tree structure
 
 Here is the folder structure of the project :
 
@@ -170,4 +170,4 @@ Pour executer le logiciel EasySoft, il est necessaire d'avoir au minimum :
 ### Prochaines Versions
 
 Une version 4 du logiciel est prévue dans les prochains jours.
-Cette version plus de fonctionalités.
+Cette version proposera plus de fonctionalités.
