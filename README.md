@@ -6,7 +6,7 @@ Easysave is a back up folder software. It's a school project created by a team o
 
 ## Instalation
 
-To install the software, you have to download the latest version of the software. Then, unzip the file and run the EasySaveApp.exe and EsaySaveConsole.exe files.
+To install the software, you have to download the latest version of the software. Then, go to the Install folder and download the App and Console folder. Then, run the setup.exe in each folder. If you want, you can also unzip the EasySaveApp V3.zip and run the EasySaveApp.exe and EsaySaveConsole.exe files.
 
 ## Clone our project
 
